@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+    <property name="LOGS_ABSOLUTE_PATH" value="/data/apache-tomcat/logs"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%cyan([%d{yy/MM/dd HH:mm:ss}]) %green([%logger{36}]) %highlight([%-5level]) :: %highlight(%msg) %n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="jdbc" level="OFF"/>
+    <logger name="jdbc.sqlonly" level="OFF"/>
+    <logger name="jdbc.sqltiming" level="DEBUG"/>
+    <logger name="jdbc.audit" level="OFF"/>
+    <logger name="jdbc.resultset" level="OFF"/>
+    <logger name="jdbc.resultsettable" level="OFF"/>
+    <logger name="jdbc.connection" level="OFF"/>
+
+    <logger name="com.formskorea.console" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <root level="OFF">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>
