@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.formskorea.console.mapper.dao.ApplicationMapper">
+    <select id="getInflucerInfo" parameterType="User" resultType="User">
+        SELECT intSeq,
+        strEmail,
+        strPassword,
+        strName,
+        strMobile,
+        strNikname,
+        intSex,
+        txtPermission,
+        intLevel,
+        intStatus,
+        strInstargram,
+        strYoutube,
+        strBlog,
+        strMall,
+        dateReg,
+        dateEdit,
+        intCompanySeq
+        <if test="strPassword != null">
+            , PASSWORD(#{strPassword}) as strPassword2
+        </if>
+        FROM TB_INFUENCER
+        WHERE strEmail = #{strEmail}
+    </select>
+
+    <select id="getClientInfo" parameterType="User" resultType="User">
+        SELECT intSeq,
+        strEmail,
+        strPassword,
+        strName,
+        strMobile,
+        strNikname,
+        intSex,
+        txtPermission,
+        intLevel,
+        intStatus,
+        dateReg,
+        dateEdit,
+        intCompanySeq
+        <if test="strPassword != null">
+            , PASSWORD(#{strPassword}) as strPassword2
+        </if>
+        FROM TB_CLIENT
+        WHERE strEmail = #{strEmail}
+    </select>
+
+    <select id="getAdminInfo" parameterType="User" resultType="User">
+        SELECT intSeq,
+        strName,
+        strEmail,
+        strPassword,
+        intLevel,
+        intStatus,
+        dateReg,
+        dateEdit,
+        txtPermission
+        <if test="strPassword != null">
+            , PASSWORD(#{strPassword}) as strPassword2
+        </if>
+
+        FROM TB_ADMIN
+        WHERE strEmail = #{strEmail}
+    </select>
+
+    <select id="getCompany" parameterType="User" resultType="Company">
+        SELECT strCompanyname,
+               strHompage,
+               intLevel,
+               intStatus,
+               dateReg,
+               dateEdit
+        FROM TB_COMPANY
+        WHERE intSeq = #{intCompanySeq}
+    </select>
+</mapper>

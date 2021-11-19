@@ -22,6 +22,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("com.auth0:java-jwt:3.13.0")
     implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.2")
     implementation("org.mariadb.jdbc:mariadb-java-client:1.3.2")
     implementation("org.json:json:20180130")

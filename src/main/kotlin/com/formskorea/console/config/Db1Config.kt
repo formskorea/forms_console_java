@@ -35,7 +35,7 @@ class Db1Config {
         sqlSessionFactoryBean.setDataSource(db1DataSource)
         sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:mapper/dao/*.xml"))
         sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:mybatis-config.xml"))
-        sqlSessionFactoryBean.setTypeAliasesPackage("biz.themaker.home.data.model")
+        sqlSessionFactoryBean.setTypeAliasesPackage("com.formskorea.console.data.model")
         return sqlSessionFactoryBean.`object`!!
     }
 

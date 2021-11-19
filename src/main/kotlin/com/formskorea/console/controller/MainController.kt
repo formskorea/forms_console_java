@@ -37,4 +37,18 @@ class MainController {
         return "index"
     }
 
+    @RequestMapping(value = ["/login"], method = [RequestMethod.GET, RequestMethod.POST])
+    @Throws(Exception::class)
+    fun login(model: Model, response: HttpServletResponse, request: HttpServletRequest) : Any {
+
+        val cookie = request.cookies
+
+        val scripts = ArrayList<String>()
+        scripts.add("/js/login.js")
+
+        model.addAttribute("scripts", scripts)
+
+        return "login"
+    }
+
 }

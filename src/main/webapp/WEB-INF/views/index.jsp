@@ -1,11 +1,13 @@
 <%@ page import="java.util.List" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %><%
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
     List<String> arrScript = (List<String>) request.getAttribute("scripts");
     List<String> arrCss = (List<String>) request.getAttribute("styles");
 %>
 <jsp:include page="inc_header.jsp">
     <jsp:param name="styles" value="${arrCss}"/>
 </jsp:include>
+<jsp:include page="inc_menu.jsp" />
 <main id="main" class="main">
 
     <div class="pagetitle">
@@ -47,8 +49,9 @@
         </div>
     </section>
 
-</main><!-- End #main -->
-
+</main>
+<!-- End #main -->
+<jsp:include page="inc_footer.jsp" />
 <jsp:include page="inc_bottom.jsp">
     <jsp:param name="scripts" value="${arrScript}"/>
 </jsp:include>
