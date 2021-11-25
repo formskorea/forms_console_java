@@ -9,6 +9,7 @@ data class User(
     @SerializedName("pass") var strPassword: String? = null,
     @SerializedName("name") var strName: String? = null,
     @SerializedName("mobile") var strMobile: String? = null,
+    @SerializedName("tel") var strTelnum: String? = null,
     @SerializedName("nik") var strNikname: String? = null,
     @SerializedName("sex") var intSex: Int? = null,
     @SerializedName("perm") var strPermission: String? = null,
@@ -21,6 +22,8 @@ data class User(
     @SerializedName("reg") var dateReg: String? = null,
     @SerializedName("edit") var dateEdit: String? = null,
     @SerializedName("company") var company: Company? = null,
+    @SerializedName("media") var media: ArrayList<Media>? = null,
     var intCompanySeq: Int? = null,
-    @SerializedName("pass2") var strPassword2: String? = null
+    @SerializedName("pass2") var strPassword2: String? = null,
+    var txtPermission: String? = null
 )

@@ -6,7 +6,10 @@ $(document).ready(function () {
         var password = $("#yourPassword").val();
         var mtype = $("#gridRadios1").is(":checked") ? $("#gridRadios1").val() : ($("#gridRadios2").is(":checked") ? $("#gridRadios2").val() : $("#gridRadios3").val());
 
-        if(email != "" && password != "") {
+        if(!checkEmail(email)) {
+            var message = $("#useremail").parent().find(".invalid-feedback").text();
+            showModal(message);
+        } else if(email != "" && password != "") {
             $.ajax({
                 url: '/api/login',
                 type: 'POST',
@@ -28,5 +31,5 @@ $(document).ready(function () {
                 /*pass*/
             });
         }
-    })
+    });
 });

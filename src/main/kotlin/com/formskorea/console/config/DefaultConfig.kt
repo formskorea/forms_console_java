@@ -28,6 +28,8 @@ object DefaultConfig {
     const val MESSAGE_CHECK_EMAIL = "이메일 형식이 맞지 않습니다."
     const val MESSAGE_NOTUSER = "사용금지된 회원입니다."
     const val MESSAGE_REJECT = "탈퇴한 회원입니다."
+    const val MESSAGE_EMPTY_PASSWORD = "비밀번호가 없습니다."
+    const val MESSAGE_PASSNOTMATCH = "비밀번호가 일치하지 않습니다."
     const val MESSAGE_REJOIN = "이미 가입된 회원입니다."
     const val MESSAGE_TOKENOUT = "토큰이 만료되었습니다."
     const val MESSAGE_NULL = "값이 없습니다."
@@ -46,4 +48,5 @@ object DefaultConfig {
     const val MEMBER_OK = 1
     const val MEMBER_REJECT = 5
     const val MEMBER_CUT = 9
+
 }

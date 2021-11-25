@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.formskorea.console.mapper.dao.ApplicationMapper">
-    <select id="getInflucerInfo" parameterType="User" resultType="User">
+    <select id="getInfluncerInfo" parameterType="User" resultType="User">
         SELECT intSeq,
         strEmail,
         strPassword,
@@ -12,10 +12,6 @@
         txtPermission,
         intLevel,
         intStatus,
-        strInstargram,
-        strYoutube,
-        strBlog,
-        strMall,
         dateReg,
         dateEdit,
         intCompanySeq
@@ -65,14 +61,108 @@
         WHERE strEmail = #{strEmail}
     </select>
 
-    <select id="getCompany" parameterType="User" resultType="Company">
-        SELECT strCompanyname,
-               strHompage,
-               intLevel,
-               intStatus,
-               dateReg,
-               dateEdit
+    <select id="getCompany" parameterType="Company" resultType="Company">
+        SELECT intSeq,
+        strCompanyname,
+        strHomepage,
+        intLevel,
+        strTelnum,
+        strZipcode,
+        strAddress,
+        strZone,
+        intStatus,
+        dateReg,
+        dateEdit
         FROM TB_COMPANY
-        WHERE intSeq = #{intCompanySeq}
+        WHERE
+        intSeq > 0
+        <if test="intSeq != null and intSeq != 0">
+            AND intSeq = #{intSeq}
+        </if>
+        <if test="strCompanyname != null and strCompanyname != ''">
+            AND strCompanyname = #{strCompanyname}
+        </if>
     </select>
+
+    <insert id="setInfluncer" parameterType="User" useGeneratedKeys="true" keyProperty="intSeq">
+        INSERT INTO TB_INFUENCER (strEmail,
+                                  strPassword,
+                                  strName,
+                                  strMobile,
+                                  strNikname,
+                                  intSex,
+                                  txtPermission,
+                                  intLevel,
+                                  intStatus,
+                                  intCompanySeq)
+        VALUES (#{strEmail},
+                PASSWORD(#{strPassword}),
+                #{strName},
+                #{strMobile},
+                #{strNikname},
+                #{intSex},
+                #{txtPermission},
+                #{intLevel},
+                #{intStatus},
+                #{intCompanySeq});
+    </insert>
+
+    <insert id="setClient" parameterType="User" useGeneratedKeys="true" keyProperty="intSeq">
+        INSERT INTO TB_CLIENT (strEmail,
+                               strPassword,
+                               strName,
+                               strMobile,
+                               strTelnum,
+                               strNikname,
+                               intSex,
+                               txtPermission,
+                               intLevel,
+                               intStatus,
+                               intCompanySeq)
+        VALUES (#{strEmail},
+                PASSWORD(#{strPassword}),
+                #{strName},
+                #{strMobile},
+                #{strTelnum},
+                #{strNikname},
+                #{intSex},
+                #{txtPermission},
+                #{intLevel},
+                #{intStatus},
+                #{intCompanySeq});
+    </insert>
+
+    <insert id="setAdmin" parameterType="User" useGeneratedKeys="true" keyProperty="intSeq">
+        INSERT INTO TB_ADMIN (strName,
+                              strEmail,
+                              strPassword,
+                              intLevel,
+                              intStatus,
+                              txtPermission)
+        VALUES (#{strName},
+                #{strEmail},
+                PASSWORD(#{strPassword}),
+                #{intLevel},
+                #{intStatus},
+                #{txtPermission});
+    </insert>
+
+    <insert id="setCompany" parameterType="Company" useGeneratedKeys="true" keyProperty="intSeq">
+        INSERT INTO TB_COMPANY (strCompanyname,
+                                strHomepage,
+                                intLevel,
+                                strTelnum,
+                                strZipcode,
+                                strAddress,
+                                strZone,
+                                intStatus)
+        VALUES (#{strCompanyname},
+                #{strHomepage},
+                #{intLevel},
+                #{strTelnum},
+                #{strZipcode},
+                #{strAddress},
+                #{strZone},
+                #{intStatus});
+    </insert>
 </mapper>

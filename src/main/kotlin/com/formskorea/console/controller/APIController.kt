@@ -134,6 +134,8 @@ class APIController {
     fun join(@RequestBody data: User, response: HttpServletResponse, request: HttpServletRequest): Any {
         val rtnValue = ReturnValue()
 
+        log.error(data.toString())
+
         if (rtnValue.status == DefaultConfig.SERVER_SUCCESS && data.strEmail.isNullOrEmpty()) {
             rtnValue.error = DefaultConfig.ERROR_PARAM
             rtnValue.status = DefaultConfig.SERVER_PARAMERROR
@@ -149,31 +151,64 @@ class APIController {
         if (rtnValue.status == DefaultConfig.SERVER_SUCCESS && (data.strPassword.isNullOrEmpty() || data.strPassword2.isNullOrEmpty())) {
             rtnValue.error = DefaultConfig.ERROR_PARAM
             rtnValue.status = DefaultConfig.SERVER_PARAMERROR
-            rtnValue.message = DefaultConfig.MESSAGE_MEMBERTYPE
+            rtnValue.message = DefaultConfig.MESSAGE_EMPTY_PASSWORD
         }
 
-        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS && (data.strPassword.isNullOrEmpty() != data.strPassword2.isNullOrEmpty())) {
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS && (data.strPassword != data.strPassword2)) {
             rtnValue.error = DefaultConfig.ERROR_PARAM
             rtnValue.status = DefaultConfig.SERVER_PARAMERROR
-            rtnValue.message = DefaultConfig.MESSAGE_MEMBERTYPE
+            rtnValue.message = DefaultConfig.MESSAGE_PASSNOTMATCH
         }
 
         if (rtnValue.status == DefaultConfig.SERVER_SUCCESS && data.strMemberType.isNullOrEmpty()) {
             rtnValue.error = DefaultConfig.ERROR_PARAM
             rtnValue.status = DefaultConfig.SERVER_PARAMERROR
             rtnValue.message = DefaultConfig.MESSAGE_MEMBERTYPE
-        } else {
-            when (data.strMemberType) {
-                DefaultConfig.MEMBER_ADMIN -> {
+        }
 
-                }
-                DefaultConfig.MEMBER_ADMIN -> {
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS) {
+            try {
+                var cresult: Boolean? = true
+                log.error(data.toString())
 
+                if(data.intLevel == null) {
+                    data.intLevel = 1
                 }
-                else -> {
+                if(data.intStatus == null) {
+                    data.intStatus = 0
+                }
 
+                if (data.company != null && !data.company?.strCompanyname.isNullOrEmpty()) {
+                    val ccresult = applicationService.getCompany(data.company!!)
+
+                    if(ccresult == null) {
+                        data.company!!.strAddress += "|" + data.company!!.strAddress2
+                        cresult = applicationService.setCompany(data.company!!)
+                        if (cresult != null && cresult == true) {
+                            data.intCompanySeq = data.company?.intSeq
+                        }
+                    } else {
+                        data.intCompanySeq = ccresult.intSeq
+                    }
                 }
+
+                var result = applicationService.setUser(data)
+
+                if (result == null) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_INFONULL
+                } else {
+                    rtnValue.result = data.intSeq
+                }
+
+            } catch (e: Exception) {
+                log.error(e.message)
+                rtnValue.error = DefaultConfig.ERROR_DBERROR
+                rtnValue.status = DefaultConfig.SERVER_DBERROR
+                rtnValue.message = DefaultConfig.MESSAGE_DBERROR
             }
+
         }
 
         return rtnValue

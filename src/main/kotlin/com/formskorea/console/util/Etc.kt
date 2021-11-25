@@ -1,11 +1,17 @@
 package com.formskorea.console.util
 
+import com.formskorea.console.config.DefaultConfig
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
+import javax.servlet.http.Cookie
 
 object Etc {
+    var log = LoggerFactory.getLogger(this::class.java) as Logger
+
     fun setComma(value: Int) : String {
         val nf = NumberFormat.getInstance()
         return nf.format(value)
@@ -71,4 +77,14 @@ object Etc {
         return checkValid(data, regex)
     }
 
+    fun getCookie(key: String, cookie: Array<Cookie>?) : String {
+        if(cookie != null) {
+            for (field in cookie) {
+                if (field.name == key) {
+                    return field.value
+                }
+            }
+        }
+        return ""
+    }
 }

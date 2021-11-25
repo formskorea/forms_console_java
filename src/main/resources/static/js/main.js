@@ -237,3 +237,8 @@ function setCookie(key, value, expiredays = 0) {
         document.cookie = key + "=" + escape(value) + "; path=/; ";
     }
 }
+
+function checkEmail(value) {
+    var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+    return regEmail.test(value);
+}
