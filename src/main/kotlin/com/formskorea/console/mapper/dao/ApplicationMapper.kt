@@ -1,6 +1,7 @@
 package com.formskorea.console.mapper.dao
 
 import com.formskorea.console.data.model.Company
+import com.formskorea.console.data.model.Media
 import com.formskorea.console.data.model.User
 
 interface ApplicationMapper {
@@ -12,4 +13,5 @@ interface ApplicationMapper {
     fun setAdmin(data: User) : Boolean?
     fun getCompany(data: Company) : Company?
     fun setCompany(data: Company) : Boolean?
+    fun setMedia(data: Media) : Boolean?
 }

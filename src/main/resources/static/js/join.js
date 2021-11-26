@@ -45,10 +45,8 @@ $(document).ready(function () {
             if($("#in_corpname").val() != "") {
                tojson.company = { 'comname': $("#in_corpname").val(), 'tel': $("#in_corptel").val(), 'zip': $("#zipcode").val(), 'address': $("#address1").val(), 'address2': $("#address2").val() };
             }
-            tojson.media = [{'usertype': mtype, 'type': 1, 'url': $("#media_1").val()}, {'usertype': mtype, 'type': 2, 'url': $("#media_2").val()}, {'usertype': mtype, 'type': 3, 'url': $("#media_3").val()}, {'usertype': mtype, 'type': 4, 'url': $("#media_4").val()}];
+            tojson.media = [{'type': 1, 'url': $("#media_1").val()}, {'type': 2, 'url': $("#media_2").val()}, {'type': 3, 'url': $("#media_3").val()}, {'type': 4, 'url': $("#media_4").val()}];
          }
-
-         console.log(tojson);
 
          $.ajax({
             url: '/api/join',

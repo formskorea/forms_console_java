@@ -7,7 +7,7 @@
     <div class="d-flex align-items-center justify-content-between">
         <a href="index.html" class="logo d-flex align-items-center">
             <img src="/img/logo.png" alt="">
-            <span class="d-none d-lg-block">Forms Console</span>
+            <span class="d-none d-lg-block">Meta Console</span>
         </a>
         <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->

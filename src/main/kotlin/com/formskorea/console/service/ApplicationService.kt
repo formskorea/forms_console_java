@@ -2,6 +2,7 @@ package com.formskorea.console.service
 
 import com.formskorea.console.config.DefaultConfig
 import com.formskorea.console.data.model.Company
+import com.formskorea.console.data.model.Media
 import com.formskorea.console.data.model.User
 import com.formskorea.console.mapper.dao.ApplicationMapper
 import org.slf4j.Logger
@@ -63,6 +64,10 @@ class ApplicationService {
 
     fun getCompany (data: Company) : Company? {
         return applicationMapper.getCompany(data)
+    }
+
+    fun setMedia(data: Media) : Boolean? {
+        return applicationMapper.setMedia(data)
     }
 
 }

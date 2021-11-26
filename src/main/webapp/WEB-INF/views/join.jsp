@@ -19,7 +19,7 @@
                         <div class="d-flex justify-content-center py-4">
                             <a href="/login" class="logo d-flex align-items-center w-auto">
                                 <img src="/img/logo.png" alt="">
-                                <span class="d-none d-lg-block">Forms Console</span>
+                                <span class="d-none d-lg-block">Meta Console</span>
                             </a>
                         </div><!-- End Logo -->
 
@@ -29,7 +29,7 @@
 
                                 <div class="pt-4 pb-2">
                                     <h5 class="card-title text-center pb-0 fs-4"><strong>회원가입</strong></h5>
-                                    <p class="text-center small">Forms Console 회원가입을 진행해 주세요.</p>
+                                    <p class="text-center small"><strong>Meta Console</strong> 회원가입을 진행해 주세요.</p>
                                 </div>
 
                                 <form id="join_form" class="row g-3 needs-validation" novalidate>
@@ -156,6 +156,7 @@
                                         <button class="btn btn-primary w-100" type="submit">회원가입</button>
                                     </div>
                                     <div class="col-12 mb-0">
+                                        <p class="small mb-2">회원가입 버튼을 클릭하면 Meta Console의 <a href="/rule?type=1" target="_blank"><strong>약관</strong></a>, <a href="/rule?type=2" target="_blank"><strong>데이터 정책</strong></a> 및 <a href="/rule?type=2" target="_blank"><strong>쿠키 정책</strong></a>에 동의하게 됩니다.</p>
                                         <p class="small mb-0">로그인을 원하시면 <a href="/login"><strong>이곳</strong></a>을
                                             클릭해주세요.</p>
                                         <p class="small">회원정보를 찾으시려면 <a href="/find"><strong>이곳</strong></a>을

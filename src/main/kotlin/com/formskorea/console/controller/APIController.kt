@@ -199,6 +199,26 @@ class APIController {
                     rtnValue.status = DefaultConfig.SERVER_NOTUSER
                     rtnValue.message = DefaultConfig.MESSAGE_INFONULL
                 } else {
+                    if(data.media != null) {
+                        for(field in data.media!!) {
+                            if(!field.strURL.isNullOrEmpty()) {
+                                field.intUserSeq = data.intSeq
+                                field.intUserType = when(data.strMemberType) {
+                                    DefaultConfig.MEMBER_CLIENT -> {
+                                        1
+                                    }
+                                    DefaultConfig.MEMBER_INFLUENCER -> {
+                                        2
+                                    }
+                                    else -> {
+                                        9
+                                    }
+                                }
+                                applicationService.setMedia(field)
+                            }
+                        }
+                    }
+
                     rtnValue.result = data.intSeq
                 }
 

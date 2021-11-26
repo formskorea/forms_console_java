@@ -165,4 +165,9 @@
                 #{strZone},
                 #{intStatus});
     </insert>
+
+    <insert id="setMedia" parameterType="Media" useGeneratedKeys="true" keyProperty="intSeq">
+        INSERT INTO TB_MEDIA (intUserSeq, intUserType, intType, strURL, intStatus)
+        VALUES (#{intUserSeq}, #{intUserType}, #{intType}, #{strURL}, #{intStatus});
+    </insert>
 </mapper>

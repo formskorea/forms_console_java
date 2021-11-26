@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Forms Console :: Marketing Solution</title>
+    <title>Meta Console :: Marketing Solution</title>
     <meta content="For your Dream, For your Brand, For your Life - Infuluencor Management System" name="description">
     <meta content="Forms Console Marketing Solution" name="keywords">
 
@@ -23,7 +23,6 @@
     <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel='stylesheet'>
     <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
-    <link href="/vendor/simple-datatables/style.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
     <%
         if(arrCss != null && arrCss.size() > 0) {

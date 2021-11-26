@@ -137,6 +137,36 @@ class MainController {
         return "login"
     }
 
+    @RequestMapping(value = ["/joinok"], method = [RequestMethod.GET, RequestMethod.POST])
+    @Throws(Exception::class)
+    fun joinok(model: Model, response: HttpServletResponse, request: HttpServletRequest) : Any {
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request.cookies)
+        var isLogin = false
+
+        if(token != "") {
+            try {
+                var userinfo = Token.get(token, DefaultConfig.TOKEN_EXPDAY)
+
+                log.error(userinfo.toString())
+
+                if (userinfo != null) {
+                    userinfo = applicationService.info(userinfo)
+                    if(userinfo?.intStatus == DefaultConfig.MEMBER_OK) {
+                        isLogin = true
+                    }
+                }
+            } catch (e: Exception) {
+                log.error(e.message)
+            }
+        }
+
+        if(isLogin) {
+            return RedirectView("/")
+        }
+
+        return "joinok"
+    }
+
     @RequestMapping(value = ["/join"], method = [RequestMethod.GET, RequestMethod.POST])
     @Throws(Exception::class)
     fun join(model: Model, response: HttpServletResponse, request: HttpServletRequest) : Any {
