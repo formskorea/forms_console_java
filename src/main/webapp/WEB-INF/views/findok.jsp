@@ -4,6 +4,7 @@
 <%
     List<String> arrScript = (List<String>) request.getAttribute("scripts");
     List<String> arrCss = (List<String>) request.getAttribute("styles");
+    String email = (String) request.getAttribute("email");
 %>
 <jsp:include page="inc_header.jsp">
     <jsp:param name="styles" value="${arrCss}"/>
@@ -24,15 +25,15 @@
                         <div class="card mb-3 col-12">
                             <div class="card-body">
                                 <div class="pt-4 pb-2">
-                                    <h5 class="card-title text-center pb-0 fs-4"><strong>회원가입 신청완료</strong></h5>
-                                    <p class="text-center small"><strong>Meta Console</strong> 회원가입 신청을 완료하였습니다.</p>
+                                    <h5 class="card-title text-center pb-0 fs-4"><strong>회원정보 찾기완료</strong></h5>
+                                    <p class="text-center small"><strong>Meta Console</strong>에서 회원 정보를 찾았습니다.</p>
                                 </div>
-                                <h5>가입안내</h5>
+                                <h5>정보찾기 안내</h5>
                                 <div class="col-12 pt-2 pb-2">
                                     <ul>
-                                        <li>Meta Console은 관리자의 승인으로 사용할 수 있는 비공개 시스템입니다.</li>
-                                        <li>승인이 완료 될 경우, 가입 요청된 이메일로 승인내용이 발송됩니다.</li>
-                                        <li>승인 전에 로그인하시면, 임시회원 자격으로 Meta Console을 사용하게 됩니다.</li>
+                                        <li>Meta Console에서 <%=email%>로 가입된 정보를 찾았습니다.</li>
+                                        <li>가입시 등록한 이메일로 임시비밀번호가 발급되었습니다.</li>
+                                        <li>비밀번호는 로그인 후 내정보에서 수정가능합니다.</li>
                                     </ul>
                                 </div>
                                 <h5>약관 및 가입정책</h5>

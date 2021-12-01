@@ -1,0 +1,37 @@
+
+spring:
+  #upload setting
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size : 50MB
+      max-request-size: 50MB
+
+  #db1 - private
+  db1:
+    datasource:
+      jdbc-url: jdbc:mariadb://18.218.132.92:3306/FM_CONSOLE
+      username: console
+      password: console2021!
+      driver-class-name: org.mariadb.jdbc.Driver
+
+  #gson,jsp conf
+  mvc:
+    converters:
+      preferred-json-mapper: gson
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+
+  #mail conf
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: formsmeta@gmail.com
+    password: vhawm11!!
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+        auth: true

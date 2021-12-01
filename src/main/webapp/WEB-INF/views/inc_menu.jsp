@@ -1,11 +1,23 @@
 <%@ page import="com.formskorea.console.data.model.User" %>
+<%@ page import="com.formskorea.console.config.DefaultConfig" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %><%
     User userinfo = (User) request.getAttribute("fmcuser");
+
+    String memberType = "";
+    switch (userinfo.getStrMemberType()) {
+        case DefaultConfig.MEMBER_ADMIN:
+            memberType = "관리자";
+            break;
+        case DefaultConfig.MEMBER_CLIENT:
+            memberType = "고객사";
+        default :
+            memberType = "인플루언서";
+    }
 %>
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
     <div class="d-flex align-items-center justify-content-between">
-        <a href="index.html" class="logo d-flex align-items-center">
+        <a href="/" class="logo d-flex align-items-center">
             <img src="/img/logo.png" alt="">
             <span class="d-none d-lg-block">Meta Console</span>
         </a>
@@ -106,7 +118,7 @@
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
                         <h6><%=userinfo.getStrNikname()%></h6>
-                        <span>Lv.<%=userinfo.getIntLevel()%></span>
+                        <span><%=memberType%> Lv.<%=userinfo.getIntLevel()%></span>
                     </li>
                     <li>
                         <hr class="dropdown-divider">

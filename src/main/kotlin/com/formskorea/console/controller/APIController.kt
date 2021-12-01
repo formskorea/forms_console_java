@@ -4,6 +4,7 @@ import com.formskorea.console.config.DefaultConfig
 import com.formskorea.console.data.model.ReturnValue
 import com.formskorea.console.data.model.User
 import com.formskorea.console.service.ApplicationService
+import com.formskorea.console.service.MailService
 import com.formskorea.console.util.Etc
 import com.formskorea.console.util.Token
 import org.slf4j.Logger
@@ -20,6 +21,9 @@ class APIController {
 
     @Autowired
     lateinit var applicationService: ApplicationService
+
+    @Autowired
+    lateinit var mailService: MailService
 
 
     @RequestMapping(value = ["/login"], produces = ["application/json"], method = [RequestMethod.POST])
@@ -235,16 +239,71 @@ class APIController {
     }
 
 
-    @RequestMapping(value = ["/find"])
+    @RequestMapping(value = ["/find"], produces = ["application/json"], method = [RequestMethod.POST])
     @ResponseBody
     @Throws(Exception::class)
-    fun find(response: HttpServletResponse, request: HttpServletRequest): Any {
+    fun find(@RequestBody data: User, response: HttpServletResponse, request: HttpServletRequest): Any {
         val rtnValue = ReturnValue()
 
+        log.debug(data.toString())
 
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS && data.strMemberType.isNullOrEmpty()) {
+            rtnValue.error = DefaultConfig.ERROR_PARAM
+            rtnValue.status = DefaultConfig.SERVER_PARAMERROR
+            rtnValue.message = DefaultConfig.MESSAGE_MEMBERTYPE
+        }
+
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS && data.strEmail.isNullOrEmpty()) {
+            rtnValue.error = DefaultConfig.ERROR_PARAM
+            rtnValue.status = DefaultConfig.SERVER_PARAMERROR
+            rtnValue.message = DefaultConfig.MESSAGE_EMPTY_EMAIL
+        }
+
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS && !Etc.checkEMail(data.strEmail.toString())) {
+            rtnValue.error = DefaultConfig.ERROR_PARAM
+            rtnValue.status = DefaultConfig.SERVER_PARAMERROR
+            rtnValue.message = DefaultConfig.MESSAGE_CHECK_EMAIL
+        }
+
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS) {
+            try {
+                val result = applicationService.info(data)
+
+                if (result == null) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_INFONULL
+                } else if (result.intStatus == DefaultConfig.MEMBER_REJECT) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_REJECT
+                } else if (result.intStatus == DefaultConfig.MEMBER_CUT) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_NOTUSER
+                } else {
+                    data.strPassword = Etc.random(111111, 999999).toString()
+                    applicationService.editUser(data)
+                    try {
+                        mailService.sendMail(DefaultConfig.MAIL_SEND_PASSWORD_TITLE, DefaultConfig.MAIL_SEND_PASSWORD_INFO.replace("{new_password}", data.strPassword.toString()), data.strEmail.toString())
+                    } catch (e: Exception) {
+                        log.error(e.message)
+                        rtnValue.error = DefaultConfig.ERROR_PROCESS
+                        rtnValue.status = DefaultConfig.SERVER_PARAMERROR
+                        rtnValue.message = DefaultConfig.MESSAGE_PROCESS
+                    }
+                }
+
+            } catch (e: Exception) {
+                rtnValue.error = DefaultConfig.ERROR_DBERROR
+                rtnValue.status = DefaultConfig.SERVER_DBERROR
+                rtnValue.message = DefaultConfig.MESSAGE_DBERROR
+            }
+        }
 
         return rtnValue
     }
+
 
 
 }

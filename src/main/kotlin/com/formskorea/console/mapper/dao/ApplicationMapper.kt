@@ -11,7 +11,11 @@ interface ApplicationMapper {
     fun setInfluncer(data: User) : Boolean?
     fun setClient(data: User) : Boolean?
     fun setAdmin(data: User) : Boolean?
+    fun editInfluncer(data: User) : Boolean?
+    fun editClient(data: User) : Boolean?
+    fun editAdmin(data: User) : Boolean?
     fun getCompany(data: Company) : Company?
     fun setCompany(data: Company) : Boolean?
     fun setMedia(data: Media) : Boolean?
+    fun getMedia(data: Media) : ArrayList<Media>?
 }

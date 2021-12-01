@@ -1,10 +1,21 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.formskorea.console.data.model.User" %>
+<%@ page import="com.formskorea.console.config.DefaultConfig" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     List<String> arrScript = (List<String>) request.getAttribute("scripts");
     List<String> arrCss = (List<String>) request.getAttribute("styles");
     User userinfo = (User) request.getAttribute("fmcuser");
+    String memberType = "";
+    switch (userinfo.getStrMemberType()) {
+        case DefaultConfig.MEMBER_ADMIN:
+            memberType = "관리자";
+            break;
+        case DefaultConfig.MEMBER_CLIENT:
+            memberType = "고객사";
+        default:
+            memberType = "인플루언서";
+    }
 %>
 <jsp:include page="inc_header.jsp">
     <jsp:param name="styles" value="${arrCss}"/>
@@ -32,15 +43,29 @@
                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
                         <img src="/img/ic_user.svg" alt="Profile" class="rounded-circle">
-                        <h2><%=userinfo.getStrName()%>
-                        </h2>
-                        <h3>Lv. <%=userinfo.getIntLevel()%>
-                        </h3>
+                        <h2><%=userinfo.getStrNikname()%></h2>
+                        <h3><%=memberType%> Lv. <%=userinfo.getIntLevel()%></h3>
                         <div class="social-links mt-2">
-                            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                        <% for(Integer i = 0; i < userinfo.getMedia().size(); i++) {
+                            switch (userinfo.getMedia().get(i).getIntType()) {
+                                case 1 : %>
+                                    <a href="<%=userinfo.getMedia().get(i).getStrURL()%>" target="_blank" class="instagram"><i class="bi bi-instagram"></i></a>
+                            <%
+                                    break;
+                                case 2 : %>
+                                    <a href="<%=userinfo.getMedia().get(i).getStrURL()%>" target="_blank" class="youtube"><i class="bi bi-youtube"></i></a>
+                            <%
+                                break;
+                                case 3 : %>
+                            <a href="<%=userinfo.getMedia().get(i).getStrURL()%>" target="_blank" class="blog"><i class="bi bi-bootstrap"></i></a>
+                            <%
+                                break;
+                                case 4 : %>
+                                <a href="<%=userinfo.getMedia().get(i).getStrURL()%>" target="_blank" class="shoppingmall"><i class="bi bi-cart3"></i></a>
+                            <%
+                                break;
+                            }
+                        } %>
                         </div>
                     </div>
                 </div>
@@ -81,56 +106,79 @@
 
                             <div class="tab-pane fade show active profile-overview" id="profile-overview">
 
-                                <h5 class="card-title">개인정보</h5>
+                                <h5 class="card-title"><strong><i class="bi bi-info-circle"></i> 개인정보</strong></h5>
 
+                                <% switch (userinfo.getStrMemberType()) {
+                                    case DefaultConfig.MEMBER_CLIENT: %>
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label ">성명</div>
                                     <div class="col-lg-9 col-md-8"><%=userinfo.getStrName()%>
                                     </div>
                                 </div>
-
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">회사</div>
-                                    <div class="col-lg-9 col-md-8">(주)폼즈</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">레벨</div>
-                                    <div class="col-lg-9 col-md-8">Lv. <%=userinfo.getIntLevel()%>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">주소</div>
-                                    <div class="col-lg-9 col-md-8"><%="주소"%>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">연락처</div>
+                                    <div class="col-lg-3 col-md-4 label ">연락처</div>
                                     <div class="col-lg-9 col-md-8"><%=userinfo.getStrMobile()%>
                                     </div>
                                 </div>
-
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Email</div>
+                                    <div class="col-lg-3 col-md-4 label ">이메일</div>
                                     <div class="col-lg-9 col-md-8"><%=userinfo.getStrEmail()%>
                                     </div>
                                 </div>
-
-                                <% if (userinfo.getCompany() != null) {
+                                <%      break;
+                                    case DefaultConfig.MEMBER_INFLUENCER:
                                 %>
-                                <h5 class="card-title">회사정보</h5>
-
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">회사명</div>
-                                    <div class="col-lg-9 col-md-8"><%=userinfo.getCompany().getStrCompanyname()%>
+                                    <div class="col-lg-3 col-md-4 label ">성명</div>
+                                    <div class="col-lg-9 col-md-8"><%=userinfo.getStrName()%>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">활동명</div>
+                                    <div class="col-lg-9 col-md-8"><%=userinfo.getStrNikname()%>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">연락처</div>
+                                    <div class="col-lg-9 col-md-8"><%=userinfo.getStrMobile()%>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">이메일</div>
+                                    <div class="col-lg-9 col-md-8"><%=userinfo.getStrEmail()%>
+                                    </div>
+                                </div>
+                                <%      break;
+                                    default:
+                                %>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">성명</div>
+                                    <div class="col-lg-9 col-md-8"><%=userinfo.getStrName()%>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">이메일</div>
+                                    <div class="col-lg-9 col-md-8"><%=userinfo.getStrEmail()%>
                                     </div>
                                 </div>
                                 <%
-                                    }
-                                %>
-
+                                        break;
+                                    } %>
+                                <% if (userinfo.getCompany() != null) { %>
+                                <h5 class="card-title"><strong><i class="bi bi-building"></i> 회사정보</strong></h5>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">회사명</div>
+                                    <div class="col-lg-9 col-md-8"><%=userinfo.getCompany().getStrCompanyname()%></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">연락처</div>
+                                    <div class="col-lg-9 col-md-8"><%=userinfo.getCompany().getStrTelnum()%></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">주소</div>
+                                    <div class="col-lg-9 col-md-8">(<%=userinfo.getCompany().getStrZipcode()%>)&nbsp;&nbsp;<%=userinfo.getCompany().getStrAddress().replace("|", " ")%></div>
+                                </div>
+                                <% } %>
                             </div>
 
                             <div class="tab-pane fade profile-edit pt-3" id="profile-edit">

@@ -18,14 +18,18 @@ class ApplicationService {
     lateinit var applicationMapper: ApplicationMapper
 
     fun info(data : User) : User? {
+        val media = Media()
         val info = when(data.strMemberType) {
             DefaultConfig.MEMBER_ADMIN -> {
-               applicationMapper.getAdminInfo(data)
+                media.intUserType = 9
+                applicationMapper.getAdminInfo(data)
             }
             DefaultConfig.MEMBER_CLIENT -> {
+                media.intUserType = 1
                 applicationMapper.getClientInfo(data)
             }
             else -> {
+                media.intUserType = 2
                 applicationMapper.getInfluncerInfo(data)
             }
         }
@@ -41,6 +45,9 @@ class ApplicationService {
             info.intCompanySeq = null
         }
 
+        media.intUserSeq = info?.intSeq
+        info?.media = applicationMapper.getMedia(media)
+
         return info
     }
 
@@ -54,6 +61,20 @@ class ApplicationService {
             }
             else -> {
                 applicationMapper.setInfluncer(data)
+            }
+        }
+    }
+
+    fun editUser(data: User) : Boolean? {
+        return when(data.strMemberType) {
+            DefaultConfig.MEMBER_ADMIN -> {
+                applicationMapper.editAdmin(data)
+            }
+            DefaultConfig.MEMBER_CLIENT -> {
+                applicationMapper.editClient(data)
+            }
+            else -> {
+                applicationMapper.editInfluncer(data)
             }
         }
     }

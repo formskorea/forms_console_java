@@ -20,6 +20,7 @@ object DefaultConfig {
     const val ERROR_LOGOUT = "logout"
     const val ERROR_DBERROR = "database error"
     const val ERROR_NULL = "null"
+    const val ERROR_PROCESS = "server error"
 
     const val MESSAGE_OK = "정상"
     const val MESSAGE_INFONULL = "로그인 정보를 찾을 수 없습니다."
@@ -35,6 +36,7 @@ object DefaultConfig {
     const val MESSAGE_NULL = "값이 없습니다."
     const val MESSAGE_NOFILE = "파일이 없습니다."
     const val MESSAGE_NOIMAGEFILE = "이미지파일이 아닙니다."
+    const val MESSAGE_PROCESS = "처리중 오류가 발생했습니다."
 
     const val MESSAGE_DBERROR = "일시적인 장애가 발생되었습니다.\n잠시후 다시 시도해 주세요."
 
@@ -46,7 +48,17 @@ object DefaultConfig {
     const val TOKEN_KEY = "ghkanfaostptustlzmflt"
 
     const val MEMBER_OK = 1
+    const val MEMBER_JOIN = 0
     const val MEMBER_REJECT = 5
     const val MEMBER_CUT = 9
+
+    const val MAIL_SEND_PASSWORD_TITLE = "Meta Console 임시 접속 비밀번호를 전달드립니다."
+    const val MAIL_SEND_PASSWORD_INFO = "안녕하세요. Meta Console 입니다." +
+            "\n회원찾기에 성공하여, 임시 비밀번호를 전달드립니다." +
+            "\n임시 비밀번호는 아래와 같습니다." +
+            "\n \n \n ==================================" +
+            "\n       비밀번호 : {new_password}" +
+            "\n ==================================" +
+            "\n \n * 본메일은 발송전용 메일입니다."
 
 }

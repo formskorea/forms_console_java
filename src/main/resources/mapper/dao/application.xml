@@ -147,6 +147,114 @@
                 #{txtPermission});
     </insert>
 
+    <update id="editInfluncer" parameterType="User">
+        UPDATE TB_INFUENCER SET
+        <if test="strPassword != null and strPassword != ''">
+            strPassword = PASSWORD(#{strPassword}),
+        </if>
+        <if test="strName != null and strName != ''">
+            strName = #{strName},
+        </if>
+        <if test="strMobile != null and strMobile != ''">
+            strMobile = #{strMobile},
+        </if>
+        <if test="strNikname != null and strNikname != ''">
+            strNikname = #{strNikname},
+        </if>
+        <if test="intSex != null and intSex != 0">
+            intSex = #{intSex},
+        </if>
+        <if test="txtPermission != null and txtPermission != ''">
+            txtPermission = #{txtPermission},
+        </if>
+        <if test="intLevel != null and intLevel != 0">
+            intLevel = #{intLevel},
+        </if>
+        <if test="intStatus != null and intStatus != 0">
+            intStatus = #{intStatus},
+        </if>
+        <if test="intCompanySeq != null and intCompanySeq != 0">
+            intCompanySeq = #{intCompanySeq},
+        </if>
+        dateEdit = CURRENT_TIMESTAMP
+        WHERE
+        intSeq > 0
+        <if test="intSeq != null and intSeq != 0">
+            AND intSeq = #{intSeq}
+        </if>
+        <if test="strEmail != null and strEmail != ''">
+            AND strEmail = #{strEmail}
+        </if>
+    </update>
+
+    <update id="editClient" parameterType="User">
+        UPDATE TB_CLIENT SET
+        <if test="strPassword != null and strPassword != ''">
+            strPassword = PASSWORD(#{strPassword}),
+        </if>
+        <if test="strName != null and strName != ''">
+            strName = #{strName},
+        </if>
+        <if test="strMobile != null and strMobile != ''">
+            strMobile = #{strMobile},
+        </if>
+        <if test="strNikname != null and strNikname != ''">
+            strNikname = #{strNikname},
+        </if>
+        <if test="intSex != null and intSex != 0">
+            intSex = #{intSex},
+        </if>
+        <if test="txtPermission != null and txtPermission != ''">
+            txtPermission = #{txtPermission},
+        </if>
+        <if test="intLevel != null and intLevel != 0">
+            intLevel = #{intLevel},
+        </if>
+        <if test="intStatus != null and intStatus != 0">
+            intStatus = #{intStatus},
+        </if>
+        <if test="intCompanySeq != null and intCompanySeq != 0">
+            intCompanySeq = #{intCompanySeq},
+        </if>
+        dateEdit = CURRENT_TIMESTAMP
+        WHERE
+        intSeq > 0
+        <if test="intSeq != null and intSeq != 0">
+            AND intSeq = #{intSeq}
+        </if>
+        <if test="strEmail != null and strEmail != ''">
+            AND strEmail = #{strEmail}
+        </if>
+    </update>
+
+    <update id="editAdmin" parameterType="User">
+        UPDATE TB_CLIENT SET
+        <if test="strPassword != null and strPassword != ''">
+            strPassword = PASSWORD(#{strPassword}),
+        </if>
+        <if test="strName != null and strName != ''">
+            strName = #{strName},
+        </if>
+        <if test="txtPermission != null and txtPermission != ''">
+            txtPermission = #{txtPermission},
+        </if>
+        <if test="intLevel != null and intLevel != 0">
+            intLevel = #{intLevel},
+        </if>
+        <if test="intStatus != null and intStatus != 0">
+            intStatus = #{intStatus},
+        </if>
+        dateEdit = CURRENT_TIMESTAMP
+        WHERE
+        intSeq > 0
+        <if test="intSeq != null and intSeq != 0">
+            AND intSeq = #{intSeq}
+        </if>
+        <if test="strEmail != null and strEmail != ''">
+            AND strEmail = #{strEmail}
+        </if>
+    </update>
+
     <insert id="setCompany" parameterType="Company" useGeneratedKeys="true" keyProperty="intSeq">
         INSERT INTO TB_COMPANY (strCompanyname,
                                 strHomepage,
@@ -170,4 +278,22 @@
         INSERT INTO TB_MEDIA (intUserSeq, intUserType, intType, strURL, intStatus)
         VALUES (#{intUserSeq}, #{intUserType}, #{intType}, #{strURL}, #{intStatus});
     </insert>
+
+    <select id="getMedia" parameterType="Media" resultType="Media">
+        SELECT
+            intSeq, intUserSeq, intUserType, intType, strURL, intStatus
+        FROM
+               TB_MEDIA
+        WHERE
+            intSeq > 0
+        <if test="intSeq != null and intSeq != 0">
+            AND intSeq = #{intSeq}
+        </if>
+        <if test="intUserType != null and intUserType != 0">
+            AND intUserType = #{intUserType}
+        </if>
+        <if test="intUserSeq != null and intUserSeq != 0">
+            AND intUserSeq = #{intUserSeq}
+        </if>
+    </select>
 </mapper>

@@ -87,4 +87,8 @@ object Etc {
         }
         return ""
     }
+
+    fun random(start:Int, end: Int) : Int {
+        return (start until end).random()
+    }
 }
