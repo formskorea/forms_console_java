@@ -19,7 +19,7 @@
             , PASSWORD(#{strPassword}) as strPassword2
         </if>
         FROM TB_INFUENCER
-        WHERE strEmail = #{strEmail}
+        WHERE strEmail = #{strEmail};
     </select>
 
     <select id="getClientInfo" parameterType="User" resultType="User">
@@ -40,7 +40,7 @@
             , PASSWORD(#{strPassword}) as strPassword2
         </if>
         FROM TB_CLIENT
-        WHERE strEmail = #{strEmail}
+        WHERE strEmail = #{strEmail};
     </select>
 
     <select id="getAdminInfo" parameterType="User" resultType="User">
@@ -56,9 +56,8 @@
         <if test="strPassword != null">
             , PASSWORD(#{strPassword}) as strPassword2
         </if>
-
         FROM TB_ADMIN
-        WHERE strEmail = #{strEmail}
+        WHERE strEmail = #{strEmail};
     </select>
 
     <select id="getCompany" parameterType="Company" resultType="Company">
@@ -81,7 +80,7 @@
         </if>
         <if test="strCompanyname != null and strCompanyname != ''">
             AND strCompanyname = #{strCompanyname}
-        </if>
+        </if>;
     </select>
 
     <insert id="setInfluncer" parameterType="User" useGeneratedKeys="true" keyProperty="intSeq">
@@ -184,7 +183,7 @@
         </if>
         <if test="strEmail != null and strEmail != ''">
             AND strEmail = #{strEmail}
-        </if>
+        </if>;
     </update>
 
     <update id="editClient" parameterType="User">
@@ -224,7 +223,7 @@
         </if>
         <if test="strEmail != null and strEmail != ''">
             AND strEmail = #{strEmail}
-        </if>
+        </if>;
     </update>
 
     <update id="editAdmin" parameterType="User">
@@ -252,7 +251,7 @@
         </if>
         <if test="strEmail != null and strEmail != ''">
             AND strEmail = #{strEmail}
-        </if>
+        </if>;
     </update>
 
     <insert id="setCompany" parameterType="Company" useGeneratedKeys="true" keyProperty="intSeq">
@@ -281,11 +280,11 @@
 
     <select id="getMedia" parameterType="Media" resultType="Media">
         SELECT
-            intSeq, intUserSeq, intUserType, intType, strURL, intStatus
+        intSeq, intUserSeq, intUserType, intType, strURL, intStatus
         FROM
-               TB_MEDIA
+        TB_MEDIA
         WHERE
-            intSeq > 0
+        intSeq > 0
         <if test="intSeq != null and intSeq != 0">
             AND intSeq = #{intSeq}
         </if>
@@ -294,6 +293,130 @@
         </if>
         <if test="intUserSeq != null and intUserSeq != 0">
             AND intUserSeq = #{intUserSeq}
-        </if>
+        </if>;
     </select>
+
+    <update id="editMedia" parameterType="Media">
+        UPDATE TB_MEDIA SET
+        <if test="strURL != null and strURL != ''">
+            strURL = #{strURL},
+        </if>
+        <if test="intStatus != null and intStatus != 0">
+            intStatus = #{intStatus},
+        </if>
+        dateEdit = CURRENT_TIMESTAMP
+        WHERE
+        intSeq > 0
+        <if test="intSeq != null and intSeq != 0">
+            AND intSeq = #{intSeq}
+        </if>
+        <if test="intUserType != null and intUserType != 0">
+            AND intUserType = #{intUserType}
+        </if>
+        <if test="intUserSeq != null and intUserSeq != 0">
+            AND intUserSeq = #{intUserSeq}
+        </if>;
+    </update>
+
+    <delete id="delMedia" parameterType="Media">
+        DELETE FROM TB_MEDIA
+        WHERE
+        intSeq > 0
+        <if test="intSeq != null and intSeq != 0">
+            AND intSeq = #{intSeq}
+        </if>
+        <if test="intUserType != null and intUserType != 0">
+            AND intUserType = #{intUserType}
+        </if>
+        <if test="intUserSeq != null and intUserSeq != 0">
+            AND intUserSeq = #{intUserSeq}
+        </if>;
+    </delete>
+
+    <insert id="setTag" parameterType="Tag" useGeneratedKeys="true" keyProperty="intSeq">
+        INSERT INTO TB_TAGS(strTag)
+        VALUES (#{strTag});
+    </insert>
+
+    <delete id="delTag" parameterType="Tag">
+        DELETE
+        FROM TB_TAGS
+        WHERE strTag = #{strTag};
+    </delete>
+
+    <select id="getTags" parameterType="Tag" resultType="Tag">
+        SELECT a.strTag FROM TB_TAGS a, TB_TAG_LINK b
+        WHERE
+            a.intSeq > 0
+        <if test="intUserType != null and intUserType != 0">
+            AND b.intUserType = #{intUserType}
+        </if>
+        <if test="intUserSeq != null and intUserSeq != 0">
+            AND b.intUserSeq = #{intUserSeq}
+        </if>
+        <if test="strTag != null and strTag != ''">
+            AND a.strTag LIKE CONCAT('%', #{strTag}, '%')
+        </if>;
+    </select>
+
+    <insert id="setTagLink" parameterType="Tag" useGeneratedKeys="true" keyProperty="intSeq">
+        INSERT INTO TB_TAG_LINK(intTagSeq, intUserType, intUserSeq)
+        VALUES (#{intTagSeq}, #{intUserType}, #{intUserSeq});
+    </insert>
+
+    <delete id="delTagLink" parameterType="Tag">
+        DELETE
+        FROM TB_TAG_LINK
+        WHERE
+        intSeq > 0
+        <if test="intUserType != null and intUserType != 0">
+            AND intUserType = #{intUserType}
+        </if>
+        <if test="intUserSeq != null and intUserSeq != 0">
+            AND intUserSeq = #{intUserSeq}
+        </if>
+        <if test="intTagSeq != null and intTagSeq != 0">
+            AND intTagSeq = #{intTagSeq}
+        </if>;
+    </delete>
+
+    <insert id="setCash" parameterType="Cash" useGeneratedKeys="true" keyProperty="intSeq">
+        INSERT INTO TB_CASH(intUserType, intUserSeq, intCashType, strBankType, strBankNum)
+        VALUES (#{intUserType}, #{intUserSeq}, #{intUserSeq}, #{intUserSeq});
+    </insert>
+
+    <delete id="delCash" parameterType="Cash">
+        DELETE
+        FROM TB_CASH
+        WHERE
+        intSeq > 0
+        <if test="intUserType != null and intUserType != 0">
+            AND intUserType = #{intUserType}
+        </if>
+        <if test="intUserSeq != null and intUserSeq != 0">
+            AND intUserSeq = #{intUserSeq}
+        </if>
+        <if test="intSeq != null and intSeq != 0">
+            AND intSeq = #{intSeq}
+        </if>;
+    </delete>
+
+    <select id="getCash" parameterType="Cash" resultType="Cash">
+        SELECT
+        intSeq, intUserType, intUserSeq, intCashType, strBankType, strBankNum
+        FROM
+        TB_MEDIA
+        WHERE
+        intSeq > 0
+        <if test="intSeq != null and intSeq != 0">
+            AND intSeq = #{intSeq}
+        </if>
+        <if test="intUserType != null and intUserType != 0">
+            AND intUserType = #{intUserType}
+        </if>
+        <if test="intUserSeq != null and intUserSeq != 0">
+            AND intUserSeq = #{intUserSeq}
+        </if>;
+    </select>
+
 </mapper>

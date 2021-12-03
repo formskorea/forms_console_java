@@ -1,6 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.formskorea.console.data.model.User" %>
 <%@ page import="com.formskorea.console.config.DefaultConfig" %>
+<%@ page import="java.util.Objects" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     List<String> arrScript = (List<String>) request.getAttribute("scripts");
@@ -16,6 +17,20 @@
         default:
             memberType = "인플루언서";
     }
+    String tags = "";
+    for (int i = 0; i < userinfo.getTags().size(); i++) {
+        tags += (i > 0 ? ", " : "") + "#" + userinfo.getTags().get(i).getStrTag();
+    }
+
+    String cashs = "";
+    if(userinfo.getCashs()!= null && userinfo.getCashs().size() > 0) {
+        for (int i = 0; i < userinfo.getCashs().size(); i++) {
+            cashs += (i > 0 ? "<br />" : "") + userinfo.getCashs().get(i).getStrBankType() + " " + userinfo.getCashs().get(i).getStrBankNum();
+        }
+    } else {
+        cashs = "없음";
+    }
+
 %>
 <jsp:include page="inc_header.jsp">
     <jsp:param name="styles" value="${arrCss}"/>
@@ -43,29 +58,35 @@
                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
                         <img src="/img/ic_user.svg" alt="Profile" class="rounded-circle">
-                        <h2><%=userinfo.getStrNikname()%></h2>
-                        <h3><%=memberType%> Lv. <%=userinfo.getIntLevel()%></h3>
+                        <h2><%=userinfo.getStrNikname()%>
+                        </h2>
+                        <h3><%=memberType%> Lv. <%=userinfo.getIntLevel()%>
+                        </h3>
                         <div class="social-links mt-2">
-                        <% for(Integer i = 0; i < userinfo.getMedia().size(); i++) {
-                            switch (userinfo.getMedia().get(i).getIntType()) {
-                                case 1 : %>
-                                    <a href="<%=userinfo.getMedia().get(i).getStrURL()%>" target="_blank" class="instagram"><i class="bi bi-instagram"></i></a>
+                            <% for (Integer i = 0; i < userinfo.getMedia().size(); i++) {
+                                switch (userinfo.getMedia().get(i).getIntType()) {
+                                    case 1: %>
+                            <a href="<%=userinfo.getMedia().get(i).getStrURL()%>" target="_blank" class="instagram"><i
+                                    class="bi bi-instagram"></i></a>
                             <%
                                     break;
-                                case 2 : %>
-                                    <a href="<%=userinfo.getMedia().get(i).getStrURL()%>" target="_blank" class="youtube"><i class="bi bi-youtube"></i></a>
+                                case 2: %>
+                            <a href="<%=userinfo.getMedia().get(i).getStrURL()%>" target="_blank" class="youtube"><i
+                                    class="bi bi-youtube"></i></a>
                             <%
-                                break;
-                                case 3 : %>
-                            <a href="<%=userinfo.getMedia().get(i).getStrURL()%>" target="_blank" class="blog"><i class="bi bi-bootstrap"></i></a>
+                                    break;
+                                case 3: %>
+                            <a href="<%=userinfo.getMedia().get(i).getStrURL()%>" target="_blank" class="blog"><i
+                                    class="bi bi-bootstrap"></i></a>
                             <%
-                                break;
-                                case 4 : %>
-                                <a href="<%=userinfo.getMedia().get(i).getStrURL()%>" target="_blank" class="shoppingmall"><i class="bi bi-cart3"></i></a>
+                                    break;
+                                case 4: %>
+                            <a href="<%=userinfo.getMedia().get(i).getStrURL()%>" target="_blank"
+                               class="shoppingmall"><i class="bi bi-cart3"></i></a>
                             <%
-                                break;
-                            }
-                        } %>
+                                            break;
+                                    }
+                                } %>
                         </div>
                     </div>
                 </div>
@@ -108,16 +129,9 @@
 
                                 <h5 class="card-title"><strong><i class="bi bi-info-circle"></i> 개인정보</strong></h5>
 
-                                <% switch (userinfo.getStrMemberType()) {
-                                    case DefaultConfig.MEMBER_CLIENT: %>
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label ">성명</div>
                                     <div class="col-lg-9 col-md-8"><%=userinfo.getStrName()%>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">연락처</div>
-                                    <div class="col-lg-9 col-md-8"><%=userinfo.getStrMobile()%>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -125,14 +139,17 @@
                                     <div class="col-lg-9 col-md-8"><%=userinfo.getStrEmail()%>
                                     </div>
                                 </div>
-                                <%      break;
-                                    case DefaultConfig.MEMBER_INFLUENCER:
-                                %>
+
+                                <% switch (userinfo.getStrMemberType()) {
+                                    case DefaultConfig.MEMBER_CLIENT: %>
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">성명</div>
-                                    <div class="col-lg-9 col-md-8"><%=userinfo.getStrName()%>
+                                    <div class="col-lg-3 col-md-4 label ">연락처</div>
+                                    <div class="col-lg-9 col-md-8"><%=userinfo.getStrMobile()%>
                                     </div>
                                 </div>
+                                <% break;
+                                    case DefaultConfig.MEMBER_INFLUENCER:
+                                %>
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label ">활동명</div>
                                     <div class="col-lg-9 col-md-8"><%=userinfo.getStrNikname()%>
@@ -143,40 +160,54 @@
                                     <div class="col-lg-9 col-md-8"><%=userinfo.getStrMobile()%>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">이메일</div>
-                                    <div class="col-lg-9 col-md-8"><%=userinfo.getStrEmail()%>
-                                    </div>
-                                </div>
-                                <%      break;
-                                    default:
-                                %>
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">성명</div>
-                                    <div class="col-lg-9 col-md-8"><%=userinfo.getStrName()%>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">이메일</div>
-                                    <div class="col-lg-9 col-md-8"><%=userinfo.getStrEmail()%>
-                                    </div>
-                                </div>
-                                <%
-                                        break;
+                                <% break;
                                     } %>
+                                <% if (!userinfo.getStrMemberType().equals(DefaultConfig.MEMBER_ADMIN) && !tags.equals("")) { %>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">해시태그</div>
+                                    <div class="col-lg-9 col-md-8"><%=tags%>
+                                    </div>
+                                </div>
+                                <% } %>
                                 <% if (userinfo.getCompany() != null) { %>
+                                <% if(userinfo.getStrMemberType().equals(DefaultConfig.MEMBER_CLIENT)) { %>
                                 <h5 class="card-title"><strong><i class="bi bi-building"></i> 회사정보</strong></h5>
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label ">회사명</div>
-                                    <div class="col-lg-9 col-md-8"><%=userinfo.getCompany().getStrCompanyname()%></div>
+                                    <div class="col-lg-9 col-md-8"><%=userinfo.getCompany().getStrCompanyname()%>
+                                    </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">연락처</div>
-                                    <div class="col-lg-9 col-md-8"><%=userinfo.getCompany().getStrTelnum()%></div>
+                                    <div class="col-lg-3 col-md-4 label ">회사 연락처</div>
+                                    <div class="col-lg-9 col-md-8"><%=userinfo.getCompany().getStrTelnum()%>
+                                    </div>
                                 </div>
+                                <% } %>
+                                <% if(userinfo.getStrMemberType().equals(DefaultConfig.MEMBER_INFLUENCER)) { %>
+                                <h5 class="card-title"><strong><i class="bi bi-building"></i> 소속사정보</strong></h5>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">소속사명</div>
+                                    <div class="col-lg-9 col-md-8"><%=userinfo.getCompany().getStrCompanyname()%>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">소속사 연락처</div>
+                                    <div class="col-lg-9 col-md-8"><%=userinfo.getCompany().getStrTelnum()%>
+                                    </div>
+                                </div>
+                                <% } %>
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label ">주소</div>
-                                    <div class="col-lg-9 col-md-8">(<%=userinfo.getCompany().getStrZipcode()%>)&nbsp;&nbsp;<%=userinfo.getCompany().getStrAddress().replace("|", " ")%></div>
+                                    <div class="col-lg-9 col-md-8">(<%=userinfo.getCompany().getStrZipcode()%>)&nbsp;&nbsp;<%=userinfo.getCompany().getStrAddress().replace("|", " ")%>
+                                    </div>
+                                </div>
+                                <% } %>
+                                <% if (userinfo.getStrMemberType().equals(DefaultConfig.MEMBER_INFLUENCER)) { %>
+                                <h5 class="card-title"><strong><i class="bi bi-cash-coin"></i> 금융정보</strong></h5>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">입금은행정보</div>
+                                    <div class="col-lg-9 col-md-8"><%=cashs%>
+                                    </div>
                                 </div>
                                 <% } %>
                             </div>
@@ -184,122 +215,168 @@
                             <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
                                 <!-- Profile Edit Form -->
-                                <form>
+                                <form id="form_editinfo" method="post" action="#">
+<%--                                    <div class="row mb-3">--%>
+<%--                                        <label class="col-md-4 col-lg-3 col-form-label"></label>--%>
+<%--                                        <div class="col-md-8 col-lg-9">--%>
+<%--                                            <img src="/img/ic_user.svg" alt="Profile">--%>
+<%--                                            <div class="pt-2">--%>
+<%--                                                <a href="#" class="btn btn-primary btn-sm"--%>
+<%--                                                   title="Upload new profile image"><i class="bi bi-upload"></i></a>--%>
+<%--                                                <a href="#" class="btn btn-danger btn-sm"--%>
+<%--                                                   title="Remove my profile image"><i class="bi bi-trash"></i></a>--%>
+<%--                                            </div>--%>
+<%--                                        </div>--%>
+<%--                                    </div>--%>
+                                    <h5 class="card-title"><strong><i class="bi bi-info-circle"></i> 개인정보</strong></h5>
                                     <div class="row mb-3">
-                                        <label class="col-md-4 col-lg-3 col-form-label"></label>
+                                        <label for="Name" class="col-md-4 col-lg-3 col-form-label">성명</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <img src="/img/ic_user.svg" alt="Profile">
-                                            <div class="pt-2">
-                                                <a href="#" class="btn btn-primary btn-sm"
-                                                   title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                                                <a href="#" class="btn btn-danger btn-sm"
-                                                   title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                                            <input name="Name" type="text" class="form-control" id="Name"
+                                                   value="<%=userinfo.getStrName()%>">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="Email" class="col-md-4 col-lg-3 col-form-label">이메일</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input name="Email" type="text" class="form-control" id="Email"
+                                                   value="<%=userinfo.getStrEmail()%>">
+                                        </div>
+                                    </div>
+                                    <% switch (userinfo.getStrMemberType()) {
+                                        case DefaultConfig.MEMBER_CLIENT: %>
+                                        <div class="row mb-3">
+                                            <label for="Mobile" class="col-md-4 col-lg-3 col-form-label">연락처</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="Mobile" type="text" class="form-control" id="Mobile"
+                                                       value="<%=userinfo.getStrMobile()%>">
                                             </div>
                                         </div>
-                                    </div>
-
+                                        <div class="row mb-3">
+                                            <label for="hashtag" class="col-md-4 col-lg-3 col-form-label">해시태그</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="hashtag" type="text" class="form-control" id="hashtag"
+                                                       value="">
+                                            </div>
+                                        </div>
+                                        <h5 class="card-title"><strong><i class="bi bi-building"></i> 회사정보</strong></h5>
+                                        <div class="row mb-3">
+                                            <label for="corpname" class="col-md-4 col-lg-3 col-form-label">회사명</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="corpname" type="text" class="form-control" id="corpname"
+                                                       value="<%=userinfo.getCompany().getStrCompanyname()%>">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label for="corpname" class="col-md-4 col-lg-3 col-form-label">회사 연락처</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="corptel" type="tel" class="form-control" id="corptel"
+                                                       value="<%=userinfo.getCompany().getStrTelnum()%>">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label for="zipcode" class="col-md-4 col-lg-3 col-form-label">우편번호</label>
+                                            <div class="col-md-8 col-lg-5">
+                                                <input type="text" name="zipcode" class="form-control" id="zipcode" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label for="address1" class="col-md-4 col-lg-3 col-form-label">주소</label>
+                                            <div class="col-md-4 col-lg-6">
+                                                <input type="text" name="address1" class="form-control" id="address1" readonly>
+                                            </div>
+                                            <div class="col-md-8 col-lg-3">
+                                                <button class="btn btn-outline-primary w-100" type="button" id="addr_search">
+                                                    주소검색
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label for="address2" class="col-md-4 col-lg-3 col-form-label">상세주소</label>
+                                            <div class="col-md-8 col-lg-9">
+                                                <input name="address2" type="text" class="form-control" id="address2"
+                                                       value="">
+                                            </div>
+                                        </div>
+                                    <% break;
+                                        case DefaultConfig.MEMBER_INFLUENCER:
+                                    %>
                                     <div class="row mb-3">
-                                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
+                                        <label for="Nikname" class="col-md-4 col-lg-3 col-form-label">활동명</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <input name="fullName" type="text" class="form-control" id="fullName"
-                                                   value="Kevin Anderson">
+                                            <input name="Nikname" type="text" class="form-control" id="Nikname"
+                                                   value="<%=userinfo.getStrNikname()%>">
                                         </div>
                                     </div>
-
                                     <div class="row mb-3">
-                                        <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
+                                        <label for="Mobile" class="col-md-4 col-lg-3 col-form-label">연락처</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <textarea name="about" class="form-control" id="about"
-                                                      style="height: 100px">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea>
+                                            <input name="Mobile" type="text" class="form-control" id="Mobile"
+                                                   value="<%=userinfo.getStrMobile()%>">
                                         </div>
                                     </div>
-
                                     <div class="row mb-3">
-                                        <label for="company" class="col-md-4 col-lg-3 col-form-label">Company</label>
+                                        <label for="hashtag" class="col-md-4 col-lg-3 col-form-label">해시태그</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <input name="company" type="text" class="form-control" id="company"
-                                                   value="Lueilwitz, Wisoky and Leuschke">
+                                            <input name="hashtag" type="text" class="form-control" id="hashtag"
+                                                   value="">
                                         </div>
                                     </div>
-
+                                    <h5 class="card-title"><strong><i class="bi bi-building"></i> 소속사정보</strong></h5>
                                     <div class="row mb-3">
-                                        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job</label>
+                                        <label for="corpname" class="col-md-4 col-lg-3 col-form-label">소속사명</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <input name="job" type="text" class="form-control" id="Job"
-                                                   value="Web Designer">
+                                            <input name="corpname" type="text" class="form-control" id="corpname"
+                                                   value="<%=userinfo.getCompany().getStrCompanyname()%>">
                                         </div>
                                     </div>
-
                                     <div class="row mb-3">
-                                        <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
+                                        <label for="corpname" class="col-md-4 col-lg-3 col-form-label">소속사 연락처</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <input name="country" type="text" class="form-control" id="Country"
-                                                   value="USA">
+                                            <input name="corptel" type="tel" class="form-control" id="corptel"
+                                                   value="<%=userinfo.getCompany().getStrTelnum()%>">
                                         </div>
                                     </div>
-
                                     <div class="row mb-3">
-                                        <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="address" type="text" class="form-control" id="Address"
-                                                   value="A108 Adam Street, New York, NY 535022">
+                                        <label for="zipcode" class="col-md-4 col-lg-3 col-form-label">우편번호</label>
+                                        <div class="col-md-8 col-lg-5">
+                                            <input type="text" name="zipcode" class="form-control" id="zipcode" readonly>
                                         </div>
                                     </div>
-
                                     <div class="row mb-3">
-                                        <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="phone" type="text" class="form-control" id="Phone"
-                                                   value="(436) 486-3538 x29071">
+                                        <label for="address1" class="col-md-4 col-lg-3 col-form-label">주소</label>
+                                        <div class="col-md-4 col-lg-6">
+                                            <input type="text" name="address1" class="form-control" id="address1" readonly>
+                                        </div>
+                                        <div class="col-md-8 col-lg-3">
+                                            <button class="btn btn-outline-primary w-100" type="button" id="addr_search">
+                                                주소검색
+                                            </button>
                                         </div>
                                     </div>
-
                                     <div class="row mb-3">
-                                        <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                        <label for="address2" class="col-md-4 col-lg-3 col-form-label">상세주소</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <input name="email" type="email" class="form-control" id="Email"
-                                                   value="k.anderson@example.com">
+                                            <input name="address2" type="text" class="form-control" id="address2"
+                                                   value="">
                                         </div>
                                     </div>
-
+                                    <h5 class="card-title"><strong><i class="bi bi-cash-coin"></i> 금융정보</strong></h5>
                                     <div class="row mb-3">
-                                        <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter
-                                            Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="twitter" type="text" class="form-control" id="Twitter"
-                                                   value="https://twitter.com/#">
+                                        <label for="banktype" class="col-md-4 col-lg-3 col-form-label">입금은행정보</label>
+                                        <div class="col-md-8 col-lg-3">
+                                            <input name="banktype" type="text" class="form-control" id="banktype"
+                                                   value="" placeholder="은행구분 예)국민, 신한 등">
+                                        </div>
+                                        <div class="col-md-8 col-lg-6">
+                                            <input name="bankinfo" type="text" class="form-control" id="bankinfo"
+                                                   value="" placeholder="계좌번호입력">
                                         </div>
                                     </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook
-                                            Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="facebook" type="text" class="form-control" id="Facebook"
-                                                   value="https://facebook.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Instagram" class="col-md-4 col-lg-3 col-form-label">Instagram
-                                            Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="instagram" type="text" class="form-control" id="Instagram"
-                                                   value="https://instagram.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin
-                                            Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="linkedin" type="text" class="form-control" id="Linkedin"
-                                                   value="https://linkedin.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    <% break;
+                                    } %>
+                                    <div class="text-center mt-5">
+                                        <button type="submit" class="btn btn-primary">내정보 수정하기</button>
                                     </div>
                                 </form><!-- End Profile Edit Form -->
 
@@ -311,36 +388,16 @@
                                 <form>
 
                                     <div class="row mb-3">
-                                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email
-                                            Notifications</label>
+                                        <label for="" class="col-md-4 col-lg-3 col-form-label">알림 설정</label>
                                         <div class="col-md-8 col-lg-9">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="changesMade"
                                                        checked>
                                                 <label class="form-check-label" for="changesMade">
-                                                    Changes made to your account
+                                                    이메일 알림
                                                 </label>
                                             </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="newProducts"
-                                                       checked>
-                                                <label class="form-check-label" for="newProducts">
-                                                    Information on new products and services
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="proOffers">
-                                                <label class="form-check-label" for="proOffers">
-                                                    Marketing and promo offers
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="securityNotify"
-                                                       checked disabled>
-                                                <label class="form-check-label" for="securityNotify">
-                                                    Security alerts
-                                                </label>
-                                            </div>
+
                                         </div>
                                     </div>
 
@@ -356,8 +413,7 @@
                                 <form>
 
                                     <div class="row mb-3">
-                                        <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current
-                                            Password</label>
+                                        <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">현재 비밀번호</label>
                                         <div class="col-md-8 col-lg-9">
                                             <input name="password" type="password" class="form-control"
                                                    id="currentPassword">
@@ -365,8 +421,7 @@
                                     </div>
 
                                     <div class="row mb-3">
-                                        <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New
-                                            Password</label>
+                                        <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">새 비밀번호</label>
                                         <div class="col-md-8 col-lg-9">
                                             <input name="newpassword" type="password" class="form-control"
                                                    id="newPassword">
@@ -374,8 +429,7 @@
                                     </div>
 
                                     <div class="row mb-3">
-                                        <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New
-                                            Password</label>
+                                        <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">새 비밀번호 확인</label>
                                         <div class="col-md-8 col-lg-9">
                                             <input name="renewpassword" type="password" class="form-control"
                                                    id="renewPassword">
@@ -383,7 +437,7 @@
                                     </div>
 
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Change Password</button>
+                                        <button type="submit" class="btn btn-primary">비밀번호 변경</button>
                                     </div>
                                 </form><!-- End Change Password Form -->
 

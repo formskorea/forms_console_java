@@ -21,8 +21,10 @@ data class User(
     @SerializedName("mall") var strMall: String? = null,
     @SerializedName("reg") var dateReg: String? = null,
     @SerializedName("edit") var dateEdit: String? = null,
-    @SerializedName("company") var company: Company? = null,
-    @SerializedName("media") var media: ArrayList<Media>? = null,
+    var company: Company? = null,
+    var media: ArrayList<Media>? = null,
+    var tags: ArrayList<Tag>? = null,
+    var cashs: ArrayList<Cash>? = null,
     var intCompanySeq: Int? = null,
     @SerializedName("pass2") var strPassword2: String? = null,
     var txtPermission: String? = null
