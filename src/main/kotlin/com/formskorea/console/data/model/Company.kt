@@ -14,5 +14,6 @@ data class Company(
     @SerializedName("level") var intLevel: Int? = null,
     @SerializedName("status") var intStatus: Int? = null,
     @SerializedName("reg") var dateReg: Int? = null,
-    @SerializedName("edit") var dateEdit: Int? = null
+    @SerializedName("edit") var dateEdit: Int? = null,
+    @SerializedName("corpnum") var strCompanynum: String? = null
 )

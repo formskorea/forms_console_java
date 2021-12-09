@@ -25,6 +25,7 @@ object DefaultConfig {
     const val MESSAGE_OK = "정상"
     const val MESSAGE_INFONULL = "로그인 정보를 찾을 수 없습니다."
     const val MESSAGE_MEMBERTYPE = "회원구분 정보가 없습니다."
+    const val MESSAGE_EMPTY_NAME = "성명 정보가 없습니다."
     const val MESSAGE_EMPTY_EMAIL = "이메일 정보가 없습니다."
     const val MESSAGE_CHECK_EMAIL = "이메일 형식이 맞지 않습니다."
     const val MESSAGE_NOTUSER = "사용금지된 회원입니다."

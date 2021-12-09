@@ -1,10 +1,7 @@
 package com.formskorea.console.service
 
 import com.formskorea.console.config.DefaultConfig
-import com.formskorea.console.data.model.Company
-import com.formskorea.console.data.model.Media
-import com.formskorea.console.data.model.Tag
-import com.formskorea.console.data.model.User
+import com.formskorea.console.data.model.*
 import com.formskorea.console.mapper.dao.ApplicationMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -56,6 +53,12 @@ class ApplicationService {
         tag.intUserType = media.intUserType
         info?.tags = applicationMapper.getTags(tag)
 
+        //cash
+        val cash = Cash()
+        cash.intUserType =info?.intSeq
+        cash.intUserType = media.intUserType
+        info?.cashs = applicationMapper.getCash(cash)
+
         return info
     }
 
@@ -74,6 +77,76 @@ class ApplicationService {
     }
 
     fun editUser(data: User): Boolean? {
+        //media
+        val defMedia = Media()
+        defMedia.intUserType = when(data.strMemberType) {
+            DefaultConfig.MEMBER_CLIENT -> 1
+            DefaultConfig.MEMBER_INFLUENCER -> 2
+            else -> 9
+        }
+        defMedia.intUserSeq = data.intSeq
+        applicationMapper.delMedia(defMedia)
+
+        if(!data.media.isNullOrEmpty()) {
+            for (field in data.media!!) {
+                field.intUserSeq = data.intSeq
+                field.intUserType = defMedia.intUserType
+                applicationMapper.setMedia(field)
+            }
+        }
+
+        //tag
+        val defTag = Tag()
+        defTag.intUserSeq = data.intSeq
+        defTag.intUserType = defMedia.intUserType
+        applicationMapper.delTagLink(defTag)
+
+        if(!data.tags.isNullOrEmpty()) {
+            for (field in data.tags!!) {
+                field.intUserSeq = data.intSeq
+                field.intUserType = defMedia.intUserType
+                val result = applicationMapper.getTag(field)
+                if(result.isNullOrEmpty()) { //tag reg
+                    applicationMapper.setTag(field)
+                    field.intTagSeq = field.intSeq
+                } else {
+                    field.intTagSeq = result[0].intSeq
+                }
+                applicationMapper.setTagLink(field)
+            }
+        }
+
+        //cash
+        val defCash = Cash()
+        defCash.intUserSeq = data.intSeq
+        defCash.intUserType = defMedia.intUserType
+        applicationMapper.delCash(defCash)
+
+        if(!data.cashs.isNullOrEmpty()) {
+            for (field in data.cashs!!) {
+                field.intUserSeq = data.intSeq
+                field.intUserType = defMedia.intUserType
+                applicationMapper.setCash(field)
+            }
+        }
+
+        //company
+        if (data.company != null && !data.company?.strCompanyname.isNullOrEmpty()) {
+            val ccresult = applicationMapper.getCompany(data.company!!)
+            if (ccresult == null) {
+                data.company!!.strAddress += "|" + data.company!!.strAddress2
+                data.company!!.intStatus = 1
+                val cresult = applicationMapper.setCompany(data.company!!)
+                if (cresult != null && cresult == true) {
+                    data.intCompanySeq = data.company?.intSeq
+                }
+            } else {
+                data.intCompanySeq = ccresult.intSeq
+            }
+        } else {
+            data.intCompanySeq = -1
+        }
+
         return when (data.strMemberType) {
             DefaultConfig.MEMBER_ADMIN -> {
                 applicationMapper.editAdmin(data)

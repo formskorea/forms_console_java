@@ -19,6 +19,7 @@ object Token {
         return try {
             JWT.create()
                 .withIssuer(DefaultConfig.TOKEN_ISSUER)
+                .withClaim("seq", member.intSeq)
                 .withClaim("email", member.strEmail)
                 .withClaim("type", member.strMemberType)
                 .withClaim("name", member.strName)
@@ -41,6 +42,7 @@ object Token {
                 .build()
 
             val jwt = verifier.verify(value)
+            member.intSeq = jwt.getClaim("seq").asInt()
             member.strEmail = jwt.getClaim("email").asString()
             member.strName = jwt.getClaim("name").asString()
             member.strMemberType = jwt.getClaim("type").asString()

@@ -90,6 +90,24 @@ class MainController {
                         isLogin = true
                         userinfo2.strMemberType = userinfo.strMemberType
                         model.addAttribute("fmcuser", userinfo2)
+
+                        val scripts = ArrayList<String>()
+                        scripts.add("//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js")
+                        scripts.add("/js/tagify.min.js")
+
+                        when(userinfo2.strMemberType) {
+                            DefaultConfig.MEMBER_ADMIN -> scripts.add("/js/profile-a.js")
+                            DefaultConfig.MEMBER_CLIENT -> scripts.add("/js/profile-c.js")
+                            else -> scripts.add("/js/profile-i.js")
+                        }
+
+                        model.addAttribute("scripts", scripts)
+
+                        val styles = ArrayList<String>()
+                        styles.add("/css/tagify.css")
+                        model.addAttribute("styles", styles)
+
+                        model.addAttribute("token", token)
                     }
                 }
             } catch (e: Exception) {

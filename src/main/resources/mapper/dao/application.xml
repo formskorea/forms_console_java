@@ -71,7 +71,8 @@
         strZone,
         intStatus,
         dateReg,
-        dateEdit
+        dateEdit,
+        strCompanynum
         FROM TB_COMPANY
         WHERE
         intSeq > 0
@@ -262,7 +263,8 @@
                                 strZipcode,
                                 strAddress,
                                 strZone,
-                                intStatus)
+                                intStatus,
+                                strCompanynum)
         VALUES (#{strCompanyname},
                 #{strHomepage},
                 #{intLevel},
@@ -270,7 +272,8 @@
                 #{strZipcode},
                 #{strAddress},
                 #{strZone},
-                #{intStatus});
+                #{intStatus},
+                #{strCompanynum});
     </insert>
 
     <insert id="setMedia" parameterType="Media" useGeneratedKeys="true" keyProperty="intSeq">
@@ -293,6 +296,9 @@
         </if>
         <if test="intUserSeq != null and intUserSeq != 0">
             AND intUserSeq = #{intUserSeq}
+        </if>
+        <if test="strURL != null and strURL != ''">
+            AND strURL = #{strURL}
         </if>;
     </select>
 
@@ -344,10 +350,19 @@
         WHERE strTag = #{strTag};
     </delete>
 
+    <select id="getTag" parameterType="Tag" resultType="Tag">
+        SELECT intSeq, strTag FROM TB_TAGS
+        WHERE
+        intSeq > 0
+        <if test="strTag != null and strTag != ''">
+            AND strTag = #{strTag}
+        </if>;
+    </select>
+
     <select id="getTags" parameterType="Tag" resultType="Tag">
         SELECT a.strTag FROM TB_TAGS a, TB_TAG_LINK b
         WHERE
-            a.intSeq > 0
+            a.intSeq = b.intTagSeq
         <if test="intUserType != null and intUserType != 0">
             AND b.intUserType = #{intUserType}
         </if>
@@ -355,7 +370,7 @@
             AND b.intUserSeq = #{intUserSeq}
         </if>
         <if test="strTag != null and strTag != ''">
-            AND a.strTag LIKE CONCAT('%', #{strTag}, '%')
+            AND a.strTag = #{strTag}
         </if>;
     </select>
 
@@ -382,7 +397,7 @@
 
     <insert id="setCash" parameterType="Cash" useGeneratedKeys="true" keyProperty="intSeq">
         INSERT INTO TB_CASH(intUserType, intUserSeq, intCashType, strBankType, strBankNum)
-        VALUES (#{intUserType}, #{intUserSeq}, #{intUserSeq}, #{intUserSeq});
+        VALUES (#{intUserType}, #{intUserSeq}, #{intCashType}, #{strBankType}, #{strBankNum});
     </insert>
 
     <delete id="delCash" parameterType="Cash">
@@ -405,7 +420,7 @@
         SELECT
         intSeq, intUserType, intUserSeq, intCashType, strBankType, strBankNum
         FROM
-        TB_MEDIA
+        TB_CASH
         WHERE
         intSeq > 0
         <if test="intSeq != null and intSeq != 0">

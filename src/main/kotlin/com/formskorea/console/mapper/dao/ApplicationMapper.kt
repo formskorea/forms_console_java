@@ -20,10 +20,11 @@ interface ApplicationMapper {
     fun editMedia(data: Media): Boolean?
     fun setTag(data: Tag): Boolean?
     fun delTag(data: Tag): Boolean?
+    fun getTag(data: Tag): ArrayList<Tag>?
     fun getTags(data: Tag): ArrayList<Tag>?
     fun setTagLink(data: Tag): Boolean?
     fun delTagLink(data: Tag): Boolean?
     fun setCash(data: Cash): Boolean?
     fun delCash(data: Cash): Boolean?
-    fun getCash(data: Cash): Boolean?
+    fun getCash(data: Cash): ArrayList<Cash>?
 }

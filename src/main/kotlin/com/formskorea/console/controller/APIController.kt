@@ -10,6 +10,7 @@ import com.formskorea.console.util.Token
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -134,11 +135,18 @@ class APIController {
 
     @RequestMapping(value = ["/join"])
     @ResponseBody
+    @Transactional
     @Throws(Exception::class)
     fun join(@RequestBody data: User, response: HttpServletResponse, request: HttpServletRequest): Any {
         val rtnValue = ReturnValue()
 
         log.error(data.toString())
+
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS && data.strName.isNullOrEmpty()) {
+            rtnValue.error = DefaultConfig.ERROR_PARAM
+            rtnValue.status = DefaultConfig.SERVER_PARAMERROR
+            rtnValue.message = DefaultConfig.MESSAGE_EMPTY_NAME
+        }
 
         if (rtnValue.status == DefaultConfig.SERVER_SUCCESS && data.strEmail.isNullOrEmpty()) {
             rtnValue.error = DefaultConfig.ERROR_PARAM
@@ -175,18 +183,19 @@ class APIController {
                 var cresult: Boolean? = true
                 log.error(data.toString())
 
-                if(data.intLevel == null) {
+                if (data.intLevel == null) {
                     data.intLevel = 1
                 }
-                if(data.intStatus == null) {
+                if (data.intStatus == null) {
                     data.intStatus = 0
                 }
 
                 if (data.company != null && !data.company?.strCompanyname.isNullOrEmpty()) {
                     val ccresult = applicationService.getCompany(data.company!!)
 
-                    if(ccresult == null) {
+                    if (ccresult == null) {
                         data.company!!.strAddress += "|" + data.company!!.strAddress2
+                        data.company!!.intStatus = 1
                         cresult = applicationService.setCompany(data.company!!)
                         if (cresult != null && cresult == true) {
                             data.intCompanySeq = data.company?.intSeq
@@ -203,11 +212,11 @@ class APIController {
                     rtnValue.status = DefaultConfig.SERVER_NOTUSER
                     rtnValue.message = DefaultConfig.MESSAGE_INFONULL
                 } else {
-                    if(data.media != null) {
-                        for(field in data.media!!) {
-                            if(!field.strURL.isNullOrEmpty()) {
+                    if (data.media != null) {
+                        for (field in data.media!!) {
+                            if (!field.strURL.isNullOrEmpty()) {
                                 field.intUserSeq = data.intSeq
-                                field.intUserType = when(data.strMemberType) {
+                                field.intUserType = when (data.strMemberType) {
                                     DefaultConfig.MEMBER_CLIENT -> {
                                         1
                                     }
@@ -238,6 +247,69 @@ class APIController {
         return rtnValue
     }
 
+    @RequestMapping(value = ["/useredit"])
+    @ResponseBody
+    @Transactional
+    @Throws(Exception::class)
+    fun useredit(
+        @RequestBody data: User,
+        response: HttpServletResponse,
+        request: HttpServletRequest
+    ): Any {
+        val rtnValue = ReturnValue()
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request.cookies)
+
+        try {
+            val info = Token.get(token, DefaultConfig.TOKEN_EXPDAY)
+
+            log.error(token + "::" + info.toString())
+
+            if (info == null) {
+                rtnValue.error = DefaultConfig.ERROR_NOTFOUND
+                rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                rtnValue.message = DefaultConfig.MESSAGE_TOKENOUT
+            } else {
+                data.intSeq = info.intSeq
+            }
+        } catch (e: Exception) {
+            rtnValue.error = DefaultConfig.ERROR_NOTFOUND
+            rtnValue.status = DefaultConfig.SERVER_NOTUSER
+            rtnValue.message = DefaultConfig.MESSAGE_TOKENOUT
+        }
+
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS && data.strEmail.isNullOrEmpty()) {
+            rtnValue.error = DefaultConfig.ERROR_PARAM
+            rtnValue.status = DefaultConfig.SERVER_PARAMERROR
+            rtnValue.message = DefaultConfig.MESSAGE_EMPTY_EMAIL
+        }
+
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS && !Etc.checkEMail(data.strEmail.toString())) {
+            rtnValue.error = DefaultConfig.ERROR_PARAM
+            rtnValue.status = DefaultConfig.SERVER_PARAMERROR
+            rtnValue.message = DefaultConfig.MESSAGE_CHECK_EMAIL
+        }
+
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS && data.strMemberType.isNullOrEmpty()) {
+            rtnValue.error = DefaultConfig.ERROR_PARAM
+            rtnValue.status = DefaultConfig.SERVER_PARAMERROR
+            rtnValue.message = DefaultConfig.MESSAGE_MEMBERTYPE
+        }
+
+        log.error(data.toString())
+
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS) {
+            try {
+                applicationService.editUser(data)
+            } catch (e: Exception) {
+                log.error(e.message)
+                rtnValue.error = DefaultConfig.ERROR_NOTFOUND
+                rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                rtnValue.message = DefaultConfig.MESSAGE_TOKENOUT
+            }
+        }
+
+        return rtnValue
+    }
 
     @RequestMapping(value = ["/find"], produces = ["application/json"], method = [RequestMethod.POST])
     @ResponseBody
@@ -285,7 +357,14 @@ class APIController {
                     data.strPassword = Etc.random(111111, 999999).toString()
                     applicationService.editUser(data)
                     try {
-                        mailService.sendMail(DefaultConfig.MAIL_SEND_PASSWORD_TITLE, DefaultConfig.MAIL_SEND_PASSWORD_INFO.replace("{new_password}", data.strPassword.toString()), data.strEmail.toString())
+                        mailService.sendMail(
+                            DefaultConfig.MAIL_SEND_PASSWORD_TITLE,
+                            DefaultConfig.MAIL_SEND_PASSWORD_INFO.replace(
+                                "{new_password}",
+                                data.strPassword.toString()
+                            ),
+                            data.strEmail.toString()
+                        )
                     } catch (e: Exception) {
                         log.error(e.message)
                         rtnValue.error = DefaultConfig.ERROR_PROCESS
@@ -303,7 +382,5 @@ class APIController {
 
         return rtnValue
     }
-
-
 
 }

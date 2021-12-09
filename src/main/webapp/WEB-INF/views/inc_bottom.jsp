@@ -1,7 +1,9 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.formskorea.console.config.DefaultConfig" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %><%
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
     List<String> arrScript = (List<String>) request.getAttribute("scripts");
+    String TOKEN = (String) request.getAttribute("token");
 %>
 <script>
     var fmctk = "<%=DefaultConfig.TOKEN_ISSUER%>";
@@ -14,11 +16,12 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.29.0/dist/apexcharts.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="/js/main.js"></script>
 <%
-    if(arrScript != null && arrScript.size() > 0) {
-        for(int i = 0; i < arrScript.size(); i++) {
+    if (arrScript != null && arrScript.size() > 0) {
+        for (int i = 0; i < arrScript.size(); i++) {
             out.println("<script src=\"" + arrScript.get(i) + "\"></script>");
         }
     }
