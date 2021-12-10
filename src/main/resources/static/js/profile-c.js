@@ -14,7 +14,7 @@ $(document).ready(function ($) {
     });
 
     $("#form_editinfo").submit(function (event) {
-        vent.preventDefault();
+        event.preventDefault();
 
         if (!isProcessing) {
             isProcessing = true;
@@ -93,7 +93,6 @@ $(document).ready(function ($) {
                         //tag change
                         $("#view_tags").html(nowtags);
                         $("#view_name").html(name);
-                        $("#view_nikname").html(nikname);
                         $("#view_email").html(email);
                         $("#view_mobile").html(mobile);
 

@@ -15,20 +15,25 @@
     media[1] = "";
     media[2] = "";
     media[3] = "";
+
     switch (userinfo.getStrMemberType()) {
         case DefaultConfig.MEMBER_ADMIN:
             memberType = "관리자";
             break;
         case DefaultConfig.MEMBER_CLIENT:
-            memberType = "고객사";
+            memberType = "협력사";
+            break;
         default:
             memberType = "인플루언서";
+            break;
     }
     String tags = "";
     String tagsv = "";
-    for (int i = 0; i < userinfo.getTags().size(); i++) {
-        tags += (i > 0 ? ", " : "") + "#" + userinfo.getTags().get(i).getStrTag();
-        tagsv += (i > 0 ? "," : "") + userinfo.getTags().get(i).getStrTag();
+    if(userinfo.getTags() != null && userinfo.getTags().size() > 0) {
+        for (int i = 0; i < userinfo.getTags().size(); i++) {
+            tags += (i > 0 ? ", " : "") + "#" + userinfo.getTags().get(i).getStrTag();
+            tagsv += (i > 0 ? "," : "") + userinfo.getTags().get(i).getStrTag();
+        }
     }
 
     String cashs = "";
@@ -47,7 +52,7 @@
     if (userinfo.getCompany() != null && userinfo.getCompany().getStrAddress() != null && !userinfo.getCompany().getStrAddress().equals("")) {
         String[] address = userinfo.getCompany().getStrAddress().split("\\|");
         corpaddress[0] = address[0] != null && !address[0].equals("") ? address[0] : "";
-        corpaddress[1] = address[1] != null && !address[1].equals("") ? address[1] : "";
+        corpaddress[1] = address.length > 1 && address[1] != null && !address[1].equals("") ? address[1] : "";
     }
 
 %>
@@ -188,11 +193,13 @@
                                 </div>
                                 <% break;
                                 } %>
+                                <% if (!userinfo.getStrMemberType().equals(DefaultConfig.MEMBER_ADMIN)) { %>
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label ">해시태그</div>
                                     <div class="col-lg-9 col-md-8" id="view_tags"><%=(!userinfo.getStrMemberType().equals(DefaultConfig.MEMBER_ADMIN) && !tags.equals("") ? tags : "없음")%>
                                     </div>
                                 </div>
+                                <% } %>
                                 <% if (userinfo.getStrMemberType().equals(DefaultConfig.MEMBER_CLIENT)) { %>
                                 <h5 class="card-title"><strong><i class="bi bi-building"></i> 회사정보</strong></h5>
                                 <div class="row">
@@ -219,11 +226,13 @@
                                     </div>
                                 </div>
                                 <% } %>
+                                <% if (!userinfo.getStrMemberType().equals(DefaultConfig.MEMBER_ADMIN)) { %>
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label ">주소</div>
                                     <div class="col-lg-9 col-md-8" id="view_address"><%=(userinfo.getCompany() != null ? "(" + userinfo.getCompany().getStrZipcode() + ") " + userinfo.getCompany().getStrAddress().replace("|", " ") : "없음")%>
                                     </div>
                                 </div>
+                                <% } %>
                                 <% if (userinfo.getStrMemberType().equals(DefaultConfig.MEMBER_INFLUENCER)) { %>
                                 <h5 class="card-title view_bank"><strong><i class="bi bi-cash-coin"></i> 금융정보</strong></h5>
                                 <div class="row view_bank">

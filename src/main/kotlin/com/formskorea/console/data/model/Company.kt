@@ -13,7 +13,7 @@ data class Company(
     @SerializedName("zone") var strZone: String? = null,
     @SerializedName("level") var intLevel: Int? = null,
     @SerializedName("status") var intStatus: Int? = null,
-    @SerializedName("reg") var dateReg: Int? = null,
-    @SerializedName("edit") var dateEdit: Int? = null,
+    @SerializedName("reg") var dateReg: String? = null,
+    @SerializedName("edit") var dateEdit: String? = null,
     @SerializedName("corpnum") var strCompanynum: String? = null
 )

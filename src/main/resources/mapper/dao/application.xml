@@ -276,6 +276,43 @@
                 #{strCompanynum});
     </insert>
 
+    <update id="editCompany" parameterType="Company">
+        UPDATE TB_COMPANY SET
+        <if test="strCompanyname != null and strCompanyname != ''">
+            strCompanyname = #{strCompanyname},
+        </if>
+        <if test="strHomepage != null and strHomepage != ''">
+            strHomepage = #{strHomepage},
+        </if>
+        <if test="intLevel != null and intLevel != 0">
+            intLevel = #{intLevel},
+        </if>
+        <if test="strTelnum != null and strTelnum != ''">
+            strTelnum = #{strTelnum},
+        </if>
+        <if test="strZipcode != null and strZipcode != ''">
+            strZipcode = #{strZipcode},
+        </if>
+        <if test="strAddress != null and strAddress != ''">
+            strAddress = #{strAddress},
+        </if>
+        <if test="strZone != null and strZone != ''">
+            strZone = #{strZone},
+        </if>
+        <if test="intStatus != null and intStatus != 0">
+            intStatus = #{intStatus},
+        </if>
+        <if test="strCompanynum != null and strCompanynum != ''">
+            strCompanynum = #{strCompanynum},
+        </if>
+        dateEdit = CURRENT_TIMESTAMP
+        WHERE
+        intSeq > 0
+        <if test="intSeq != null and intSeq != 0">
+            AND intSeq = #{intSeq}
+        </if>;
+    </update>
+
     <insert id="setMedia" parameterType="Media" useGeneratedKeys="true" keyProperty="intSeq">
         INSERT INTO TB_MEDIA (intUserSeq, intUserType, intType, strURL, intStatus)
         VALUES (#{intUserSeq}, #{intUserType}, #{intType}, #{strURL}, #{intStatus});

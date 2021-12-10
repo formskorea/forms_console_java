@@ -40,7 +40,6 @@ class ApplicationService {
             val company = Company()
             company.intSeq = info?.intCompanySeq
             info.company = applicationMapper.getCompany(company)
-            info.intCompanySeq = null
         }
 
         //media
@@ -132,16 +131,22 @@ class ApplicationService {
 
         //company
         if (data.company != null && !data.company?.strCompanyname.isNullOrEmpty()) {
-            val ccresult = applicationMapper.getCompany(data.company!!)
-            if (ccresult == null) {
+            if(data.intCompanySeq != null && data.intCompanySeq!! > 0) {
                 data.company!!.strAddress += "|" + data.company!!.strAddress2
                 data.company!!.intStatus = 1
-                val cresult = applicationMapper.setCompany(data.company!!)
-                if (cresult != null && cresult == true) {
-                    data.intCompanySeq = data.company?.intSeq
-                }
+                applicationMapper.editCompany(data.company!!)
             } else {
-                data.intCompanySeq = ccresult.intSeq
+                val ccresult = applicationMapper.getCompany(data.company!!)
+                if (ccresult == null) {
+                    data.company!!.strAddress += "|" + data.company!!.strAddress2
+                    data.company!!.intStatus = 1
+                    val cresult = applicationMapper.setCompany(data.company!!)
+                    if (cresult != null && cresult == true) {
+                        data.intCompanySeq = data.company?.intSeq
+                    }
+                } else {
+                    data.intCompanySeq = ccresult.intSeq
+                }
             }
         } else {
             data.intCompanySeq = -1

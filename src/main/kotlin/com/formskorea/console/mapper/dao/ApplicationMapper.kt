@@ -14,6 +14,7 @@ interface ApplicationMapper {
     fun editAdmin(data: User): Boolean?
     fun getCompany(data: Company): Company?
     fun setCompany(data: Company): Boolean?
+    fun editCompany(data: Company): Boolean?
     fun setMedia(data: Media): Boolean?
     fun getMedia(data: Media): ArrayList<Media>?
     fun delMedia(data: Media): Boolean?

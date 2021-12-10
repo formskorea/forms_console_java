@@ -89,6 +89,7 @@ class APIController {
                 }
 
             } catch (e: Exception) {
+                log.error(e.message)
                 rtnValue.error = DefaultConfig.ERROR_DBERROR
                 rtnValue.status = DefaultConfig.SERVER_DBERROR
                 rtnValue.message = DefaultConfig.MESSAGE_DBERROR
@@ -125,6 +126,7 @@ class APIController {
                 result?.intCompanySeq = null
                 result?.dateReg = null
                 result?.dateEdit = null
+                result?.intCompanySeq = null
 
                 rtnValue.result = result
             }
@@ -195,17 +197,11 @@ class APIController {
                 }
 
                 if (data.company != null && !data.company?.strCompanyname.isNullOrEmpty()) {
-                    val ccresult = applicationService.getCompany(data.company!!)
-
-                    if (ccresult == null) {
-                        data.company!!.strAddress += "|" + data.company!!.strAddress2
-                        data.company!!.intStatus = 1
-                        cresult = applicationService.setCompany(data.company!!)
-                        if (cresult != null && cresult == true) {
-                            data.intCompanySeq = data.company?.intSeq
-                        }
-                    } else {
-                        data.intCompanySeq = ccresult.intSeq
+                    data.company!!.strAddress += "|" + data.company!!.strAddress2
+                    data.company!!.intStatus = 1
+                    cresult = applicationService.setCompany(data.company!!)
+                    if (cresult != null && cresult == true) {
+                        data.intCompanySeq = data.company?.intSeq
                     }
                 }
 
@@ -265,18 +261,34 @@ class APIController {
 
         try {
             val info = Token.get(token, DefaultConfig.TOKEN_EXPDAY)
-
-            log.error(token + "::" + info.toString())
-
             if (info == null) {
                 rtnValue.error = DefaultConfig.ERROR_NOTFOUND
                 rtnValue.status = DefaultConfig.SERVER_NOTUSER
                 rtnValue.message = DefaultConfig.MESSAGE_TOKENOUT
             } else {
-                data.intSeq = info.intSeq
-                data.isSave = info.isSave
+                val result = applicationService.info(info)
+                if (result == null) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_INFONULL
+                } else if (result.intStatus == DefaultConfig.MEMBER_REJECT) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_REJECT
+                } else if (result.intStatus == DefaultConfig.MEMBER_CUT) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_NOTUSER
+                } else {
+                    data.intSeq = info.intSeq
+                    data.isSave = info.isSave
+                    data.intCompanySeq = result.intCompanySeq
+                    data.company?.intSeq = result.intCompanySeq
+                }
             }
         } catch (e: Exception) {
+            log.error(e.message)
+
             rtnValue.error = DefaultConfig.ERROR_NOTFOUND
             rtnValue.status = DefaultConfig.SERVER_NOTUSER
             rtnValue.message = DefaultConfig.MESSAGE_TOKENOUT
