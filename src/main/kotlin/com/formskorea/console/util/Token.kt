@@ -24,6 +24,7 @@ object Token {
                 .withClaim("type", member.strMemberType)
                 .withClaim("name", member.strName)
                 .withClaim("nik", member.strNikname)
+                .withClaim("save", member.isSave)
                 .withClaim("rand", Date().time + Etc.randomRange(111, 999))
                 .withExpiresAt(Date.from(LocalDateTime.now().toInstant(ZoneOffset.ofHours(9))))
                 .sign(Algorithm.HMAC256(DefaultConfig.TOKEN_KEY))
@@ -47,6 +48,7 @@ object Token {
             member.strName = jwt.getClaim("name").asString()
             member.strMemberType = jwt.getClaim("type").asString()
             member.strNikname = jwt.getClaim("nik").asString()
+            member.isSave = jwt.getClaim("save").asBoolean()
 
             return member
         } catch (e: Exception) {

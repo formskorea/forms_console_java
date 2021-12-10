@@ -22,7 +22,7 @@ object DefaultConfig {
     const val ERROR_NULL = "null"
     const val ERROR_PROCESS = "server error"
 
-    const val MESSAGE_OK = "정상"
+    const val MESSAGE_OK = "정상처리 되었습니다."
     const val MESSAGE_INFONULL = "로그인 정보를 찾을 수 없습니다."
     const val MESSAGE_MEMBERTYPE = "회원구분 정보가 없습니다."
     const val MESSAGE_EMPTY_NAME = "성명 정보가 없습니다."

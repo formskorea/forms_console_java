@@ -81,7 +81,11 @@ class APIController {
                     rtnValue.message = DefaultConfig.MESSAGE_NOTUSER
                 } else {
                     result.strMemberType = data.strMemberType
-                    rtnValue.result = Token.make(result)
+                    Etc.setCookie(DefaultConfig.TOKEN_ISSUER, Token.make(result), response, if(data.isSave) {
+                        15
+                    } else {
+                        -1
+                    })
                 }
 
             } catch (e: Exception) {
@@ -257,7 +261,7 @@ class APIController {
         request: HttpServletRequest
     ): Any {
         val rtnValue = ReturnValue()
-        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request.cookies)
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
 
         try {
             val info = Token.get(token, DefaultConfig.TOKEN_EXPDAY)
@@ -270,6 +274,7 @@ class APIController {
                 rtnValue.message = DefaultConfig.MESSAGE_TOKENOUT
             } else {
                 data.intSeq = info.intSeq
+                data.isSave = info.isSave
             }
         } catch (e: Exception) {
             rtnValue.error = DefaultConfig.ERROR_NOTFOUND
@@ -300,6 +305,11 @@ class APIController {
         if (rtnValue.status == DefaultConfig.SERVER_SUCCESS) {
             try {
                 applicationService.editUser(data)
+                Etc.setCookie(DefaultConfig.TOKEN_ISSUER, Token.make(data), response, if(data.isSave) {
+                    15
+                } else {
+                    -1
+                })
             } catch (e: Exception) {
                 log.error(e.message)
                 rtnValue.error = DefaultConfig.ERROR_NOTFOUND

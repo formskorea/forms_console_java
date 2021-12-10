@@ -11,6 +11,10 @@
     List<String> arrCss = (List<String>) request.getAttribute("styles");
     User userinfo = (User) request.getAttribute("fmcuser");
     String memberType = "";
+    media[0] = "";
+    media[1] = "";
+    media[2] = "";
+    media[3] = "";
     switch (userinfo.getStrMemberType()) {
         case DefaultConfig.MEMBER_ADMIN:
             memberType = "관리자";
@@ -460,7 +464,7 @@
                                     <% break;
                                     } %>
                                     <div class="text-center mt-5">
-                                        <button type="submit" class="btn btn-primary">내정보 수정하기</button>
+                                        <button type="submit" class="btn btn-primary"><span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="form_edit_process"></span> 내정보 수정하기</button>
                                     </div>
                                 </form><!-- End Profile Edit Form -->
 

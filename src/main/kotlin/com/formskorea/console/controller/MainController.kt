@@ -42,7 +42,7 @@ class MainController {
     @RequestMapping(value = ["/"], method = [RequestMethod.GET, RequestMethod.POST])
     @Throws(Exception::class)
     fun root(model: Model, response: HttpServletResponse, request: HttpServletRequest): Any {
-        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request.cookies)
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
         var isLogin = false
 
         if (token != "") {
@@ -75,7 +75,7 @@ class MainController {
     @RequestMapping(value = ["/profile"], method = [RequestMethod.GET, RequestMethod.POST])
     @Throws(Exception::class)
     fun profile(model: Model, response: HttpServletResponse, request: HttpServletRequest): Any {
-        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request.cookies)
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
         var isLogin = false
 
         if (token != "") {
@@ -106,8 +106,6 @@ class MainController {
                         val styles = ArrayList<String>()
                         styles.add("/css/tagify.css")
                         model.addAttribute("styles", styles)
-
-                        model.addAttribute("token", token)
                     }
                 }
             } catch (e: Exception) {
@@ -125,7 +123,7 @@ class MainController {
     @RequestMapping(value = ["/login"], method = [RequestMethod.GET, RequestMethod.POST])
     @Throws(Exception::class)
     fun login(model: Model, response: HttpServletResponse, request: HttpServletRequest): Any {
-        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request.cookies)
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
         var isLogin = false
 
         if (token != "") {
@@ -160,7 +158,7 @@ class MainController {
     @RequestMapping(value = ["/join"], method = [RequestMethod.GET, RequestMethod.POST])
     @Throws(Exception::class)
     fun join(model: Model, response: HttpServletResponse, request: HttpServletRequest): Any {
-        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request.cookies)
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
         var isLogin = false
 
         if (token != "") {
@@ -196,7 +194,7 @@ class MainController {
     @RequestMapping(value = ["/joinok"], method = [RequestMethod.GET, RequestMethod.POST])
     @Throws(Exception::class)
     fun joinok(model: Model, response: HttpServletResponse, request: HttpServletRequest): Any {
-        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request.cookies)
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
         var isLogin = false
 
         if (token != "") {
@@ -233,7 +231,7 @@ class MainController {
     @RequestMapping(value = ["/find"], method = [RequestMethod.GET, RequestMethod.POST])
     @Throws(Exception::class)
     fun find(model: Model, response: HttpServletResponse, request: HttpServletRequest): Any {
-        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request.cookies)
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
         var isLogin = false
 
         if (token != "") {
@@ -268,7 +266,7 @@ class MainController {
     @RequestMapping(value = ["/findok"], method = [RequestMethod.GET, RequestMethod.POST])
     @Throws(Exception::class)
     fun findok(model: Model, response: HttpServletResponse, request: HttpServletRequest): Any {
-        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request.cookies)
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
         var isLogin = false
 
         if (token != "") {
@@ -301,11 +299,7 @@ class MainController {
     @Throws(Exception::class)
     fun logout(model: Model, response: HttpServletResponse, request: HttpServletRequest): Any {
 
-        val cookie = Cookie(DefaultConfig.TOKEN_ISSUER, null)
-        cookie.maxAge = 0
-        cookie.path = "/"
-        response.addCookie(cookie)
-
+        Etc.setCookie(DefaultConfig.TOKEN_ISSUER, null, response, 0)
 
         return RedirectView("/login")
     }

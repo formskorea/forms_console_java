@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 import javax.servlet.http.Cookie
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 object Etc {
     var log = LoggerFactory.getLogger(this::class.java) as Logger
@@ -77,15 +79,24 @@ object Etc {
         return checkValid(data, regex)
     }
 
-    fun getCookie(key: String, cookie: Array<Cookie>?) : String {
-        if(cookie != null) {
-            for (field in cookie) {
+    fun getCookie(key: String, request: HttpServletRequest) : String {
+        if(request.cookies != null) {
+            for (field in request.cookies) {
                 if (field.name == key) {
                     return field.value
                 }
             }
         }
         return ""
+    }
+
+    fun setCookie(key: String, value: String?, response: HttpServletResponse, day: Int? = -1) {
+        val cookie = Cookie(key, value)
+        if(day != null && day > 0) {
+            cookie.maxAge = day * 24 * 60 * 60
+        }
+        cookie.path = "/"
+        response.addCookie(cookie)
     }
 
     fun random(start:Int, end: Int) : Int {
