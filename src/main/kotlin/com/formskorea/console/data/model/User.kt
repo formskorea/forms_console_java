@@ -28,5 +28,7 @@ data class User(
     var intCompanySeq: Int? = null,
     @SerializedName("pass2") var strPassword2: String? = null,
     var txtPermission: String? = null,
-    @SerializedName("save") var isSave : Boolean = false
+    @SerializedName("save") var isSave : Boolean = false,
+    var isLogin : Boolean? = false,
+    var intSuper: Int? = null
 )

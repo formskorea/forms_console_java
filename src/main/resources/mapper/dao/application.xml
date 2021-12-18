@@ -14,12 +14,19 @@
         intStatus,
         dateReg,
         dateEdit,
-        intCompanySeq
+        intCompanySeq,
+        intSuper
         <if test="strPassword != null">
             , PASSWORD(#{strPassword}) as strPassword2
         </if>
         FROM TB_INFUENCER
-        WHERE strEmail = #{strEmail};
+        WHERE
+        <if test="isLogin == true">
+            strEmail = #{strEmail}
+        </if>
+        <if test="isLogin == false">
+            intSeq = #{intSeq}
+        </if>;
     </select>
 
     <select id="getClientInfo" parameterType="User" resultType="User">
@@ -35,12 +42,19 @@
         intStatus,
         dateReg,
         dateEdit,
-        intCompanySeq
+        intCompanySeq,
+        intSuper
         <if test="strPassword != null">
             , PASSWORD(#{strPassword}) as strPassword2
         </if>
         FROM TB_CLIENT
-        WHERE strEmail = #{strEmail};
+        WHERE
+        <if test="isLogin == true">
+            strEmail = #{strEmail}
+        </if>
+        <if test="isLogin == false">
+            intSeq = #{intSeq}
+        </if>;
     </select>
 
     <select id="getAdminInfo" parameterType="User" resultType="User">
@@ -52,12 +66,19 @@
         intStatus,
         dateReg,
         dateEdit,
-        txtPermission
+        txtPermission,
+        intSuper
         <if test="strPassword != null">
             , PASSWORD(#{strPassword}) as strPassword2
         </if>
         FROM TB_ADMIN
-        WHERE strEmail = #{strEmail};
+        WHERE
+        <if test="isLogin == true">
+            strEmail = #{strEmail}
+        </if>
+        <if test="isLogin == false">
+            intSeq = #{intSeq}
+        </if>;
     </select>
 
     <select id="getCompany" parameterType="Company" resultType="Company">
@@ -94,6 +115,7 @@
                                   txtPermission,
                                   intLevel,
                                   intStatus,
+                                  intSuper,
                                   intCompanySeq)
         VALUES (#{strEmail},
                 PASSWORD(#{strPassword}),
@@ -104,6 +126,7 @@
                 #{txtPermission},
                 #{intLevel},
                 #{intStatus},
+                #{intSuper},
                 #{intCompanySeq});
     </insert>
 
@@ -118,6 +141,7 @@
                                txtPermission,
                                intLevel,
                                intStatus,
+                               intSuper,
                                intCompanySeq)
         VALUES (#{strEmail},
                 PASSWORD(#{strPassword}),
@@ -129,6 +153,7 @@
                 #{txtPermission},
                 #{intLevel},
                 #{intStatus},
+                #{intSuper},
                 #{intCompanySeq});
     </insert>
 
@@ -138,17 +163,22 @@
                               strPassword,
                               intLevel,
                               intStatus,
+                              intSuper,
                               txtPermission)
         VALUES (#{strName},
                 #{strEmail},
                 PASSWORD(#{strPassword}),
                 #{intLevel},
                 #{intStatus},
+                #{intSuper},
                 #{txtPermission});
     </insert>
 
     <update id="editInfluncer" parameterType="User">
         UPDATE TB_INFUENCER SET
+        <if test="strEmail != null and strEmail != ''">
+            strEmail = #{strEmail},
+        </if>
         <if test="strPassword != null and strPassword != ''">
             strPassword = PASSWORD(#{strPassword}),
         </if>
@@ -176,19 +206,19 @@
         <if test="intCompanySeq != null and intCompanySeq != 0">
             intCompanySeq = #{intCompanySeq},
         </if>
+        <if test="intSuper != null and intSuper != 0">
+            intSuper = #{intSuper},
+        </if>
         dateEdit = CURRENT_TIMESTAMP
         WHERE
-        intSeq > 0
-        <if test="intSeq != null and intSeq != 0">
-            AND intSeq = #{intSeq}
-        </if>
-        <if test="strEmail != null and strEmail != ''">
-            AND strEmail = #{strEmail}
-        </if>;
+        intSeq = #{intSeq};
     </update>
 
     <update id="editClient" parameterType="User">
         UPDATE TB_CLIENT SET
+        <if test="strEmail != null and strEmail != ''">
+            strEmail = #{strEmail},
+        </if>
         <if test="strPassword != null and strPassword != ''">
             strPassword = PASSWORD(#{strPassword}),
         </if>
@@ -216,19 +246,19 @@
         <if test="intCompanySeq != null and intCompanySeq != 0">
             intCompanySeq = #{intCompanySeq},
         </if>
+        <if test="intSuper != null and intSuper != 0">
+            intSuper = #{intSuper},
+        </if>
         dateEdit = CURRENT_TIMESTAMP
         WHERE
-        intSeq > 0
-        <if test="intSeq != null and intSeq != 0">
-            AND intSeq = #{intSeq}
-        </if>
-        <if test="strEmail != null and strEmail != ''">
-            AND strEmail = #{strEmail}
-        </if>;
+        intSeq = #{intSeq};
     </update>
 
     <update id="editAdmin" parameterType="User">
         UPDATE TB_CLIENT SET
+        <if test="strEmail != null and strEmail != ''">
+            strEmail = #{strEmail},
+        </if>
         <if test="strPassword != null and strPassword != ''">
             strPassword = PASSWORD(#{strPassword}),
         </if>
@@ -244,15 +274,12 @@
         <if test="intStatus != null and intStatus != 0">
             intStatus = #{intStatus},
         </if>
+        <if test="intSuper != null and intSuper != 0">
+            intSuper = #{intSuper},
+        </if>
         dateEdit = CURRENT_TIMESTAMP
         WHERE
-        intSeq > 0
-        <if test="intSeq != null and intSeq != 0">
-            AND intSeq = #{intSeq}
-        </if>
-        <if test="strEmail != null and strEmail != ''">
-            AND strEmail = #{strEmail}
-        </if>;
+        intSeq = #{intSeq};
     </update>
 
     <insert id="setCompany" parameterType="Company" useGeneratedKeys="true" keyProperty="intSeq">
@@ -399,7 +426,7 @@
     <select id="getTags" parameterType="Tag" resultType="Tag">
         SELECT a.strTag FROM TB_TAGS a, TB_TAG_LINK b
         WHERE
-            a.intSeq = b.intTagSeq
+        a.intSeq = b.intTagSeq
         <if test="intUserType != null and intUserType != 0">
             AND b.intUserType = #{intUserType}
         </if>
@@ -471,4 +498,95 @@
         </if>;
     </select>
 
+
+    <select id="getMInfluncerInfo" parameterType="Search" resultType="User">
+        SELECT intSeq,
+        strEmail,
+        strPassword,
+        strName,
+        strMobile,
+        strNikname,
+        intSex,
+        txtPermission,
+        intLevel,
+        intStatus,
+        dateReg,
+        dateEdit,
+        intCompanySeq,
+        intSuper
+        FROM TB_INFUENCER
+        WHERE
+        intSeq > 0
+        <if test="status != ''">
+            AND intStatus = #{status}
+        </if>
+        <if test="keyword != ''">
+            AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strMobile LIKE CONCAT('%', #{keyword}, '%')
+            OR strName LIKE CONCAT('%', #{keyword}, '%') OR strNikname LIKE CONCAT('%', #{keyword}, '%')
+            OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND a.intUserType = 2 AND b.strTag LIKE CONCAT('%', '테', '%'))
+            OR intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword}, '%')))
+        </if>
+        ORDER BY intSeq DESC
+        <if test="length != 0 and limit != 0">
+            LIMIT #{limit}, #{length}
+        </if>;
+    </select>
+
+    <select id="getMClientInfo" parameterType="Search" resultType="User">
+        SELECT intSeq,
+               strEmail,
+               strPassword,
+               strName,
+               strMobile,
+               strNikname,
+               intSex,
+               txtPermission,
+               intLevel,
+               intStatus,
+               dateReg,
+               dateEdit,
+               intCompanySeq,
+               intSuper
+        FROM TB_CLIENT
+        WHERE
+        intSeq > 0
+        <if test="status != ''">
+            AND intStatus = #{status}
+        </if>
+        <if test="keyword != ''">
+            AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strMobile LIKE CONCAT('%', #{keyword}, '%') OR strName LIKE CONCAT('%', #{keyword}, '%')
+            OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND a.intUserType = 2 AND b.strTag LIKE CONCAT('%', '테', '%'))
+            OR intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword}, '%')))
+        </if>
+        ORDER BY intSeq DESC
+        <if test="length != 0 and limit != 0">
+            LIMIT #{limit}, #{length}
+        </if>;
+    </select>
+
+    <select id="getMAdminInfo" parameterType="User" resultType="User">
+        SELECT intSeq,
+               strName,
+               strEmail,
+               strPassword,
+               intLevel,
+               intStatus,
+               dateReg,
+               dateEdit,
+               txtPermission,
+               intSuper
+        FROM TB_ADMIN
+        WHERE
+        intSeq > 0
+        <if test="status != ''">
+            AND intStatus = #{status}
+        </if>
+        <if test="keyword != ''">
+            AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strName LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        ORDER BY intSeq DESC
+        <if test="length != 0 and limit != 0">
+            LIMIT #{limit}, #{length}
+        </if>;
+    </select>
 </mapper>

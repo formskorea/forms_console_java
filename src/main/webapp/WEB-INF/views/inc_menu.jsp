@@ -1,17 +1,61 @@
 <%@ page import="com.formskorea.console.data.model.User" %>
 <%@ page import="com.formskorea.console.config.DefaultConfig" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %><%
+<%@ page import="org.json.JSONObject" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
     User userinfo = (User) request.getAttribute("fmcuser");
 
+    JSONObject permJson = new JSONObject();
+    String permission = userinfo.getTxtPermission();
+    if (!permission.equals("")) {
+        permJson = new JSONObject(permission);
+    }
+    Boolean isInfluencer = false;
+    Boolean isCient = false;
+    Boolean isWork = false;
+    Boolean isSetting = false;
+    Boolean isTrand = false;
+    Boolean isSuper = userinfo.getIntSuper() == 1;
     String memberType = "";
+
     switch (userinfo.getStrMemberType()) {
         case DefaultConfig.MEMBER_ADMIN:
             memberType = "관리자";
+            if (isSuper || (!permJson.isNull(DefaultConfig.PERM_INFLUENCER_READ) && permJson.getBoolean(DefaultConfig.PERM_INFLUENCER_READ))) {
+                isInfluencer = true;
+            }
+            if (isSuper || (!permJson.isNull(DefaultConfig.PERM_CLIENT_READ) && permJson.getBoolean(DefaultConfig.PERM_CLIENT_READ))) {
+                isCient = true;
+            }
+            if (isSuper || (!permJson.isNull(DefaultConfig.PERM_WORK_READ) && permJson.getBoolean(DefaultConfig.PERM_WORK_READ))) {
+                isWork = true;
+            }
+            isSetting = true;
+            isTrand = true;
             break;
         case DefaultConfig.MEMBER_CLIENT:
             memberType = "고객사";
-        default :
+            if (isSuper || (!permJson.isNull(DefaultConfig.PERM_INFLUENCER_READ) && permJson.getBoolean(DefaultConfig.PERM_INFLUENCER_READ))) {
+                isInfluencer = true;
+            }
+            if (isSuper || (!permJson.isNull(DefaultConfig.PERM_CLIENT_READ) && permJson.getBoolean(DefaultConfig.PERM_CLIENT_READ))) {
+                isCient = true;
+            }
+            if (isSuper || (!permJson.isNull(DefaultConfig.PERM_WORK_READ) && permJson.getBoolean(DefaultConfig.PERM_WORK_READ))) {
+                isWork = true;
+            }
+        default:
             memberType = "인플루언서";
+
+            if (isSuper || (!permJson.isNull(DefaultConfig.PERM_INFLUENCER_READ) && permJson.getBoolean(DefaultConfig.PERM_INFLUENCER_READ))) {
+                isInfluencer = true;
+            }
+            if (isSuper || (!permJson.isNull(DefaultConfig.PERM_CLIENT_READ) && permJson.getBoolean(DefaultConfig.PERM_CLIENT_READ))) {
+                isCient = true;
+            }
+            if (isSuper || (!permJson.isNull(DefaultConfig.PERM_WORK_READ) && permJson.getBoolean(DefaultConfig.PERM_WORK_READ))) {
+                isWork = true;
+            }
     }
 %>
 <!-- ======= Header ======= -->
@@ -117,7 +161,8 @@
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
-                        <h6><%=userinfo.getStrNikname()%></h6>
+                        <h6><%=userinfo.getStrNikname()%>
+                        </h6>
                         <span><%=memberType%> Lv.<%=userinfo.getIntLevel()%></span>
                     </li>
                     <li>
@@ -147,37 +192,60 @@
         </ul>
     </nav><!-- End Icons Navigation -->
 
-</header><!-- End Header -->
+</header>
+<!-- End Header -->
 
 <!-- ======= Sidebar ======= -->
 <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
-
         <li class="nav-item">
             <a class="nav-link" href="/">
                 <i class="bi bi-grid"></i>
-                <span>Dashboard</span>
+                <span>대시보드</span>
             </a>
         </li><!-- End Dashboard Nav -->
-
+        <% if(isTrand) { %>
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-menu-button-wide"></i><span>Components</span><i class="bi bi-chevron-down ms-auto"></i>
+            <a class="nav-link" href="/trand">
+                <i class="bi bi-clipboard-data"></i>
+                <span>트랜드 분석</span>
             </a>
-            <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="components-alerts.html">
-                        <i class="bi bi-circle"></i><span>Alerts</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="components-accordion.html">
-                        <i class="bi bi-circle"></i><span>Accordion</span>
-                    </a>
-                </li>
-            </ul>
-        </li><!-- End Components Nav -->
+        </li>
+        <% } %>
+        <% if (isInfluencer) { %>
+        <li class="nav-item">
+            <a class="nav-link" href="/influencer/list">
+                <i class="bi bi-instagram"></i>
+                <span>인플루언서</span>
+            </a>
+        </li>
+        <% } %>
+        <% if (isCient) { %>
+        <li class="nav-item">
+            <a class="nav-link" href="/client/list">
+                <i class="bi bi-building"></i>
+                <span>협력사</span>
+            </a>
+        </li>
+        <% } %>
+        <% if (isWork) { %>
+        <li class="nav-item">
+            <a class="nav-link" href="/work/list">
+                <i class="bi bi-journal-check"></i>
+                <span>협업</span>
+            </a>
+        </li>
+        <% } %>
+        <% if (isSetting) { %>
+        <li class="nav-item">
+            <a class="nav-link" href="/setting">
+                <i class="bi bi-gear"></i>
+                <span>사이트 셋팅</span>
+            </a>
+        </li>
+        <% } %>
     </ul>
 
-</aside><!-- End Sidebar-->
+</aside>
+<!-- End Sidebar-->

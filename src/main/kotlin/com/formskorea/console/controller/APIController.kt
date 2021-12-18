@@ -2,11 +2,13 @@ package com.formskorea.console.controller
 
 import com.formskorea.console.config.DefaultConfig
 import com.formskorea.console.data.model.ReturnValue
+import com.formskorea.console.data.model.Search
 import com.formskorea.console.data.model.User
 import com.formskorea.console.service.ApplicationService
 import com.formskorea.console.service.MailService
 import com.formskorea.console.util.Etc
 import com.formskorea.console.util.Token
+import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,6 +28,9 @@ class APIController {
     @Autowired
     lateinit var mailService: MailService
 
+    /**
+     * Application Management
+     * */
 
     @RequestMapping(value = ["/login"], produces = ["application/json"], method = [RequestMethod.POST])
     @ResponseBody
@@ -61,6 +66,7 @@ class APIController {
 
         if (rtnValue.status == DefaultConfig.SERVER_SUCCESS) {
             try {
+                data.isLogin = true
                 val result = applicationService.info(data)
 
                 if (result == null) {
@@ -81,11 +87,13 @@ class APIController {
                     rtnValue.message = DefaultConfig.MESSAGE_NOTUSER
                 } else {
                     result.strMemberType = data.strMemberType
-                    Etc.setCookie(DefaultConfig.TOKEN_ISSUER, Token.make(result), response, if(data.isSave) {
-                        15
-                    } else {
-                        -1
-                    })
+                    Etc.setCookie(
+                        DefaultConfig.TOKEN_ISSUER, Token.make(result), response, if (data.isSave) {
+                            15
+                        } else {
+                            -1
+                        }
+                    )
                 }
 
             } catch (e: Exception) {
@@ -102,12 +110,10 @@ class APIController {
     @RequestMapping(value = ["/info"])
     @ResponseBody
     @Throws(Exception::class)
-    fun info(
-        @RequestHeader(value = DefaultConfig.TOKEN_NAME) token: String?,
-        response: HttpServletResponse,
-        request: HttpServletRequest
-    ): Any {
+    fun info(response: HttpServletResponse, request: HttpServletRequest): Any {
         val rtnValue = ReturnValue()
+
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
 
         try {
             val info = Token.get(token.toString(), DefaultConfig.TOKEN_EXPDAY)
@@ -120,15 +126,34 @@ class APIController {
                 rtnValue.message = DefaultConfig.MESSAGE_TOKENOUT
             } else {
                 val result = applicationService.info(info)
-                result?.intSeq = null
-                result?.strPassword = null
-                result?.strPassword2 = null
-                result?.intCompanySeq = null
-                result?.dateReg = null
-                result?.dateEdit = null
-                result?.intCompanySeq = null
 
-                rtnValue.result = result
+                if (result == null) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_INFONULL
+                } else if (result.strPassword2 != result.strPassword) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_INFONULL
+                } else if (result.intStatus == DefaultConfig.MEMBER_REJECT) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_REJECT
+                } else if (result.intStatus == DefaultConfig.MEMBER_CUT) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_NOTUSER
+                } else {
+                    result.intSeq = null
+                    result.strPassword = null
+                    result.strPassword2 = null
+                    result.intCompanySeq = null
+                    result.dateReg = null
+                    result.dateEdit = null
+                    result.intCompanySeq = null
+
+                    rtnValue.result = result
+                }
             }
         } catch (e: Exception) {
             rtnValue.error = DefaultConfig.ERROR_NOTFOUND
@@ -251,11 +276,7 @@ class APIController {
     @ResponseBody
     @Transactional
     @Throws(Exception::class)
-    fun useredit(
-        @RequestBody data: User,
-        response: HttpServletResponse,
-        request: HttpServletRequest
-    ): Any {
+    fun useredit(@RequestBody data: User, response: HttpServletResponse, request: HttpServletRequest): Any {
         val rtnValue = ReturnValue()
         val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
 
@@ -317,11 +338,13 @@ class APIController {
         if (rtnValue.status == DefaultConfig.SERVER_SUCCESS) {
             try {
                 applicationService.editUser(data)
-                Etc.setCookie(DefaultConfig.TOKEN_ISSUER, Token.make(data), response, if(data.isSave) {
-                    15
-                } else {
-                    -1
-                })
+                Etc.setCookie(
+                    DefaultConfig.TOKEN_ISSUER, Token.make(data), response, if (data.isSave) {
+                        15
+                    } else {
+                        -1
+                    }
+                )
             } catch (e: Exception) {
                 log.error(e.message)
                 rtnValue.error = DefaultConfig.ERROR_NOTFOUND
@@ -405,4 +428,163 @@ class APIController {
         return rtnValue
     }
 
+
+    @RequestMapping(value = ["/repass"], produces = ["application/json"], method = [RequestMethod.POST])
+    @ResponseBody
+    @Throws(Exception::class)
+    fun repass(@RequestBody data: User, response: HttpServletResponse, request: HttpServletRequest): Any {
+        val rtnValue = ReturnValue()
+
+        log.debug(data.toString())
+
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
+
+        try {
+            val info = Token.get(token, DefaultConfig.TOKEN_EXPDAY)
+            if (info == null) {
+                rtnValue.error = DefaultConfig.ERROR_NOTFOUND
+                rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                rtnValue.message = DefaultConfig.MESSAGE_TOKENOUT
+            } else {
+                val result = applicationService.info(info)
+                if (result == null) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_INFONULL
+                } else if (result.intStatus == DefaultConfig.MEMBER_REJECT) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_REJECT
+                } else if (result.intStatus == DefaultConfig.MEMBER_CUT) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_NOTUSER
+                } else {
+                    data.intSeq = info.intSeq
+                    data.isSave = info.isSave
+                    data.intCompanySeq = result.intCompanySeq
+                    data.company?.intSeq = result.intCompanySeq
+                }
+            }
+        } catch (e: Exception) {
+            log.error(e.message)
+
+            rtnValue.error = DefaultConfig.ERROR_NOTFOUND
+            rtnValue.status = DefaultConfig.SERVER_NOTUSER
+            rtnValue.message = DefaultConfig.MESSAGE_TOKENOUT
+        }
+
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS && data.strPassword.isNullOrEmpty()) {
+            rtnValue.error = DefaultConfig.ERROR_PARAM
+            rtnValue.status = DefaultConfig.SERVER_PARAMERROR
+            rtnValue.message = DefaultConfig.MESSAGE_EMPTY_PASSWORD
+        }
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS) {
+            try {
+                val result = applicationService.info(data)
+
+                if (result == null) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_INFONULL
+                } else if (result.intStatus == DefaultConfig.MEMBER_REJECT) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_REJECT
+                } else if (result.intStatus == DefaultConfig.MEMBER_CUT) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_NOTUSER
+                } else if (result.strPassword != result.strPassword2) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_PASSNOTMATCH
+                } else {
+                    data.strPassword = data.strPassword2
+                    data.intCompanySeq = null
+                    applicationService.editPass(data)
+                }
+            } catch (e: Exception) {
+                rtnValue.error = DefaultConfig.ERROR_DBERROR
+                rtnValue.status = DefaultConfig.SERVER_DBERROR
+                rtnValue.message = DefaultConfig.MESSAGE_DBERROR
+            }
+        }
+
+        return rtnValue
+    }
+
+    /**
+     * Influencer Management
+     * */
+
+    @RequestMapping(value = ["/influencer/list"], produces = ["application/json"], method = [RequestMethod.POST])
+    @ResponseBody
+    @Throws(Exception::class)
+    fun getInfluencer(@RequestBody data: Search, response: HttpServletResponse, request: HttpServletRequest): Any {
+        val rtnValue = ReturnValue()
+
+        log.debug(data.toString())
+
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
+        var isInfluencer = false
+
+        try {
+            val info = Token.get(token, DefaultConfig.TOKEN_EXPDAY)
+            if (info == null) {
+                rtnValue.error = DefaultConfig.ERROR_NOTFOUND
+                rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                rtnValue.message = DefaultConfig.MESSAGE_TOKENOUT
+            } else {
+                val result = applicationService.info(info)
+                if (result == null) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_INFONULL
+                } else if (result.intStatus == DefaultConfig.MEMBER_REJECT) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_REJECT
+                } else if (result.intStatus == DefaultConfig.MEMBER_CUT) {
+                    rtnValue.error = DefaultConfig.ERROR_NOTUSER
+                    rtnValue.status = DefaultConfig.SERVER_NOTUSER
+                    rtnValue.message = DefaultConfig.MESSAGE_NOTUSER
+                } else {
+                    var permJson = JSONObject()
+                    if (!result.txtPermission.isNullOrEmpty()) {
+                        if (result.intSuper == 1 || (!permJson.isNull(DefaultConfig.PERM_INFLUENCER_READ) && permJson.getBoolean(
+                                DefaultConfig.PERM_INFLUENCER_READ
+                            ))
+                        ) {
+                            isInfluencer = true
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            log.error(e.message)
+            rtnValue.error = DefaultConfig.ERROR_NOTFOUND
+            rtnValue.status = DefaultConfig.SERVER_NOTUSER
+            rtnValue.message = DefaultConfig.MESSAGE_TOKENOUT
+        }
+
+        if (!isInfluencer) {
+            rtnValue.error = DefaultConfig.ERROR_NOTUSER
+            rtnValue.status = DefaultConfig.SERVER_NOTUSER
+            rtnValue.message = DefaultConfig.MESSAGE_NOTUSER
+        }
+
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS) {
+            try {
+                val result = applicationService.getMInfluncerInfo(data)
+                rtnValue.result = result
+            } catch (e: Exception) {
+                rtnValue.error = DefaultConfig.ERROR_DBERROR
+                rtnValue.status = DefaultConfig.SERVER_DBERROR
+                rtnValue.message = DefaultConfig.MESSAGE_DBERROR
+            }
+        }
+
+        return rtnValue
+    }
 }

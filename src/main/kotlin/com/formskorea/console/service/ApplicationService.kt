@@ -185,6 +185,20 @@ class ApplicationService {
         return applicationMapper.editMedia(data)
     }
 
+    fun editPass(data: User) : Boolean? {
+        return when (data.strMemberType) {
+            DefaultConfig.MEMBER_ADMIN -> {
+                applicationMapper.editAdmin(data)
+            }
+            DefaultConfig.MEMBER_CLIENT -> {
+                applicationMapper.editClient(data)
+            }
+            else -> {
+                applicationMapper.editInfluncer(data)
+            }
+        }
+    }
+
     fun setTag(data: Tag): Boolean? {
         var rtnValue = true
         try {
@@ -228,6 +242,10 @@ class ApplicationService {
 
     fun getTags(data: Tag): ArrayList<Tag>? {
         return applicationMapper.getTags(data)
+    }
+
+    fun getMInfluncerInfo(data: Search): ArrayList<User>? {
+        return applicationMapper.getMInfluncerInfo(data)
     }
 
 }

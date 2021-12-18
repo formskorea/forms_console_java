@@ -28,6 +28,7 @@ dependencies {
     implementation("org.json:json:20180130")
     implementation("org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16")
     implementation("com.google.code.gson:gson:2.8.5")
+    implementation("org.json:json:20211205")
     implementation("commons-io:commons-io:2.6")
     implementation("javax.servlet:jstl:1.2")
     implementation("org.apache.tomcat.embed:tomcat-embed-jasper")

@@ -50,4 +50,60 @@ $(document).ready(function ($) {
         }
 
     });
+
+    $("#form_password").submit(function (event) {
+        event.preventDefault();
+
+        if (!isProcessing) {
+            var current = $("#currentPassword").val();
+            var password = $("#newPassword").val();
+            var repassword = $("#renewPassword").val();
+            var submitButton = $(this).find("button[type=submit]");
+
+            if (current == "" || password == "" || repassword == "") {
+                showModal("비밀번호 항목을 전부 입력해 주세요.");
+            } else if (current == password) {
+                showModal("이전 비밀번호와 동일합니다.");
+            } else if (password != repassword) {
+                showModal("새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.");
+            } else {
+                isProcessing = true;
+                $("#form_password_process").removeClass("d-none");
+                submitButton.removeClass("btn-primary");
+                submitButton.addClass("btn-secondary");
+
+                var tojson = {'mtype': MEMTYPE, 'pass' : current, 'pass2' : password};
+
+                $.ajax({
+                    url: '/api/repass',
+                    type: 'POST',
+                    data: JSON.stringify(tojson),
+                    headers: {'Content-Type': 'application/json'},
+                }).then((data, textStatus, jqXHR) => {
+                    showModal(data.message);
+
+                    $("#form_password_process").addClass("d-none");
+                    isProcessing = false;
+                    submitButton.addClass("btn-primary");
+                    submitButton.removeClass("btn-secondary");
+
+                    $("#currentPassword").val('');
+                    $("#newPassword").val('');
+                    $("#renewPassword").val('');
+                }, (jqXHR, textStatus, errorThrown) => {
+                    /*pass*/
+                    $("#form_password_process").addClass("d-none");
+                    isProcessing = false;
+                    submitButton.addClass("btn-primary");
+                    submitButton.removeClass("btn-secondary");
+
+                    $("#currentPassword").val('');
+                    $("#newPassword").val('');
+                    $("#renewPassword").val('');
+                });
+            }
+        } else {
+            showModal("처리중입니다.");
+        }
+    });
 });

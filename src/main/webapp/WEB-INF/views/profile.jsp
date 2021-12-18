@@ -507,7 +507,7 @@
 
                             <div class="tab-pane fade pt-3" id="profile-change-password">
                                 <!-- Change Password Form -->
-                                <form>
+                                <form id="form_password" method="post" action="#">
 
                                     <div class="row mb-3">
                                         <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">현재
@@ -536,7 +536,7 @@
                                     </div>
 
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">비밀번호 변경</button>
+                                        <button type="submit" class="btn btn-primary"><span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="form_password_process"></span> 비밀번호 변경</button>
                                     </div>
                                 </form><!-- End Change Password Form -->
 

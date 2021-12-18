@@ -62,4 +62,18 @@ object DefaultConfig {
             "\n ==================================" +
             "\n \n * 본메일은 발송전용 메일입니다."
 
+    const val PERM_SUPER = "super"
+    const val PERM_INFLUENCER_READ = "iread"
+    const val PERM_INFLUENCER_ADD = "iadd"
+    const val PERM_INFLUENCER_EDIT = "iedit"
+    const val PERM_INFLUENCER_DEL = "idel"
+    const val PERM_CLIENT_READ = "cread"
+    const val PERM_CLIENT_ADD = "cadd"
+    const val PERM_CLIENT_EDIT = "cedit"
+    const val PERM_CLIENT_DEL = "cdel"
+    const val PERM_WORK_READ = "wread"
+    const val PERM_WORK_ADD = "wadd"
+    const val PERM_WORK_EDIT = "wedit"
+    const val PERM_WORK_DEL = "wdel"
+
 }
