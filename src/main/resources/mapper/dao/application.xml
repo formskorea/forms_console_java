@@ -341,13 +341,13 @@
     </update>
 
     <insert id="setMedia" parameterType="Media" useGeneratedKeys="true" keyProperty="intSeq">
-        INSERT INTO TB_MEDIA (intUserSeq, intUserType, intType, strURL, intStatus)
-        VALUES (#{intUserSeq}, #{intUserType}, #{intType}, #{strURL}, #{intStatus});
+        INSERT INTO TB_MEDIA (intUserSeq, intUserType, intType, strURL, intStatus, intCount1, intCount2, intCount3)
+        VALUES (#{intUserSeq}, #{intUserType}, #{intType}, #{strURL}, #{intStatus}, 0, 0, 0);
     </insert>
 
     <select id="getMedia" parameterType="Media" resultType="Media">
         SELECT
-        intSeq, intUserSeq, intUserType, intType, strURL, intStatus
+        intSeq, intUserSeq, intUserType, intType, strURL, intStatus, intCount1, intCount2, intCount3
         FROM
         TB_MEDIA
         WHERE
@@ -373,6 +373,15 @@
         </if>
         <if test="intStatus != null and intStatus != 0">
             intStatus = #{intStatus},
+        </if>
+        <if test="intCount1 != null and intCount1 != 0">
+            intCount1 = #{intCount1},
+        </if>
+        <if test="intCount2 != null and intCount2 != 0">
+            intCount2 = #{intCount2},
+        </if>
+        <if test="intCount3 != null and intCount3 != 0">
+            intCount3 = #{intCount3},
         </if>
         dateEdit = CURRENT_TIMESTAMP
         WHERE
@@ -502,7 +511,6 @@
     <select id="getMInfluncerInfo" parameterType="Search" resultType="User">
         SELECT intSeq,
         strEmail,
-        strPassword,
         strName,
         strMobile,
         strNikname,
@@ -517,25 +525,40 @@
         FROM TB_INFUENCER
         WHERE
         intSeq > 0
-        <if test="status != ''">
+        <if test="status != null">
             AND intStatus = #{status}
         </if>
         <if test="keyword != ''">
             AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strMobile LIKE CONCAT('%', #{keyword}, '%')
             OR strName LIKE CONCAT('%', #{keyword}, '%') OR strNikname LIKE CONCAT('%', #{keyword}, '%')
-            OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND a.intUserType = 2 AND b.strTag LIKE CONCAT('%', '테', '%'))
+            OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
             OR intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword}, '%')))
         </if>
         ORDER BY intSeq DESC
-        <if test="length != 0 and limit != 0">
+        <if test="length != 0 and limit != -1">
             LIMIT #{limit}, #{length}
+        </if>;
+    </select>
+
+    <select id="getMInfluncerCount" parameterType="Search" resultType="Integer">
+        SELECT COUNT(intSeq)
+        FROM TB_INFUENCER
+        WHERE
+        intSeq > 0
+        <if test="status != null">
+            AND intStatus = #{status}
+        </if>
+        <if test="keyword != ''">
+            AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strMobile LIKE CONCAT('%', #{keyword}, '%')
+            OR strName LIKE CONCAT('%', #{keyword}, '%') OR strNikname LIKE CONCAT('%', #{keyword}, '%')
+            OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
+            OR intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword}, '%')))
         </if>;
     </select>
 
     <select id="getMClientInfo" parameterType="Search" resultType="User">
         SELECT intSeq,
                strEmail,
-               strPassword,
                strName,
                strMobile,
                strNikname,
@@ -550,17 +573,32 @@
         FROM TB_CLIENT
         WHERE
         intSeq > 0
-        <if test="status != ''">
+        <if test="status != null">
             AND intStatus = #{status}
         </if>
         <if test="keyword != ''">
             AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strMobile LIKE CONCAT('%', #{keyword}, '%') OR strName LIKE CONCAT('%', #{keyword}, '%')
-            OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND a.intUserType = 2 AND b.strTag LIKE CONCAT('%', '테', '%'))
+            OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
             OR intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword}, '%')))
         </if>
         ORDER BY intSeq DESC
-        <if test="length != 0 and limit != 0">
+        <if test="length != 0 and limit != -1">
             LIMIT #{limit}, #{length}
+        </if>;
+    </select>
+
+    <select id="getMClientCount" parameterType="Search" resultType="Integer">
+        SELECT COUNT(intSeq)
+        FROM TB_CLIENT
+        WHERE
+        intSeq > 0
+        <if test="status != null">
+            AND intStatus = #{status}
+        </if>
+        <if test="keyword != ''">
+            AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strMobile LIKE CONCAT('%', #{keyword}, '%') OR strName LIKE CONCAT('%', #{keyword}, '%')
+            OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
+            OR intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword}, '%')))
         </if>;
     </select>
 
@@ -568,7 +606,6 @@
         SELECT intSeq,
                strName,
                strEmail,
-               strPassword,
                intLevel,
                intStatus,
                dateReg,
@@ -578,15 +615,27 @@
         FROM TB_ADMIN
         WHERE
         intSeq > 0
-        <if test="status != ''">
+        <if test="status != null">
             AND intStatus = #{status}
         </if>
         <if test="keyword != ''">
             AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strName LIKE CONCAT('%', #{keyword}, '%'))
         </if>
         ORDER BY intSeq DESC
-        <if test="length != 0 and limit != 0">
+        <if test="length != 0 and limit != -1">
             LIMIT #{limit}, #{length}
+        </if>;
+    </select>
+    <select id="getMAdminCount" parameterType="User" resultType="Integer">
+        SELECT COUNT(intSeq)
+        FROM TB_ADMIN
+        WHERE
+        intSeq > 0
+        <if test="status != null">
+            AND intStatus = #{status}
+        </if>
+        <if test="keyword != ''">
+            AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strName LIKE CONCAT('%', #{keyword}, '%'))
         </if>;
     </select>
 </mapper>

@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="row col-md-2 mb-3">
-                    <button class="btn btn-primary"><i class="bi bi-search"></i> 검색하기</button>
+                    <button class="btn btn-primary" id="search_button"><i class="bi bi-search"></i> 검색하기</button>
                 </div>
             </div>
 
@@ -51,19 +51,17 @@
         <div class="row g-0 mb-3" id="item_box">
             <div class="card mb-3 item_row">
                 <div class="row g-0">
-                    <div class="col-md-2 align-center">
-                        <img src="/img/card.jpg" class="img-fluid rounded" alt="...">
-                    </div>
-                    <div class="col-md-10">
+<%--                    <div class="col-md-2 align-center">--%>
+<%--                        <img src="/img/card.jpg" class="img-fluid rounded" alt="...">--%>
+<%--                    </div>--%>
+                    <div class="col-md-12">
                         <div class="card-body">
                             <div class="row">
                                 <h5 class="card-title item_name col-md-3">활동명 (성명)</h5>
-                                <span class="item_tel col-md-3 card-title text-secondary" style="text-align: center;">010-0000-0000</span>
-                                <span class="item_email col-md-3 card-title text-secondary" style="text-align: center;">email@email.com</span>
-                                <span class="item_level col-md-1 card-title text-secondary" style="text-align: center;">lv1</span>
-                                <span class="item_status col-md-1 card-title text-secondary"
-                                      style="text-align: center;"> <span
-                                        class="badge bg-success text-light">정상</span></span>
+                                <span class="item_tel col-md-3 card-title text-secondary text-center">010-0000-0000</span>
+                                <span class="item_email col-md-3 card-title text-secondary text-center">email@email.com</span>
+                                <span class="item_level col-md-2 card-title text-secondary text-center">lv1</span>
+                                <span class="item_status col-md-1 card-title text-secondary text-center"><span class="badge bg-success text-light">정상</span></span>
                             </div>
                             <div class="row mb-1 item_instagram_box">
                                 <label class="col-md-6 h5"><a href="#" target="_blank" class="item_media_link"
@@ -110,7 +108,7 @@
                                                             data-bs-placement="top" data-bs-original-title="게시물"></i>
                                     <span class="item_follow">-</span></div>
                             </div>
-                            <div class="row mb-1 item_blog_box">
+                            <div class="row mb-1 item_shopping_box">
                                 <label class="col-md-12 h5"><a href="#" target="_blank" class="item_media_link"
                                                               data-bs-toggle="tooltip" data-bs-placement="top"
                                                               data-bs-original-title="쇼핑몰 링크"><i
@@ -131,13 +129,6 @@
             </div>
         </div>
         <nav aria-label="Page navigation" id="page_box">
-            <ul class="pagination justify-content-center">
-                <li class="page-item"><a class="page-link" href="#">이전</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">다음</a></li>
-            </ul>
         </nav>
     </section>
 

@@ -181,6 +181,10 @@ class ApplicationService {
         return applicationMapper.delMedia(data)
     }
 
+    fun getMedia(data: Media) : ArrayList<Media>? {
+        return applicationMapper.getMedia(data)
+    }
+
     fun editMedia(data: Media): Boolean? {
         return applicationMapper.editMedia(data)
     }
@@ -246,6 +250,21 @@ class ApplicationService {
 
     fun getMInfluncerInfo(data: Search): ArrayList<User>? {
         return applicationMapper.getMInfluncerInfo(data)
+    }
+    fun getMInfluncerCount(data: Search): Int? {
+        return applicationMapper.getMInfluncerCount(data)
+    }
+    fun getMClientInfo(data: Search): ArrayList<User>? {
+        return applicationMapper.getMClientInfo(data)
+    }
+    fun getMClientCount(data: Search): Int? {
+        return applicationMapper.getMClientCount(data)
+    }
+    fun getMAdminInfo(data: Search): ArrayList<User>? {
+        return applicationMapper.getMAdminInfo(data)
+    }
+    fun getMAdminCount(data: Search): Int? {
+        return applicationMapper.getMAdminCount(data)
     }
 
 }

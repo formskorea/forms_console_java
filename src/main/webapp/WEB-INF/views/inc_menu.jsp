@@ -207,7 +207,7 @@
         </li><!-- End Dashboard Nav -->
         <% if(isTrand) { %>
         <li class="nav-item">
-            <a class="nav-link" href="/trand">
+            <a class="nav-link" href="/trend">
                 <i class="bi bi-clipboard-data"></i>
                 <span>트랜드 분석</span>
             </a>

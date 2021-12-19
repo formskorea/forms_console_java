@@ -39,25 +39,25 @@ function paging(maxsize) {
     page_box.append(html);
     page_box.find("a").unbind("click");
     page_box.find("a").click(function(e){
-       e.preventDefault();
-       var type = $(this).attr("aria-label");
-       console.log(type);
-       switch(type) {
-           case "Previous" :
-               var count = now_page - Math.ceil(paging_size / 2);
-               now_page = count <= 0 ? 1 : count;
-               break;
-           case "Next" :
-               var count = now_page + Math.ceil(paging_size / 2);
-               now_page = count > maxsize ? maxsize : count;
-               break;
-           default :
-               now_page = parseInt(type);
-               break;
-       }
+        e.preventDefault();
+        var type = $(this).attr("aria-label");
+        console.log(type);
+        switch(type) {
+            case "Previous" :
+                var count = now_page - Math.ceil(paging_size / 2);
+                now_page = count <= 0 ? 1 : count;
+                break;
+            case "Next" :
+                var count = now_page + Math.ceil(paging_size / 2);
+                now_page = count > maxsize ? maxsize : count;
+                break;
+            default :
+                now_page = parseInt(type);
+                break;
+        }
 
-       now_limit = (now_page - 1) * now_length;
-       loadData();
+        now_limit = (now_page - 1) * now_length;
+        loadData();
     });
 }
 
@@ -67,7 +67,7 @@ function loadData() {
     empty_box.addClass("d-none");
     loading_box.removeClass("d-none");
     $.ajax({
-        url: '/api/influencer/list',
+        url: '/api/client/list',
         type: 'POST',
         data: JSON.stringify({'status' : list_status, 'limit' : now_limit, 'length' : now_length, 'page' : now_page, 'keyword' : $("#search_text").val()}),
         headers: {'Content-Type': 'application/json'},
@@ -78,7 +78,7 @@ function loadData() {
                 for(var i = 0; i < data.result.list.length; i++) {
                     var field = data.result.list[i];
                     list_box.append(list_item);
-                    list_box.find(".item_name").eq(i).html(field.nik + "(" + field.name + ")");
+                    list_box.find(".item_name").eq(i).html(field.name);
                     list_box.find(".item_mobile").eq(i).html(field.mobile);
                     list_box.find(".item_email").eq(i).html(field.email);
                     list_box.find(".item_level").eq(i).html("lv" + field.level);
@@ -99,41 +99,10 @@ function loadData() {
                     }
                     list_box.find(".item_status").eq(i).html(status_span);
                     list_box.find(".item_instagram_box").eq(i).addClass("d-none");
-                    list_box.find(".item_youtube_box").eq(i).addClass("d-none");
-                    list_box.find(".item_blog_box").eq(i).addClass("d-none");
-                    list_box.find(".item_shopping_box").eq(i).addClass("d-none");
-                    for(var j = 0; j < field.media.length; j++) {
-                        switch(field.media[j].type) {
-                            case 1 :
-                                list_box.find(".item_instagram_box").eq(i).find("a.item_media_link").attr("src", field.media[j].url);
-                                list_box.find(".item_instagram_box").eq(i).find("span.item_media_link").html(field.media[j].url);
-                                list_box.find(".item_instagram_box").eq(i).find("span.item_follower").html(priceToString(field.media[j].count1));
-                                list_box.find(".item_instagram_box").eq(i).find("span.item_follow").html(priceToString(field.media[j].count2));
-                                list_box.find(".item_instagram_box").eq(i).find("span.item_upcount").html(priceToString(field.media[j].count3));
-                                list_box.find(".item_instagram_box").eq(i).removeClass("d-none");
-                                break;
-                            case 2 :
-                                list_box.find(".item_youtube_box").eq(i).find("a.item_media_link").attr("src", field.media[j].url);
-                                list_box.find(".item_youtube_box").eq(i).find("span.item_media_link").html(field.media[j].url);
-                                list_box.find(".item_youtube_box").eq(i).find("span.item_follower").html(priceToString(field.media[j].count1));
-                                list_box.find(".item_youtube_box").eq(i).find("span.item_follow").html(priceToString(field.media[j].count2));
-                                list_box.find(".item_youtube_box").eq(i).find("span.item_upcount").html(priceToString(field.media[j].count3));
-                                list_box.find(".item_youtube_box").eq(i).removeClass("d-none");
-                                break;
-                            case 3 :
-                                list_box.find(".item_blog_box").eq(i).find("a.item_media_link").attr("src", field.media[j].url);
-                                list_box.find(".item_blog_box").eq(i).find("span.item_media_link").html(field.media[j].url);
-                                list_box.find(".item_blog_box").eq(i).find("span.item_follower").html(priceToString(field.media[j].count1));
-                                list_box.find(".item_blog_box").eq(i).find("span.item_follow").html(priceToString(field.media[j].count2));
-                                list_box.find(".item_blog_box").eq(i).removeClass("d-none");
-                                break;
-                            case 4 :
-                                list_box.find(".item_shopping_box").eq(i).find("a.item_media_link").attr("src", field.media[j].url);
-                                list_box.find(".item_shopping_box").eq(i).find("span.item_media_link").html(field.media[j].url);
-                                list_box.find(".item_shopping_box").eq(i).removeClass("d-none");
-                                break;
-                        }
-                    }
+
+                    list_box.find(".item_companyname").eq(i).html(field.company.comname);
+                    list_box.find(".item_companytel").eq(i).html(field.company.tel);
+                    list_box.find(".item_companyaddr").eq(i).html("(" + field.company.zip + ") " + field.company.address.replace("|", " "));
                 }
 
                 paging(data.result.max_page);

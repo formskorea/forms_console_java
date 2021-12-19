@@ -29,6 +29,9 @@ interface ApplicationMapper {
     fun delCash(data: Cash): Boolean?
     fun getCash(data: Cash): ArrayList<Cash>?
     fun getMInfluncerInfo(data: Search): ArrayList<User>?
+    fun getMInfluncerCount(data: Search): Int?
     fun getMClientInfo(data: Search): ArrayList<User>?
+    fun getMClientCount(data: Search): Int?
     fun getMAdminInfo(data: Search): ArrayList<User>?
+    fun getMAdminCount(data: Search): Int?
 }

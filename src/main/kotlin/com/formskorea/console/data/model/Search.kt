@@ -6,5 +6,6 @@ data class Search(
     var end: Int?,
     var limit : Int?,
     var length: Int?,
-    var status: Int?
+    var status: Int?,
+    var page: Int?
 )

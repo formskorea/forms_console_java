@@ -242,3 +242,7 @@ function checkEmail(value) {
     var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
     return regEmail.test(value);
 }
+
+function priceToString(price) {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
