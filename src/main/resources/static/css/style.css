@@ -907,6 +907,8 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   color: rgba(1, 41, 112, 0.6);
 }
+
+.work-add label:nth-child(1),
 .profile .profile-edit label {
   font-weight: 600;
   color: rgba(1, 41, 112, 0.6);
@@ -1082,3 +1084,12 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 13px;
   color: #4b3098;
 }
+
+/*--------------------------------------------------------------
+# User custom
+--------------------------------------------------------------*/
+
+.text-1em { font-size: 1rem !important; }
+.text-2em { font-size: 2rem !important; }
+.text-3em { font-size: 3rem !important; }
+.text-4em { font-size: 4rem !important; }

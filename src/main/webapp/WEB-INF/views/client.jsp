@@ -57,16 +57,16 @@
                     <div class="col-md-12">
                         <div class="card-body">
                             <div class="row">
-                                <h5 class="card-title item_name col-md-3">활동명</h5>
-                                <span class="item_tel col-md-3 card-title text-secondary text-center">010-0000-0000</span>
-                                <span class="item_email col-md-3 card-title text-secondary text-center">email@email.com</span>
-                                <span class="item_level col-md-2 card-title text-secondary text-center">lv1</span>
-                                <span class="item_status col-md-1 card-title text-secondary text-center"><span class="badge bg-success text-light">정상</span></span>
+                                <h5 class="card-title item_name col-md-3 text-1em text-1em">활동명</h5>
+                                <span class="item_tel col-md-3 card-title text-secondary text-center text-1em">010-0000-0000</span>
+                                <span class="item_email col-md-3 card-title text-secondary text-center text-1em">email@email.com</span>
+                                <span class="item_level col-md-2 card-title text-secondary text-center text-1em">lv1</span>
+                                <span class="item_status col-md-1 card-title text-secondary text-center text-1em"><span class="badge bg-success text-light">정상</span></span>
                             </div>
                             <div class="row item_company_box">
-                                <h5 class="card-title item_companyname col-md-3 pt-md-0">회사명</h5>
-                                <span class="item_companytel col-md-3 card-title text-secondary pt-md-0 text-center">010-0000-0000</span>
-                                <span class="item_companyaddr col-md-6 card-title text-secondary pt-md-0 text-center">주소주소</span>
+                                <h5 class="card-title item_companyname col-md-3 pt-md-0 text-1em">회사명</h5>
+                                <span class="item_companytel col-md-3 card-title text-secondary pt-md-0 text-center text-1em">010-0000-0000</span>
+                                <span class="item_companyaddr col-md-6 card-title text-secondary pt-md-0 text-center text-1em">주소주소</span>
                             </div>
                         </div>
                     </div>

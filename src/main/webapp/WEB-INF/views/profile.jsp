@@ -284,7 +284,7 @@
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <label for="hashtag" class="col-md-4 col-lg-3 col-form-label">해시태그</label>
+                                        <label for="hashtag" class="col-md-4 col-lg-3 col-form-label">관련 키워드</label>
                                         <div class="col-md-8 col-lg-9">
                                             <input name="hashtag" type="text" class="form-control" id="hashtag"
                                                    value="<%=tagsv%>">
@@ -351,7 +351,7 @@
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <label for="hashtag" class="col-md-4 col-lg-3 col-form-label">해시태그</label>
+                                        <label for="hashtag" class="col-md-4 col-lg-3 col-form-label">관련 키워드</label>
                                         <div class="col-md-8 col-lg-9">
                                             <input name="hashtag" type="text" class="form-control" id="hashtag"
                                                    value="<%=tagsv%>">

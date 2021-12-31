@@ -28,7 +28,7 @@
         <div class="row align-center text-center">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-                <img class="mt-lg-5 mb-lg-5" src="/img/wait.jpg" />
+
             </div>
             <div class="col-md-3"></div>
         </div>

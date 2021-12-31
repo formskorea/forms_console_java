@@ -7,5 +7,8 @@ data class Search(
     var limit : Int?,
     var length: Int?,
     var status: Int?,
-    var page: Int?
+    var page: Int?,
+    var media1: Int?,
+    var media2: Int?,
+    var media3: Int?
 )

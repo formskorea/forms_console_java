@@ -3,7 +3,7 @@ package com.formskorea.console.data.model
 import com.google.gson.annotations.SerializedName
 
 data class User(
-    var intSeq: Int? = null,
+    @SerializedName("seq") var intSeq: Int? = null,
     @SerializedName("mtype") var strMemberType: String? = null,
     @SerializedName("email") var strEmail: String? = null,
     @SerializedName("pass") var strPassword: String? = null,

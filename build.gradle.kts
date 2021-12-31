@@ -31,6 +31,7 @@ dependencies {
     implementation("org.json:json:20211205")
     implementation("commons-io:commons-io:2.6")
     implementation("javax.servlet:jstl:1.2")
+    implementation("com.amazonaws:aws-java-sdk-s3:1.11.478")
     implementation("org.apache.tomcat.embed:tomcat-embed-jasper")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")

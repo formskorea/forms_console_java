@@ -246,3 +246,13 @@ function checkEmail(value) {
 function priceToString(price) {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
+
+function comma(str) {
+    str = uncomma(String(str));
+    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+}
+
+function uncomma(str) {
+    str = str.replace(/[^\d]+/g, '');
+    return String(str *= 1);
+}

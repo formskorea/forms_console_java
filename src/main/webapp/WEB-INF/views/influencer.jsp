@@ -57,62 +57,62 @@
                     <div class="col-md-12">
                         <div class="card-body">
                             <div class="row">
-                                <h5 class="card-title item_name col-md-3">활동명 (성명)</h5>
-                                <span class="item_tel col-md-3 card-title text-secondary text-center">010-0000-0000</span>
-                                <span class="item_email col-md-3 card-title text-secondary text-center">email@email.com</span>
-                                <span class="item_level col-md-2 card-title text-secondary text-center">lv1</span>
-                                <span class="item_status col-md-1 card-title text-secondary text-center"><span class="badge bg-success text-light">정상</span></span>
+                                <h5 class="card-title item_name col-md-3 text-1em">활동명 (성명)</h5>
+                                <span class="item_tel col-md-3 card-title text-secondary text-center text-1em">010-0000-0000</span>
+                                <span class="item_email col-md-3 card-title text-secondary text-center text-1em">email@email.com</span>
+                                <span class="item_level col-md-2 card-title text-secondary text-center text-1em">lv1</span>
+                                <span class="item_status col-md-1 card-title text-secondary text-center text-1em"><span class="badge bg-success text-light">정상</span></span>
                             </div>
                             <div class="row mb-1 item_instagram_box">
-                                <label class="col-md-6 h5"><a href="#" target="_blank" class="item_media_link"
+                                <label class="col-md-6 "><a href="#" target="_blank" class="item_media_link text-1em"
                                                               data-bs-toggle="tooltip" data-bs-placement="top"
                                                               data-bs-original-title="인스타그램 링크"><i
                                         class="bi bi-instagram"></i> <span
-                                        class="h5 item_media_link">-</span></a></label>
-                                <div class="col-md-2 h5"><i class="ri-user-received-2-fill" data-bs-toggle="tooltip"
+                                        class="item_media_link">-</span></a></label>
+                                <div class="col-md-2  text-1em"><i class="ri-user-received-2-fill" data-bs-toggle="tooltip"
                                                             data-bs-placement="top" data-bs-original-title="팔로워"></i>
                                     <span class="item_follower">-</span></div>
-                                <div class="col-md-2 h5"><i class="ri-user-shared-2-fill" data-bs-toggle="tooltip"
+                                <div class="col-md-2  text-1em"><i class="ri-user-shared-2-fill" data-bs-toggle="tooltip"
                                                             data-bs-placement="top" data-bs-original-title="팔로우"></i>
                                     <span class="item_follow">-</span></div>
-                                <div class="col-md-2 h5"><i class="bi bi-image" data-bs-toggle="tooltip"
+                                <div class="col-md-2  text-1em"><i class="bi bi-image" data-bs-toggle="tooltip"
                                                             data-bs-placement="top" data-bs-original-title="게시물"></i>
                                     <span class="item_upcount">-</span></div>
                             </div>
                             <div class="row mb-1 item_youtube_box">
-                                <label class="col-md-6 h5"><a href="#" target="_blank" class="item_media_link"
+                                <label class="col-md-6 "><a href="#" target="_blank" class="item_media_link text-1em"
                                                               data-bs-toggle="tooltip" data-bs-placement="top"
                                                               data-bs-original-title="유튜브 링크"><i
                                         class="bi bi-play-btn-fill"></i> <span
-                                        class="h5 item_media_link">-</span></a></label>
-                                <div class="col-md-2 h5"><i class="ri-user-received-2-fill" data-bs-toggle="tooltip"
+                                        class="  item_media_link">-</span></a></label>
+                                <div class="col-md-2 text-1em"><i class="ri-user-received-2-fill" data-bs-toggle="tooltip"
                                                             data-bs-placement="top" data-bs-original-title="구독자"></i>
                                     <span class="item_follower">-</span></div>
-                                <div class="col-md-2 h5"><i class="bi bi-play-btn-fill" data-bs-toggle="tooltip"
+                                <div class="col-md-2 text-1em"><i class="bi bi-play-btn-fill" data-bs-toggle="tooltip"
                                                             data-bs-placement="top" data-bs-original-title="조회수"></i>
                                     <span class="item_follow">-</span></div>
-                                <div class="col-md-2 h5"><i class="bi bi-camera-video" data-bs-toggle="tooltip"
+                                <div class="col-md-2 text-1em"><i class="bi bi-camera-video" data-bs-toggle="tooltip"
                                                             data-bs-placement="top" data-bs-original-title="동영상"></i>
                                     <span class="item_upcount">-</span></div>
                             </div>
                             <div class="row mb-1 item_blog_box">
-                                <label class="col-md-6 h5"><a href="#" target="_blank" class="item_media_link"
+                                <label class="col-md-6 "><a href="#" target="_blank" class="item_media_link text-1em"
                                                               data-bs-toggle="tooltip" data-bs-placement="top"
                                                               data-bs-original-title="블로그 링크"><i
                                         class="bi bi-bootstrap"></i> <span
-                                        class="h5 item_media_link">-</span></a></label>
-                                <div class="col-md-2 h5"><i class="ri-user-received-2-fill" data-bs-toggle="tooltip"
+                                        class="  item_media_link">-</span></a></label>
+                                <div class="col-md-2 text-1em"><i class="ri-user-received-2-fill" data-bs-toggle="tooltip"
                                                             data-bs-placement="top" data-bs-original-title="방문자"></i>
                                     <span class="item_follower">-</span></div>
-                                <div class="col-md-2 h5"><i class="ri-stack-overflow-fill" data-bs-toggle="tooltip"
+                                <div class="col-md-2 text-1em"><i class="ri-stack-overflow-fill" data-bs-toggle="tooltip"
                                                             data-bs-placement="top" data-bs-original-title="게시물"></i>
                                     <span class="item_follow">-</span></div>
                             </div>
                             <div class="row mb-1 item_shopping_box">
-                                <label class="col-md-12 h5"><a href="#" target="_blank" class="item_media_link"
+                                <label class="col-md-12 "><a href="#" target="_blank" class="item_media_link text-1em"
                                                               data-bs-toggle="tooltip" data-bs-placement="top"
                                                               data-bs-original-title="쇼핑몰 링크"><i
-                                        class="bi bi-cart3"></i> <span class="h5 item_media_link">-</span></a></label>
+                                        class="bi bi-cart3"></i> <span class="  item_media_link">-</span></a></label>
                             </div>
                         </div>
                     </div>

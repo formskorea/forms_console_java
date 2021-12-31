@@ -549,11 +549,13 @@ class APIController {
                     rtnValue.status = DefaultConfig.SERVER_NOTUSER
                     rtnValue.message = DefaultConfig.MESSAGE_NOTUSER
                 } else {
-                    var permJson = JSONObject()
-                    if (result.intSuper == 1 || (!result.txtPermission.isNullOrEmpty() && !permJson.isNull(DefaultConfig.PERM_INFLUENCER_READ) && permJson.getBoolean(
-                            DefaultConfig.PERM_INFLUENCER_READ
-                        ))
-                    ) {
+                    if (!result.txtPermission.isNullOrEmpty()) {
+                        val permJson = JSONObject(result.txtPermission)
+                        if(!permJson.isNull(DefaultConfig.PERM_INFLUENCER_READ) && permJson.getBoolean(DefaultConfig.PERM_INFLUENCER_READ)) {
+                            isInfluencer = true
+                        }
+                    }
+                    if(result.intSuper == 1) {
                         isInfluencer = true
                     }
 
@@ -640,14 +642,15 @@ class APIController {
                     rtnValue.status = DefaultConfig.SERVER_NOTUSER
                     rtnValue.message = DefaultConfig.MESSAGE_NOTUSER
                 } else {
-                    var permJson = JSONObject()
-                    if (result.intSuper == 1 || (!result.txtPermission.isNullOrEmpty() && !permJson.isNull(DefaultConfig.PERM_CLIENT_READ) && permJson.getBoolean(
-                            DefaultConfig.PERM_CLIENT_READ
-                        ))
-                    ) {
+                    if (!result.txtPermission.isNullOrEmpty()) {
+                        val permJson = JSONObject(result.txtPermission)
+                        if(!permJson.isNull(DefaultConfig.PERM_CLIENT_READ) && permJson.getBoolean(DefaultConfig.PERM_CLIENT_READ)) {
+                                isClient = true
+                        }
+                    }
+                    if(result.intSuper == 1) {
                         isClient = true
                     }
-
                 }
             }
         } catch (e: Exception) {
