@@ -444,12 +444,15 @@
         </if>
         <if test="strTag != null and strTag != ''">
             AND a.strTag = #{strTag}
+        </if>
+        <if test="intType != null and intType != 0">
+            AND intType = #{intType}
         </if>;
     </select>
 
     <insert id="setTagLink" parameterType="Tag" useGeneratedKeys="true" keyProperty="intSeq">
-        INSERT INTO TB_TAG_LINK(intTagSeq, intUserType, intUserSeq)
-        VALUES (#{intTagSeq}, #{intUserType}, #{intUserSeq});
+        INSERT INTO TB_TAG_LINK(intTagSeq, intUserType, intUserSeq, intType, intWorkSeq)
+        VALUES (#{intTagSeq}, #{intUserType}, #{intUserSeq}, #{intType}, #{intWorkSeq});
     </insert>
 
     <delete id="delTagLink" parameterType="Tag">
@@ -465,6 +468,9 @@
         </if>
         <if test="intTagSeq != null and intTagSeq != 0">
             AND intTagSeq = #{intTagSeq}
+        </if>
+        <if test="intType != null and intType != 0">
+            AND intType = #{intType}
         </if>;
     </delete>
 
@@ -508,202 +514,4 @@
     </select>
 
 
-    <select id="getMInfluncerInfo" parameterType="Search" resultType="User">
-        SELECT aa.intSeq,
-        aa.strEmail,
-        aa.strName,
-        aa.strMobile,
-        aa.strNikname,
-        aa.intSex,
-        aa.txtPermission,
-        aa.intLevel,
-        aa.intStatus,
-        aa.dateReg,
-        aa.dateEdit,
-        aa.intCompanySeq,
-        aa.intSuper
-        FROM TB_INFUENCER aa
-        WHERE
-        aa.intSeq > 0
-        <if test="status != null">
-            AND aa.intStatus = #{status}
-        </if>
-        <if test="keyword != ''">
-            AND (aa.strEmail LIKE CONCAT('%', #{keyword}, '%') OR aa.strMobile LIKE CONCAT('%', #{keyword}, '%')
-            OR aa.strName LIKE CONCAT('%', #{keyword}, '%') OR aa.strNikname LIKE CONCAT('%', #{keyword}, '%')
-            OR aa.intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
-            a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
-            OR aa.intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword},
-            '%')))
-        </if>
-        <choose>
-            <when test="media1 == 1 or media2 == 1 or media3 == 1">
-                AND (
-                <if test="media1 == 1">
-                    (SELECT COUNT(ab.intSeq)
-                    FROM TB_MEDIA ab
-                    WHERE ab.intUserSeq = aa.intSeq AND ab.intUserType = 2 AND ab.intType = 1) > 0
-                </if>
-                <if test="media2 == 1">
-                    <if test="media1 == 1">
-                        OR
-                    </if>
-                    (SELECT COUNT(ab.intSeq)
-                    FROM TB_MEDIA ab
-                    WHERE ab.intUserSeq = aa.intSeq AND ab.intUserType = 2 AND ab.intType = 2) > 0
-                </if>
-                <if test="media3 == 1">
-                    <if test="media2 == 1">
-                        OR
-                    </if>
-                    (SELECT COUNT(ab.intSeq)
-                    FROM TB_MEDIA ab
-                    WHERE ab.intUserSeq = aa.intSeq AND ab.intUserType = 2 AND ab.intType = 3) > 0
-                </if>
-                )
-            </when>
-            <otherwise>
-                AND 0 > aa.intSeq
-            </otherwise>
-        </choose>
-        ORDER BY intSeq DESC
-        <if test="length != 0 and limit != -1">
-            LIMIT #{limit}, #{length}
-        </if>;
-    </select>
-
-    <select id="getMInfluncerCount" parameterType="Search" resultType="Integer">
-        SELECT COUNT(aa.intSeq)
-        FROM TB_INFUENCER aa
-        WHERE aa.intSeq > 0
-        <if test="status != null">
-            AND aa.intStatus = #{status}
-        </if>
-        <if test="keyword != ''">
-            AND (aa.strEmail LIKE CONCAT('%', #{keyword}, '%') OR aa.strMobile LIKE CONCAT('%', #{keyword}, '%')
-            OR aa.strName LIKE CONCAT('%', #{keyword}, '%') OR aa.strNikname LIKE CONCAT('%', #{keyword}, '%')
-            OR aa.intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
-            a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
-            OR aa.intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword},
-            '%')))
-        </if>
-        <choose>
-            <when test="media1 == 1 or media2 == 1 or media3 == 1">
-                AND (
-                <if test="media1 == 1">
-                    (SELECT COUNT(ab.intSeq)
-                    FROM TB_MEDIA ab
-                    WHERE ab.intUserSeq = aa.intSeq AND ab.intUserType = 2 AND ab.intType = 1) > 0
-                </if>
-                <if test="media2 == 1">
-                    <if test="media1 == 1">
-                        OR
-                    </if>
-                    (SELECT COUNT(ab.intSeq)
-                    FROM TB_MEDIA ab
-                    WHERE ab.intUserSeq = aa.intSeq AND ab.intUserType = 2 AND ab.intType = 2) > 0
-                </if>
-                <if test="media3 == 1">
-                    <if test="media2 == 1">
-                        OR
-                    </if>
-                    (SELECT COUNT(ab.intSeq)
-                    FROM TB_MEDIA ab
-                    WHERE ab.intUserSeq = aa.intSeq AND ab.intUserType = 2 AND ab.intType = 3) > 0
-                </if>
-                )
-            </when>
-            <otherwise>
-                AND 0 > aa.intSeq
-            </otherwise>
-        </choose>
-        ;
-    </select>
-
-    <select id="getMClientInfo" parameterType="Search" resultType="User">
-        SELECT intSeq,
-        strEmail,
-        strName,
-        strMobile,
-        strNikname,
-        intSex,
-        txtPermission,
-        intLevel,
-        intStatus,
-        dateReg,
-        dateEdit,
-        intCompanySeq,
-        intSuper
-        FROM TB_CLIENT
-        WHERE
-        intSeq > 0
-        <if test="status != null">
-            AND intStatus = #{status}
-        </if>
-        <if test="keyword != ''">
-            AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strMobile LIKE CONCAT('%', #{keyword}, '%') OR strName
-            LIKE CONCAT('%', #{keyword}, '%')
-            OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
-            a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
-            OR intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword}, '%')))
-        </if>
-        ORDER BY intSeq DESC
-        <if test="length != 0 and limit != -1">
-            LIMIT #{limit}, #{length}
-        </if>;
-    </select>
-
-    <select id="getMClientCount" parameterType="Search" resultType="Integer">
-        SELECT COUNT(intSeq)
-        FROM TB_CLIENT
-        WHERE
-        intSeq > 0
-        <if test="status != null">
-            AND intStatus = #{status}
-        </if>
-        <if test="keyword != ''">
-            AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strMobile LIKE CONCAT('%', #{keyword}, '%') OR strName
-            LIKE CONCAT('%', #{keyword}, '%')
-            OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
-            a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
-            OR intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword}, '%')))
-        </if>;
-    </select>
-
-    <select id="getMAdminInfo" parameterType="User" resultType="User">
-        SELECT intSeq,
-        strName,
-        strEmail,
-        intLevel,
-        intStatus,
-        dateReg,
-        dateEdit,
-        txtPermission,
-        intSuper
-        FROM TB_ADMIN
-        WHERE
-        intSeq > 0
-        <if test="status != null">
-            AND intStatus = #{status}
-        </if>
-        <if test="keyword != ''">
-            AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strName LIKE CONCAT('%', #{keyword}, '%'))
-        </if>
-        ORDER BY intSeq DESC
-        <if test="length != 0 and limit != -1">
-            LIMIT #{limit}, #{length}
-        </if>;
-    </select>
-    <select id="getMAdminCount" parameterType="User" resultType="Integer">
-        SELECT COUNT(intSeq)
-        FROM TB_ADMIN
-        WHERE
-        intSeq > 0
-        <if test="status != null">
-            AND intStatus = #{status}
-        </if>
-        <if test="keyword != ''">
-            AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strName LIKE CONCAT('%', #{keyword}, '%'))
-        </if>;
-    </select>
 </mapper>

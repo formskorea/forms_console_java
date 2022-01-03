@@ -25,7 +25,7 @@ data class User(
     var media: ArrayList<Media>? = null,
     var tags: ArrayList<Tag>? = null,
     var cashs: ArrayList<Cash>? = null,
-    var intCompanySeq: Int? = null,
+    @SerializedName("comseq") var intCompanySeq: Int? = null,
     @SerializedName("pass2") var strPassword2: String? = null,
     var txtPermission: String? = null,
     @SerializedName("save") var isSave : Boolean = false,

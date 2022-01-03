@@ -2,6 +2,7 @@ package com.formskorea.console.service
 
 import com.formskorea.console.config.DefaultConfig
 import com.formskorea.console.data.model.*
+import com.formskorea.console.mapper.dao.AdminMapper
 import com.formskorea.console.mapper.dao.ApplicationMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -14,6 +15,9 @@ class ApplicationService {
 
     @Autowired
     lateinit var applicationMapper: ApplicationMapper
+
+    @Autowired
+    lateinit var adminMapper: AdminMapper
 
     fun info(data: User): User? {
         val media = Media()
@@ -50,6 +54,7 @@ class ApplicationService {
         val tag = Tag()
         tag.intUserSeq = info?.intSeq
         tag.intUserType = media.intUserType
+        tag.intType = 1
         info?.tags = applicationMapper.getTags(tag)
 
         //cash
@@ -98,6 +103,7 @@ class ApplicationService {
         val defTag = Tag()
         defTag.intUserSeq = data.intSeq
         defTag.intUserType = defMedia.intUserType
+        defTag.intType = 1
         applicationMapper.delTagLink(defTag)
 
         if(!data.tags.isNullOrEmpty()) {
@@ -246,25 +252,6 @@ class ApplicationService {
 
     fun getTags(data: Tag): ArrayList<Tag>? {
         return applicationMapper.getTags(data)
-    }
-
-    fun getMInfluncerInfo(data: Search): ArrayList<User>? {
-        return applicationMapper.getMInfluncerInfo(data)
-    }
-    fun getMInfluncerCount(data: Search): Int? {
-        return applicationMapper.getMInfluncerCount(data)
-    }
-    fun getMClientInfo(data: Search): ArrayList<User>? {
-        return applicationMapper.getMClientInfo(data)
-    }
-    fun getMClientCount(data: Search): Int? {
-        return applicationMapper.getMClientCount(data)
-    }
-    fun getMAdminInfo(data: Search): ArrayList<User>? {
-        return applicationMapper.getMAdminInfo(data)
-    }
-    fun getMAdminCount(data: Search): Int? {
-        return applicationMapper.getMAdminCount(data)
     }
 
 }

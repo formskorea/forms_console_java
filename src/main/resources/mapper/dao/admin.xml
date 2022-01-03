@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.formskorea.console.mapper.dao.AdminMapper">
+    <select id="getMInfluncerInfo" parameterType="Search" resultType="User">
+        SELECT aa.intSeq,
+        aa.strEmail,
+        aa.strName,
+        aa.strMobile,
+        aa.strNikname,
+        aa.intSex,
+        aa.txtPermission,
+        aa.intLevel,
+        aa.intStatus,
+        aa.dateReg,
+        aa.dateEdit,
+        aa.intCompanySeq,
+        aa.intSuper
+        FROM TB_INFUENCER aa
+        WHERE
+        aa.intSeq > 0
+        <if test="status != null">
+            AND aa.intStatus = #{status}
+        </if>
+        <if test="keyword != ''">
+            AND (aa.strEmail LIKE CONCAT('%', #{keyword}, '%') OR aa.strMobile LIKE CONCAT('%', #{keyword}, '%')
+            OR aa.strName LIKE CONCAT('%', #{keyword}, '%') OR aa.strNikname LIKE CONCAT('%', #{keyword}, '%')
+            OR aa.intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
+            a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
+            OR aa.intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword},
+            '%')))
+        </if>
+        <if test="(media1 > -1 or media2 > -1 or media3 > -1) and media1 != null and media2 != null and media3 != null">
+            AND (
+            <if test="media1 == 0 and media2 == 0 and media3 == 0">
+                0 > aa.intSeq
+            </if>
+            <if test="media1 == 1">
+                (SELECT COUNT(ab.intSeq)
+                FROM TB_MEDIA ab
+                WHERE ab.intUserSeq = aa.intSeq AND ab.intUserType = 2 AND ab.intType = 1) > 0
+            </if>
+            <if test="media2 == 1">
+                <if test="media1 == 1">
+                    OR
+                </if>
+                (SELECT COUNT(ab.intSeq)
+                FROM TB_MEDIA ab
+                WHERE ab.intUserSeq = aa.intSeq AND ab.intUserType = 2 AND ab.intType = 2) > 0
+            </if>
+            <if test="media3 == 1">
+                <if test="media2 == 1">
+                    OR
+                </if>
+                (SELECT COUNT(ab.intSeq)
+                FROM TB_MEDIA ab
+                WHERE ab.intUserSeq = aa.intSeq AND ab.intUserType = 2 AND ab.intType = 3) > 0
+            </if>
+            )
+        </if>
+        ORDER BY intSeq DESC
+        <if test="length != 0 and limit != -1">
+            LIMIT #{limit}, #{length}
+        </if>;
+    </select>
+
+    <select id="getMInfluncerCount" parameterType="Search" resultType="Integer">
+        SELECT COUNT(aa.intSeq)
+        FROM TB_INFUENCER aa
+        WHERE aa.intSeq > 0
+        <if test="status != null">
+            AND aa.intStatus = #{status}
+        </if>
+        <if test="keyword != ''">
+            AND (aa.strEmail LIKE CONCAT('%', #{keyword}, '%') OR aa.strMobile LIKE CONCAT('%', #{keyword}, '%')
+            OR aa.strName LIKE CONCAT('%', #{keyword}, '%') OR aa.strNikname LIKE CONCAT('%', #{keyword}, '%')
+            OR aa.intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
+            a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
+            OR aa.intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword},
+            '%')))
+        </if>
+        <if test="(media1 > -1 or media2 > -1 or media3 > -1) and media1 != null and media2 != null and media3 != null">
+            AND (
+            <if test="media1 == 0 and media2 == 0 and media3 == 0">
+                0 > aa.intSeq
+            </if>
+            <if test="media1 == 1">
+                (SELECT COUNT(ab.intSeq)
+                FROM TB_MEDIA ab
+                WHERE ab.intUserSeq = aa.intSeq AND ab.intUserType = 2 AND ab.intType = 1) > 0
+            </if>
+            <if test="media2 == 1">
+                <if test="media1 == 1">
+                    OR
+                </if>
+                (SELECT COUNT(ab.intSeq)
+                FROM TB_MEDIA ab
+                WHERE ab.intUserSeq = aa.intSeq AND ab.intUserType = 2 AND ab.intType = 2) > 0
+            </if>
+            <if test="media3 == 1">
+                <if test="media2 == 1">
+                    OR
+                </if>
+                (SELECT COUNT(ab.intSeq)
+                FROM TB_MEDIA ab
+                WHERE ab.intUserSeq = aa.intSeq AND ab.intUserType = 2 AND ab.intType = 3) > 0
+            </if>
+            )
+        </if>
+        ;
+    </select>
+
+    <select id="getMClientInfo" parameterType="Search" resultType="User">
+        SELECT intSeq,
+        strEmail,
+        strName,
+        strMobile,
+        strNikname,
+        intSex,
+        txtPermission,
+        intLevel,
+        intStatus,
+        dateReg,
+        dateEdit,
+        intCompanySeq,
+        intSuper
+        FROM TB_CLIENT
+        WHERE
+        intSeq > 0
+        <if test="status != null">
+            AND intStatus = #{status}
+        </if>
+        <if test="keyword != ''">
+            AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strMobile LIKE CONCAT('%', #{keyword}, '%') OR strName
+            LIKE CONCAT('%', #{keyword}, '%')
+            OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
+            a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
+            OR intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword}, '%')))
+        </if>
+        ORDER BY intSeq DESC
+        <if test="length != 0 and limit != -1">
+            LIMIT #{limit}, #{length}
+        </if>;
+    </select>
+
+    <select id="getMClientCount" parameterType="Search" resultType="Integer">
+        SELECT COUNT(intSeq)
+        FROM TB_CLIENT
+        WHERE
+        intSeq > 0
+        <if test="status != null">
+            AND intStatus = #{status}
+        </if>
+        <if test="keyword != ''">
+            AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strMobile LIKE CONCAT('%', #{keyword}, '%') OR strName
+            LIKE CONCAT('%', #{keyword}, '%')
+            OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
+            a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
+            OR intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword}, '%')))
+        </if>;
+    </select>
+
+    <select id="getMAdminCount" parameterType="Search" resultType="Integer">
+        SELECT COUNT(intSeq)
+        FROM TB_ADMIN
+        WHERE
+        intSeq > 0
+        <if test="status != null">
+            AND intStatus = #{status}
+        </if>
+        <if test="keyword != ''">
+            AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strName LIKE CONCAT('%', #{keyword}, '%'))
+        </if>;
+    </select>
+
+    <insert id="setMWork" parameterType="Work" useGeneratedKeys="true" keyProperty="intSeq">
+        INSERT INTO TB_WORK (strTitle, txtInfo, dateReadystart, dateReadyend, dateStart, dateEnd, intClientSeq,
+                             intCompanySeq, intSelecttype, intTotalPrice, intStatus)
+        VALUES (#{strTitle},
+                #{txtInfo},
+                #{dateReadystart},
+                #{dateReadyend},
+                #{dateStart},
+                #{dateEnd},
+                #{intClientSeq},
+                #{intCompanySeq},
+                #{intSelecttype},
+                #{intTotalPrice},
+                #{intStatus});
+    </insert>
+
+    <update id="editMWork" parameterType="Work">
+        UPDATE TB_WORK SET
+        <if test="strTitle != null and strTitle != ''">
+            strTitle = #{strTitle},
+        </if>
+        <if test="txtInfo != null and txtInfo != ''">
+            txtInfo = #{txtInfo},
+        </if>
+        <if test="dateReadystart != null and dateReadystart != ''">
+            dateReadystart = #{dateReadystart},
+        </if>
+        <if test="dateReadyend != null and dateReadyend != ''">
+            dateReadyend = #{dateReadyend},
+        </if>
+        <if test="dateStart != null and dateStart != ''">
+            dateStart = #{dateStart},
+        </if>
+        <if test="dateEnd != null and dateEnd != ''">
+            dateEnd = #{dateEnd},
+        </if>
+        <if test="intClientSeq != null and intClientSeq != 0">
+            intClientSeq = #{intClientSeq},
+        </if>
+        <if test="intCompanySeq != null and intCompanySeq != 0">
+            intCompanySeq = #{intCompanySeq},
+        </if>
+        <if test="intSelecttype != null and intSelecttype != 0">
+            intSelecttype = #{intSelecttype},
+        </if>
+        <if test="intTotalPrice != null and intTotalPrice != 0">
+            intTotalPrice = #{intTotalPrice},
+        </if>
+        <if test="intStatus != null and intStatus != 0">
+            intStatus = #{intStatus},
+        </if>
+        dateEdit = CURRENT_TIMESTAMP
+        WHERE
+        intSeq > 0
+        <if test="intSeq != null and intSeq != 0">
+            AND intSeq = #{intSeq}
+        </if>;
+    </update>
+
+    <delete id="delMWork" parameterType="Work">
+        DELETE
+        FROM TB_WORK
+        WHERE
+        intSeq > 0
+        <if test="intSeq != null and intSeq != 0">
+            AND intSeq = #{intSeq}
+        </if>
+        <if test="intClientSeq != null and intClientSeq != 0">
+            AND intClientSeq = #{intClientSeq}
+        </if>
+        <if test="intCompanySeq != null and intCompanySeq != 0">
+            AND intCompanySeq = #{intCompanySeq}
+        </if>;
+    </delete>
+
+    <select id="getMWork" parameterType="Search" resultType="Work">
+        SELECT
+        intSeq, strTitle, txtInfo, dateReadystart, dateReadyend, dateStart, dateEnd, intClientSeq,
+        intCompanySeq, intSelecttype, intTotalPrice, intStatus, dateReg, dateEdit
+        FROM TB_WORK
+        WHERE
+        intSeq > 0
+        <if test="status != null">
+            AND intStatus = #{status}
+        </if>
+        <if test="keyword != ''">
+            AND (strTitle LIKE CONCAT('%', #{keyword}, '%') OR txtInfo LIKE CONCAT('%', #{keyword}, '%') OR strName
+            LIKE CONCAT('%', #{keyword}, '%')
+            OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
+            a.intUserType = 5 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
+            OR intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword}, '%')))
+        </if>
+        ORDER BY intSeq DESC
+        <if test="length != 0 and limit != -1">
+            LIMIT #{limit}, #{length}
+        </if>;
+    </select>
+
+    <insert id="setMWorkInfo" parameterType="WorkInfo" useGeneratedKeys="true" keyProperty="intSeq">
+        INSERT INTO TB_WORK_INFO (intWorkSeq, intClientSeq, intInfSeq, intMediaType, intMediaSeq, strURL, intUserStatus,
+                                  intClientStatus,
+                                  intPrice, intStatus)
+        VALUES (#{intWorkSeq},
+                #{intClientSeq},
+                #{intInfSeq},
+                #{intMediaType},
+                #{intMediaSeq},
+                #{strURL},
+                #{intUserStatus},
+                #{intClientStatus},
+                #{intPrice},
+                #{intStatus});
+    </insert>
+
+    <update id="editMWorkInfo" parameterType="WorkInfo">
+        UPDATE TB_WORK_INFO SET
+        <if test="intInfSeq != null and intInfSeq != 0">
+            intInfSeq = #{intInfSeq},
+        </if>
+        <if test="intMediaType != null and intMediaType != 0">
+            intMediaType = #{intMediaType},
+        </if>
+        <if test="intMediaSeq != null and intMediaSeq != 0">
+            intMediaSeq = #{intMediaSeq},
+        </if>
+        <if test="strURL != null and strURL != ''">
+            strURL = #{strURL},
+        </if>
+        <if test="intUserStatus != null and intUserStatus != 0">
+            intUserStatus = #{intUserStatus},
+        </if>
+        <if test="intClientStatus != null and intClientStatus != 0">
+            intClientStatus = #{intClientStatus},
+        </if>
+        <if test="intPrice != null and intPrice != 0">
+            intPrice = #{intPrice},
+        </if>
+        <if test="intStatus != null and intStatus != 0">
+            intStatus = #{intStatus},
+        </if>
+        dateEdit = CURRENT_TIMESTAMP
+        WHERE
+        intSeq > 0
+        <if test="intSeq != null and intSeq != 0">
+            AND intSeq = #{intSeq}
+        </if>
+        <if test="intWorkSeq != null and intWorkSeq != 0">
+            AND intWorkSeq = #{intWorkSeq}
+        </if>
+        <if test="intClientSeq != null and intClientSeq != 0">
+            AND intClientSeq = #{intClientSeq}
+        </if>;
+    </update>
+
+    <delete id="delMWorkInfo" parameterType="WorkInfo">
+        DELETE
+        FROM TB_WORK_INFO
+        WHERE
+        intSeq > 0
+        <if test="intSeq != null and intSeq != 0">
+            AND intSeq = #{intSeq}
+        </if>
+        <if test="intWorkSeq != null and intWorkSeq != 0">
+            AND intWorkSeq = #{intWorkSeq}
+        </if>
+        <if test="intClientSeq != null and intClientSeq != 0">
+            AND intClientSeq = #{intClientSeq}
+        </if>;
+    </delete>
+
+    <select id="getMWorkInfo" parameterType="WorkInfo" resultType="WorkInfo">
+        SELECT
+        intSeq, intWorkSeq, intClientSeq, intInfSeq, intMediaType, intMediaSeq, strURL, intUserStatus,
+        intClientStatus, intPrice, dateReg, dateEdit, intStatus
+        FROM TB_WORK_INFO
+        WHERE
+            intSeq > 0
+        <if test="intSeq != null and intSeq != 0">
+            AND intSeq = #{intSeq}
+        </if>
+        <if test="intWorkSeq != null and intWorkSeq != 0">
+            AND intWorkSeq = #{intWorkSeq}
+        </if>
+        <if test="intClientSeq != null and intClientSeq != 0">
+            AND intClientSeq = #{intClientSeq}
+        </if>
+        ORDER BY intSeq ASC;
+    </select>
+
+</mapper>

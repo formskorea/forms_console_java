@@ -3,7 +3,7 @@ package com.formskorea.console.data.model
 import com.google.gson.annotations.SerializedName
 
 data class Company(
-    var intSeq: Int? = null,
+    @SerializedName("seq") var intSeq: Int? = null,
     @SerializedName("comname") var strCompanyname: String? = null,
     @SerializedName("homepage") var strHomepage: String? = null,
     @SerializedName("tel") var strTelnum: String? = null,

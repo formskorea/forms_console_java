@@ -8,5 +8,7 @@ data class Tag(
     @SerializedName("reg") var dateReg: String? = null,
     var intTagSeq: Int? = null,
     var intUserType: Int? = null,
-    var intUserSeq: Int? = null
+    var intUserSeq: Int? = null,
+    var intType: Int? = null,
+    var intWorkSeq: Int? = null
 )

@@ -1,4 +1,4 @@
-package com.formskorea.console.controller
+package com.formskorea.console.controller.web
 
 import com.formskorea.console.config.DefaultConfig
 import com.formskorea.console.service.ApplicationService

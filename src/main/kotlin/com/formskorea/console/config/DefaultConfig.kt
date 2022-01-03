@@ -39,6 +39,13 @@ object DefaultConfig {
     const val MESSAGE_NOIMAGEFILE = "이미지파일이 아닙니다."
     const val MESSAGE_PROCESS = "처리중 오류가 발생했습니다."
 
+    const val MESSAGE_WORK_TITLE = "협업명을 입력해주세요."
+    const val MESSAGE_WORK_READYDAY = "모집기간을 선택하여 주세요."
+    const val MESSAGE_WORK_DAY = "진행기간을 선택하여 주세요."
+    const val MESSAGE_WORK_NOTAG = "키워드를 입력해 주세요."
+    const val MESSAGE_WORK_INFO = "협업내용을 입력해 주세요."
+    const val MESSAGE_WORK_NOCOUNT = "인플루언서가 선택되지 않았습니다."
+
     const val MESSAGE_DBERROR = "일시적인 장애가 발생되었습니다.\n잠시후 다시 시도해 주세요."
 
     const val MEMBER_INFLUENCER = "influencer"

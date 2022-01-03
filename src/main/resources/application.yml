@@ -36,10 +36,10 @@ spring:
             enable: true
         auth: true
 
-  aws:
-    access-key: AKIA4TAZKLRCZPZ6JAXA
-    secret-key: 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
-    s3:
-      endpoint: 
-      Bucket:
-      region:
+#  aws:
+#    access-key: AKIA4TAZKLRCZPZ6JAXA
+#    secret-key: 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
+#    s3:
+#      endpoint:
+#      Bucket:
+#      region:

@@ -21,6 +21,7 @@ var i_fulllist = new Array();
 var i_selectlist = new Array();
 var work_influencer_list = $("#work_influencer_list");
 var work_influencer_item = work_influencer_list.html();
+var i_work_totalprice = 0;
 
 i_list_box.html("");
 work_influencer_list.html("");
@@ -43,12 +44,18 @@ function i_loadData() {
     };
     if ($("#work_media_select1").is(":checked")) {
         jsongo.media1 = 1;
+    } else {
+        jsongo.media1 = 0;
     }
     if ($("#work_media_select2").is(":checked")) {
         jsongo.media2 = 1;
+    } else {
+        jsongo.media2 = 0;
     }
     if ($("#work_media_select3").is(":checked")) {
         jsongo.media3 = 1;
+    } else {
+        jsongo.media3 = 0;
     }
 
     $.ajax({
@@ -167,19 +174,19 @@ function i_delete(num) {
 }
 
 function i_totalprice() {
-    var total = 0;
+    i_work_totalprice = 0;
 
     for (var i = 0; i < i_selectlist.length; i++) {
         var field = i_selectlist[i];
         for (var j = 0; j < field.media.length; j++) {
             if (field.media[j].checked) {
-                total += field.media[j].price *= 1;
+                i_work_totalprice += field.media[j].price *= 1;
             }
         }
     }
 
-    if (total > 0) {
-        $("#work_item_totalprice").html(comma(total));
+    if (i_work_totalprice > 0) {
+        $("#work_item_totalprice").html(comma(i_work_totalprice));
     } else {
         $("#work_item_totalprice").html("0");
     }
@@ -366,7 +373,7 @@ function c_loadData() {
                     c_list_box.find(".cl_item_companytel").eq(i).html(field.company.tel);
                     c_list_box.find(".cl_item_companyaddr").eq(i).html("(" + field.company.zip + ") " + field.company.address.replace("|", " "));
 
-                    if(i == 0) {
+                    if (i == 0) {
                         c_list_box.find(".cl_item_status").eq(c_now_limit + i).find("input").attr("checked", true);
                     }
                 }
@@ -396,9 +403,9 @@ function c_loadData() {
 }
 
 function c_select() {
-    for(var i = 0; i < c_fulllist.length; i++) {
+    for (var i = 0; i < c_fulllist.length; i++) {
         var field = c_fulllist[i];
-        if(c_list_box.find(".cl_item_status").eq(i).find("input").is(":checked")) {
+        if (c_list_box.find(".cl_item_status").eq(i).find("input").is(":checked")) {
             c_selectlist = c_fulllist[i];
             $("#work_name").val(field.name + " :: " + field.mobile);
             $("#work_company").val(field.company.comname + " :: " + field.company.tel);
@@ -413,6 +420,7 @@ function c_select() {
 
 $(document).ready(function ($) {
     var tagify = $('[name=hashtag]').tagify();
+    var isProcessing = false;
 
     $("#work_clientsearch").click(function (e) {
         c_now_page = 1;
@@ -460,6 +468,80 @@ $(document).ready(function ($) {
 
     $("#cl_item_selectgo").click(function () {
         c_select();
+    });
+
+    $("#form_editinfo").submit(function (event) {
+        event.preventDefault();
+
+        if (isProcessing) {
+            showModal("처리중입니다.");
+        } else {
+            var title = $("#work_title").val();
+            var rstart = $("#work_wstart").val();
+            var rend = $("#work_wend").val();
+            var start = $("#work_start").val();
+            var end = $("#work_end").val();
+            var info = $("div.ql-editor").html();
+
+            var nowtags = "";
+
+            var stype = 1;
+            if ($("#work_inf_select2").is(":checked")) {
+                stype = 2;
+            }
+            if ($("#work_inf_select3").is(":checked")) {
+                stype = 3;
+            }
+
+            var tojson = {
+                "title": title,
+                "rstart": rstart,
+                "rend": rend,
+                "start": start,
+                "end": end,
+                "info": info,
+                "stype": stype
+            };
+
+            if (tagify.val()) {
+                var tdata = eval(tagify.val());
+                var tags = new Array();
+                for (key in tdata) {
+                    tags.push({'tag': tdata[key].value});
+                    nowtags += (nowtags != "" ? ", " : "") + "#" + tdata[key].value;
+                }
+                tojson.tags = tags;
+            }
+
+            if(c_selectlist.seq !== undefined) {
+                tojson.cseq = c_selectlist.seq;
+                tojson.comseq = c_selectlist.comseq;
+            }
+
+            var infos = new Array();
+
+            if(i_selectlist.length > 0) {
+                for(var i = 0; i < i_selectlist.length; i++) {
+                    for(var j = 0; j < i_selectlist[i].media.length; j++) {
+                        if(i_selectlist[i].media[j].checked) {
+                            infos.push({"cseq" : tojson.cseq, "iseq": i_selectlist[i].seq, "mtype": i_selectlist[i].media[j].type, "mseq": i_selectlist[i].media[j].seq, "ustatus": 1, "cstatus": 5, "price": i_selectlist[i].media[j].price, "status": 1});
+                        }
+                    }
+                }
+
+                tojson.infos = infos;
+            }
+
+            // if(title == "") {
+            //
+            // } else if(start == "" || end == "") {
+            // } else if(w) {
+            //
+            // }
+
+            console.log(tojson);
+
+        }
     });
 
 });
