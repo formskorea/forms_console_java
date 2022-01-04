@@ -1093,3 +1093,4 @@ h1, h2, h3, h4, h5, h6 {
 .text-2em { font-size: 2rem !important; }
 .text-3em { font-size: 3rem !important; }
 .text-4em { font-size: 4rem !important; }
+.text-bold { font-weight: bold; }

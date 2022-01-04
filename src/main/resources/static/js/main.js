@@ -224,7 +224,48 @@ function showModal(info, title = "") {
     if(title == "") {
         $("#fmc-alert h5").html("알림");
     }
-    $("#fmc-alert .modal-body").text(info);
+    $("#fmc-alert .modal-body").html(info);
+
+    $("#fmc-alert-ok").removeClass("d-none");
+    $("#fmc-alert-cancel").removeClass("d-none");
+    $("#fmc-alert-ok").addClass("d-none");
+
+    $("#fmc-alert-ok").unbind("click");
+    $("#fmc-alert-cancel").unbind("click");
+
+    $("#fmc-alert-cancel").click(function(e){
+        $("#fmc-alert").modal("hide");
+    });
+    $("#fmc-alert").modal("show");
+
+    $("#fmc-alert-cancel").html("확인");
+}
+
+//confilm make
+function showConfilm(info, funok, funcancel, title = "", oktitle = "예", canceltitle = "아니오") {
+    if(title == "") {
+        $("#fmc-alert h5").html("확인");
+    }
+    $("#fmc-alert .modal-body").html(info);
+
+    $("#fmc-alert-ok").removeClass("d-none");
+    $("#fmc-alert-cancel").removeClass("d-none");
+    $("#fmc-alert-ok").unbind("click");
+    $("#fmc-alert-cancel").unbind("click");
+
+    $("#fmc-alert-ok").click(function(e){
+        funok();
+        $("#fmc-alert").modal("hide");
+    });
+
+    $("#fmc-alert-cancel").click(function(e){
+        funcancel();
+        $("#fmc-alert").modal("hide");
+    });
+
+    $("#fmc-alert-ok").html(oktitle);
+    $("#fmc-alert-cancel").html(canceltitle);
+
     $("#fmc-alert").modal("show");
 }
 

@@ -500,7 +500,8 @@ $(document).ready(function ($) {
                 "start": start,
                 "end": end,
                 "info": info,
-                "stype": stype
+                "stype": stype,
+                "totalprice": i_work_totalprice
             };
 
             if (tagify.val()) {
@@ -532,12 +533,51 @@ $(document).ready(function ($) {
                 tojson.infos = infos;
             }
 
-            // if(title == "") {
-            //
-            // } else if(start == "" || end == "") {
-            // } else if(w) {
-            //
-            // }
+            var errstring = "";
+
+            if(title == "") {
+                errstring = "협업명을 입력해주세요.";
+            } else if(rstart == "" || rend == "") {
+                errstring = "모집기간을 입력해주세요.";
+            } else if(rstart > rend) {
+                errstring = "모집기간 종료일이 시작일보다 적습니다.";
+            } else if(start == "" || end == "") {
+                errstring = "진행기간을 입력해주세요.";
+            } else if(start > end) {
+                errstring = "진행기간 종료일이 시작일보다 적습니다.";
+            } else if(rend > start) {
+                errstring = "진행기간이 모집기간보다 앞에 있습니다.";
+            } else if(tojson.tags === undefined || tojson.tags.length <= 0) {
+                errstring = "관련 키워드를 설정해 주세요.";
+            } else if(c_selectlist.seq === undefined) {
+                errstring = "담당자를 선택해 주세요.";
+            } else if(tojson.infos === undefined || tojson.infos.length <= 0 || i_work_totalprice == 0) {
+                errstring = "인플루언서를 선택해주세요.";
+            }
+
+
+            if(errstring != "") {
+                showModal(errstring);
+            } else {
+                $.ajax({
+                    url: '/api/work/add',
+                    type: 'POST',
+                    data: JSON.stringify(tojson),
+                    headers: {'Content-Type': 'application/json'},
+                }).then((data, textStatus, jqXHR) => {
+                    if(data.status == 200) {
+                        showConfilm("협업이 저장되었습니다.<br />협업내용을 확인하시겠습니까?", function() {
+                            location.href = "/work/info/" + data.result;
+                        }, function () {
+                            location.href = "/work/list";
+                        })
+                    } else {
+                        showModal(data.message);
+                    }
+                }, (jqXHR, textStatus, errorThrown) => {
+                    showModal("DB 처리중 오류가 발생되었습니다.");
+                });
+            }
 
             console.log(tojson);
 

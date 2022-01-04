@@ -11,6 +11,7 @@
 </jsp:include>
 <jsp:include page="inc_menu.jsp">
     <jsp:param name="fmcuser" value="${userinfo}"/>
+    <jsp:param name="nowmenu" value="3"/>
 </jsp:include>
 <main id="main" class="main">
 

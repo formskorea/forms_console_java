@@ -4,6 +4,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     User userinfo = (User) request.getAttribute("fmcuser");
+    String nowmenu = (String) request.getParameter("nowmenu");
+
+    if(nowmenu == null) {
+        nowmenu = "0";
+    }
 
     JSONObject permJson = new JSONObject();
     String permission = userinfo.getTxtPermission();
@@ -200,14 +205,14 @@
 
     <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-item">
-            <a class="nav-link" href="/">
+            <a class="nav-link <%=(nowmenu.equals("1") ? "" : "collapsed")%>" href="/">
                 <i class="bi bi-grid"></i>
                 <span>대시보드</span>
             </a>
         </li><!-- End Dashboard Nav -->
         <% if(isTrand) { %>
         <li class="nav-item">
-            <a class="nav-link" href="/trend">
+            <a class="nav-link <%=(nowmenu.equals("2") ? "" : "collapsed")%>" href="/trend">
                 <i class="bi bi-clipboard-data"></i>
                 <span>트랜드 분석</span>
             </a>
@@ -215,7 +220,7 @@
         <% } %>
         <% if (isInfluencer) { %>
         <li class="nav-item">
-            <a class="nav-link" href="/influencer/list">
+            <a class="nav-link <%=(nowmenu.equals("3") ? "" : "collapsed")%>" href="/influencer/list">
                 <i class="bi bi-instagram"></i>
                 <span>인플루언서</span>
             </a>
@@ -223,7 +228,7 @@
         <% } %>
         <% if (isCient) { %>
         <li class="nav-item">
-            <a class="nav-link" href="/client/list">
+            <a class="nav-link <%=(nowmenu.equals("4") ? "" : "collapsed")%>" href="/client/list">
                 <i class="bi bi-building"></i>
                 <span>협력사</span>
             </a>
@@ -231,7 +236,7 @@
         <% } %>
         <% if (isWork) { %>
         <li class="nav-item">
-            <a class="nav-link" href="/work/list">
+            <a class="nav-link <%=(nowmenu.equals("5") ? "" : "collapsed")%>" href="/work/list">
                 <i class="bi bi-journal-check"></i>
                 <span>협업</span>
             </a>
@@ -239,7 +244,7 @@
         <% } %>
         <% if (isSetting) { %>
         <li class="nav-item">
-            <a class="nav-link" href="/setting">
+            <a class="nav-link <%=(nowmenu.equals("6") ? "" : "collapsed")%>" href="/setting">
                 <i class="bi bi-gear"></i>
                 <span>사이트 셋팅</span>
             </a>

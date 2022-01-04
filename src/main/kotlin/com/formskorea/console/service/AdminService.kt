@@ -89,7 +89,20 @@ class AdminService {
 
             return true
         } catch (e: Exception) {
+            log.error(e.message)
             return false
         }
+    }
+
+    fun getMWork(data: Search): ArrayList<Work>? {
+        return adminMapper.getMWork(data)
+    }
+
+    fun getMWorkCount(data: Search): Int? {
+        return adminMapper.getMWorkCount(data)
+    }
+
+    fun getMWorkInfo(data: WorkInfo): ArrayList<WorkInfo>? {
+        return adminMapper.getMWorkInfo(data)
     }
 }

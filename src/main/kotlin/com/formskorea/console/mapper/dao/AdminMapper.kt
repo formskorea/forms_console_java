@@ -16,6 +16,7 @@ interface AdminMapper {
     fun editMWork(data: Work) : Boolean?
     fun delMWork(data: Work) : Boolean?
     fun getMWork(data: Search): ArrayList<Work>?
+    fun getMWorkCount(data: Search): Int?
     fun setMWorkInfo(data: WorkInfo) : Boolean?
     fun editMWorkInfo(data: WorkInfo) : Boolean?
     fun delMWorkInfo(data: WorkInfo) : Boolean?

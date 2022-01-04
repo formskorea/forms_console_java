@@ -5,22 +5,23 @@
     List<String> arrScript = (List<String>) request.getAttribute("scripts");
     List<String> arrCss = (List<String>) request.getAttribute("styles");
     User userinfo = (User) request.getAttribute("fmcuser");
+    Integer workseq = (Integer) request.getAttribute("workseq");
 %>
 <jsp:include page="inc_header.jsp">
     <jsp:param name="styles" value="${arrCss}"/>
 </jsp:include>
 <jsp:include page="inc_menu.jsp">
     <jsp:param name="fmcuser" value="${userinfo}"/>
-    <jsp:param name="nowmenu" value="2"/>
+    <jsp:param name="nowmenu" value="5"/>
 </jsp:include>
 <main id="main" class="main">
-
     <div class="pagetitle">
-        <h1>트랜드 분석</h1>
+        <h1>협업</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item active">트랜드 분석</li>
+                <li class="breadcrumb-item">협업</li>
+                <li class="breadcrumb-item active">No. <%=workseq%></li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
