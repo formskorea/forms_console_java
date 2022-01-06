@@ -21,7 +21,10 @@
         <if test="status != null">
             AND aa.intStatus = #{status}
         </if>
-        <if test="keyword != ''">
+        <if test="seq != null">
+            AND aa.intSeq = #{seq}
+        </if>
+        <if test="keyword != null and keyword != ''">
             AND (aa.strEmail LIKE CONCAT('%', #{keyword}, '%') OR aa.strMobile LIKE CONCAT('%', #{keyword}, '%')
             OR aa.strName LIKE CONCAT('%', #{keyword}, '%') OR aa.strNikname LIKE CONCAT('%', #{keyword}, '%')
             OR aa.intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
@@ -58,7 +61,7 @@
             )
         </if>
         ORDER BY intSeq DESC
-        <if test="length != 0 and limit != -1">
+        <if test="length != null and limit != null and length != 0 and limit != -1">
             LIMIT #{limit}, #{length}
         </if>;
     </select>
@@ -70,7 +73,7 @@
         <if test="status != null">
             AND aa.intStatus = #{status}
         </if>
-        <if test="keyword != ''">
+        <if test="keyword != null and keyword != ''">
             AND (aa.strEmail LIKE CONCAT('%', #{keyword}, '%') OR aa.strMobile LIKE CONCAT('%', #{keyword}, '%')
             OR aa.strName LIKE CONCAT('%', #{keyword}, '%') OR aa.strNikname LIKE CONCAT('%', #{keyword}, '%')
             OR aa.intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
@@ -129,7 +132,10 @@
         <if test="status != null">
             AND intStatus = #{status}
         </if>
-        <if test="keyword != ''">
+        <if test="seq != null">
+            AND intSeq = #{seq}
+        </if>
+        <if test="keyword != null and keyword != ''">
             AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strMobile LIKE CONCAT('%', #{keyword}, '%') OR strName
             LIKE CONCAT('%', #{keyword}, '%')
             OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
@@ -137,7 +143,7 @@
             OR intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword}, '%')))
         </if>
         ORDER BY intSeq DESC
-        <if test="length != 0 and limit != -1">
+        <if test="length != null and limit != null and length != 0 and limit != -1">
             LIMIT #{limit}, #{length}
         </if>;
     </select>
@@ -150,7 +156,7 @@
         <if test="status != null">
             AND intStatus = #{status}
         </if>
-        <if test="keyword != ''">
+        <if test="keyword != null and keyword != ''">
             AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strMobile LIKE CONCAT('%', #{keyword}, '%') OR strName
             LIKE CONCAT('%', #{keyword}, '%')
             OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
@@ -167,7 +173,7 @@
         <if test="status != null">
             AND intStatus = #{status}
         </if>
-        <if test="keyword != ''">
+        <if test="keyword != null and keyword != ''">
             AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strName LIKE CONCAT('%', #{keyword}, '%'))
         </if>;
     </select>
@@ -258,14 +264,17 @@
         <if test="status != null">
             AND a.intStatus = #{status}
         </if>
-        <if test="keyword != ''">
+        <if test="seq != null">
+            AND a.intSeq = #{seq}
+        </if>
+        <if test="keyword != null and keyword != ''">
             AND (a.strTitle LIKE CONCAT('%', #{keyword}, '%') OR a.txtInfo LIKE CONCAT('%', #{keyword}, '%')
             OR a.intSeq = (SELECT aa.intWorkSeq FROM TB_TAG_LINK aa, TB_TAGS bb WHERE bb.intSeq = aa.intTagSeq AND aa.intUserType = 5 AND bb.strTag LIKE CONCAT('%', #{keyword}, '%'))
             OR b.strName LIKE CONCAT('%', #{keyword}, '%')
             OR c.strCompanyname LIKE CONCAT('%', #{keyword}, '%'))
         </if>
         ORDER BY a.intSeq DESC
-        <if test="length != 0 and limit != -1">
+        <if test="length != null and limit != null and length != null and limit != null and length != 0 and limit != -1">
             LIMIT #{limit}, #{length}
         </if>;
     </select>
@@ -280,7 +289,7 @@
         <if test="status != null">
             AND a.intStatus = #{status}
         </if>
-        <if test="keyword != ''">
+        <if test="keyword != null and keyword != ''">
             AND (strTitle LIKE CONCAT('%', #{keyword}, '%') OR txtInfo LIKE CONCAT('%', #{keyword}, '%')
             OR a.intSeq = (SELECT aa.intWorkSeq FROM TB_TAG_LINK aa, TB_TAGS bb WHERE bb.intSeq = aa.intTagSeq AND aa.intUserType = 5 AND bb.strTag LIKE CONCAT('%', #{keyword}, '%'))
             OR b.strName LIKE CONCAT('%', #{keyword}, '%')

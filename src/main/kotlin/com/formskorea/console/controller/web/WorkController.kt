@@ -1,6 +1,8 @@
 package com.formskorea.console.controller.web
 
 import com.formskorea.console.config.DefaultConfig
+import com.formskorea.console.data.model.*
+import com.formskorea.console.service.AdminService
 import com.formskorea.console.service.ApplicationService
 import com.formskorea.console.util.Etc
 import com.formskorea.console.util.Token
@@ -24,6 +26,9 @@ class WorkController {
 
     @Autowired
     lateinit var applicationService: ApplicationService
+
+    @Autowired
+    lateinit var adminService: AdminService
 
     @RequestMapping(value = ["/list", "/"], method = [RequestMethod.GET, RequestMethod.POST])
     @Throws(Exception::class)
@@ -170,6 +175,41 @@ class WorkController {
             }
         }
 
+        val search = Search()
+        search.seq = workseq
+        search.limit = 0
+        search.length = 1
+        val result = adminService.getMWork(search)
+        var work = Work()
+        if(!result.isNullOrEmpty()) {
+            work = result[0]
+            val workInfo = WorkInfo()
+            workInfo.intWorkSeq = work.intSeq
+            work.infos = adminService.getMWorkInfo(workInfo)
+            if(!work.infos.isNullOrEmpty()) {
+                for (field in work.infos!!) {
+                    search.seq = field.intInfSeq
+                    val result3 = adminService.getMInfluncerInfo(search)
+                    if(!result3.isNullOrEmpty()) {
+                        field.influencer = result3[0]
+                    }
+                }
+            }
+
+            val tag = Tag()
+            tag.intWorkSeq = workseq
+            work.tags = applicationService.getTags(tag)
+
+            search.seq = work.intClientSeq
+            val result2 = adminService.getMClientInfo(search)
+            if(!result2.isNullOrEmpty()) {
+                work.client = result2[0]
+            }
+            val company = Company()
+            company.intSeq = work.intCompanySeq
+            work.company = applicationService.getCompany(company)
+        }
+
         if (!isLogin) {
             return RedirectView("/login")
         }
@@ -183,6 +223,7 @@ class WorkController {
         model.addAttribute("styles", styles)
 
         model.addAttribute("workseq", workseq)
+        model.addAttribute("work", work)
 
         return "workread"
     }

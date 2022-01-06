@@ -447,6 +447,9 @@
         </if>
         <if test="intType != null and intType != 0">
             AND intType = #{intType}
+        </if>
+        <if test="intWorkSeq != null and intWorkSeq != 0">
+            AND intWorkSeq = #{intWorkSeq}
         </if>;
     </select>
 

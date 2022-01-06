@@ -720,17 +720,27 @@ h1, h2, h3, h4, h5, h6 {
   flex-shrink: 0;
   flex-grow: 0;
 }
-.dashboard .sales-card .card-icon {
-  color: #4154f1;
+.dashboard .youtube-card .card-icon {
+  color: #FF0000;
   background: #f6f6fe;
 }
-.dashboard .revenue-card .card-icon {
-  color: #2eca6a;
-  background: #e0f8e9;
+.dashboard .blog-card .card-icon {
+  color: #1DDB16;
+  background: #f6f6fe;
 }
-.dashboard .customers-card .card-icon {
-  color: #ff771d;
-  background: #ffecdf;
+.dashboard .instagram-card .card-icon {
+  color: #F29661;
+  background: #f6f6fe;
+}
+
+.dashboard .influencer-card .card-icon {
+  color: #BC30F7;
+  background: #f6f6fe;
+}
+
+.dashboard .client-card .card-icon {
+  color: #11cccc;
+  background: #f6f6fe;
 }
 
 /* Activity */
@@ -1089,8 +1099,30 @@ h1, h2, h3, h4, h5, h6 {
 # User custom
 --------------------------------------------------------------*/
 
+.text-0-5em { font-size: 0.5rem !important; }
+.text-0-6em { font-size: 0.6rem !important; }
+.text-0-7em { font-size: 0.7rem !important; }
+.text-0-8em { font-size: 0.8rem !important; }
+.text-0-9em { font-size: 0.9rem !important; }
 .text-1em { font-size: 1rem !important; }
 .text-2em { font-size: 2rem !important; }
 .text-3em { font-size: 3rem !important; }
 .text-4em { font-size: 4rem !important; }
 .text-bold { font-weight: bold; }
+
+
+#workread_info {
+  font-size: 13px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #dfdfdf;
+}
+
+#workread_info p {
+  line-height: 1.2em;
+  margin-bottom: 0.5em;
+}
+
+.work-table {
+  font-size: 14px;
+}
