@@ -1,6 +1,6 @@
 package com.formskorea.console.service
 
-import com.formskorea.console.mapper.dao.DefaultMapper
+import com.formskorea.console.mapper.console.DefaultMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired

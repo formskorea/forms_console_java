@@ -1,8 +1,8 @@
 package com.formskorea.console.service
 
 import com.formskorea.console.data.model.*
-import com.formskorea.console.mapper.dao.AdminMapper
-import com.formskorea.console.mapper.dao.ApplicationMapper
+import com.formskorea.console.mapper.console.AdminMapper
+import com.formskorea.console.mapper.console.ApplicationMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired

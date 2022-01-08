@@ -17,37 +17,34 @@ import javax.sql.DataSource
 
 @Configuration
 @EnableTransactionManagement
-@MapperScan(value = ["com.formskorea.console.mapper.console"], sqlSessionFactoryRef = "db1SqlSessionFactory")
-class Db1Config {
+@MapperScan(value = ["com.formskorea.console.mapper.log"], sqlSessionFactoryRef = "db2SqlSessionFactory")
+class Db2Config {
 
-    @Bean(name = ["db1DataSource"])
-    @Primary
-    @ConfigurationProperties(prefix = "spring.db1.datasource")
-    fun db1DataSource(): DataSource {
+    @Bean(name = ["db2DataSource"])
+    @ConfigurationProperties(prefix = "spring.db2.datasource")
+    fun db2DataSource(): DataSource {
         return DataSourceBuilder.create().build()
     }
 
-    @Bean(name = ["db1SqlSessionFactory"])
-    @Primary
+    @Bean(name = ["db2SqlSessionFactory"])
     @Throws(Exception::class)
-    fun db1SqlSessionFactory(@Qualifier("db1DataSource") db1DataSource: DataSource, applicationContext: ApplicationContext): SqlSessionFactory {
+    fun db2SqlSessionFactory(@Qualifier("db2DataSource") db2DataSource: DataSource, applicationContext: ApplicationContext): SqlSessionFactory {
         val sqlSessionFactoryBean = SqlSessionFactoryBean()
-        sqlSessionFactoryBean.setDataSource(db1DataSource)
-        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:mapper/console/*.xml"))
+        sqlSessionFactoryBean.setDataSource(db2DataSource)
+        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:mapper/log/*.xml"))
         sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:mybatis-config.xml"))
         sqlSessionFactoryBean.setTypeAliasesPackage("com.formskorea.console.data.model")
         return sqlSessionFactoryBean.`object`!!
     }
 
-    @Bean(name = ["db1SqlSessionTemplate"])
-    @Primary
+    @Bean(name = ["db2SqlSessionTemplate"])
     @Throws(Exception::class)
-    fun db1SqlSessionTemplate(db1SqlSessionFactory: SqlSessionFactory): SqlSessionTemplate {
-        return SqlSessionTemplate(db1SqlSessionFactory)
+    fun db2SqlSessionTemplate(db2SqlSessionFactory: SqlSessionFactory): SqlSessionTemplate {
+        return SqlSessionTemplate(db2SqlSessionFactory)
     }
 
     @Bean
     fun transactionManager(): DataSourceTransactionManager {
-        return DataSourceTransactionManager(db1DataSource())
+        return DataSourceTransactionManager(db2DataSource())
     }
 }

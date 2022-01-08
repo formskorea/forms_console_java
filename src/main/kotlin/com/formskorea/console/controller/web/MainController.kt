@@ -56,6 +56,17 @@ class MainController {
                         isLogin = true
                         userinfo2.strMemberType = userinfo.strMemberType
                         model.addAttribute("fmcuser", userinfo2)
+
+                        val scripts = ArrayList<String>()
+
+                        when(userinfo2.strMemberType) {
+                            DefaultConfig.MEMBER_ADMIN -> scripts.add("/js/dh-a.js")
+                            DefaultConfig.MEMBER_CLIENT -> scripts.add("/js/dh-c.js")
+                            else -> scripts.add("/js/dh-i.js")
+                        }
+
+                        model.addAttribute("scripts", scripts)
+
                     }
                 }
             } catch (e: Exception) {

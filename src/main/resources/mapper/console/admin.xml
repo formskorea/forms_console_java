@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.formskorea.console.mapper.dao.AdminMapper">
+<mapper namespace="com.formskorea.console.mapper.console.AdminMapper">
     <select id="getMInfluncerInfo" parameterType="Search" resultType="User">
         SELECT aa.intSeq,
         aa.strEmail,
@@ -388,4 +388,22 @@
         ORDER BY intSeq ASC;
     </select>
 
+
+    <select id="getDHWorkCount" parameterType="Search" resultType="Integer">
+        SELECT
+        COUNT(b.intSeq)
+        FROM TB_WORK a, TB_WORK_INFO b
+        WHERE
+        AND a.intSeq = b.intWorkSeq
+        <if test="status != null">
+            AND a.intStatus = #{status}
+        </if>
+        <if test="date != null">
+            AND a.dateEnd >= #{date}
+            AND #{date} >= a.dateStart
+        </if>
+        <if test="mtype != null">
+            AND b.intMedia = #{mtype}
+        </if>;
+    </select>
 </mapper>

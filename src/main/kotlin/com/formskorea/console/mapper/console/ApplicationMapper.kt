@@ -1,4 +1,4 @@
-package com.formskorea.console.mapper.dao
+package com.formskorea.console.mapper.console
 
 import com.formskorea.console.data.model.*
 
