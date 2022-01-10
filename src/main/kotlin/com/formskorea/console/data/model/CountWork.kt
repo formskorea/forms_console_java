@@ -7,5 +7,6 @@ data class CountWork(
     @SerializedName("date") var dateDay: String? = null,
     @SerializedName("instagram") var intInstagram: Int? = null,
     @SerializedName("youtube") var intYoutube: Int? = null,
-    @SerializedName("blog") var intBlog: Int? = null
+    @SerializedName("blog") var intBlog: Int? = null,
+    @SerializedName("work") var intWork: Int? = null
 )

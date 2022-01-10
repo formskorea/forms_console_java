@@ -5,7 +5,8 @@
         SELECT dateDay,
                intInstagram,
                intYoutube,
-               intBlog
+               intBlog,
+               intWork
         FROM TB_WORKS
         WHERE dateDay BETWEEN #{start} AND #{end}
         ORDER BY dateDay ASC;
@@ -13,10 +14,7 @@
     <select id="getUserCount" parameterType="Search" resultType="CountUsers">
         SELECT dateDay,
                intInfluencer,
-               intClient,
-               intInstagram,
-               intYoutube,
-               intBlog
+               intClient
         FROM TB_USERS
         WHERE dateDay BETWEEN #{start} AND #{end}
         ORDER BY dateDay ASC;

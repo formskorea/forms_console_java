@@ -10,7 +10,6 @@ import org.springframework.boot.jdbc.DataSourceBuilder
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
 import org.springframework.jdbc.datasource.DataSourceTransactionManager
 import org.springframework.transaction.annotation.EnableTransactionManagement
 import javax.sql.DataSource
@@ -44,7 +43,7 @@ class Db2Config {
     }
 
     @Bean
-    fun transactionManager(): DataSourceTransactionManager {
+    fun db2transactionManager(): DataSourceTransactionManager {
         return DataSourceTransactionManager(db2DataSource())
     }
 }

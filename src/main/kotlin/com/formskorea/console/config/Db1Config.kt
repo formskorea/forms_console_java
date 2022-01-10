@@ -47,7 +47,7 @@ class Db1Config {
     }
 
     @Bean
-    fun transactionManager(): DataSourceTransactionManager {
+    fun db1transactionManager(): DataSourceTransactionManager {
         return DataSourceTransactionManager(db1DataSource())
     }
 }

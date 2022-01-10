@@ -70,6 +70,7 @@ object DefaultConfig {
             "\n \n * 본메일은 발송전용 메일입니다."
 
     const val PERM_SUPER = "super"
+    const val PERM_MAIN_READ = "mread"
     const val PERM_INFLUENCER_READ = "iread"
     const val PERM_INFLUENCER_ADD = "iadd"
     const val PERM_INFLUENCER_EDIT = "iedit"

@@ -297,3 +297,85 @@ function uncomma(str) {
     str = str.replace(/[^\d]+/g, '');
     return String(str *= 1);
 }
+
+function changeDateToString(dates = new Date()) {
+    var date = new Date(dates);
+    var year = date.getFullYear();
+    var month = ('0' + (date.getMonth() + 1)).slice(-2);
+    var day = ('0' + date.getDate()).slice(-2);
+
+    return year + '-' + month  + '-' + day;
+}
+
+function changeStringToDate(string_date) {
+    var date = string_date.replaceAll("-", "");
+    console.log(date);
+    return new Date(Number(date.substring(0, 4)), Number(date.substring(4, 6)) - 1, Number(date.substring(6, 8)));
+}
+
+function addDate(add, type, date) {
+    var rtnvalue = new Date();
+    console.log("add : " + add + " / type : " + type);
+    switch (type) {
+        case "year" :
+            rtnvalue = date.setFullYear(date.getFullYear() + add);
+            break;
+        case "month" :
+            rtnvalue = date.setMonth(date.getMonth() + add);
+            break;
+        default :
+            rtnvalue = date.setDate(date.getDate() + add);
+            break;
+    }
+
+    return rtnvalue;
+}
+
+function addDateString(add, type = "day", date = null) {
+    var dates = date == null ? new Date : changeStringToDate(date);
+    var adddate = addDate(add, type, dates);
+    return changeDateToString(adddate);
+}
+
+function makeLineChart(id, series, labels, format) {
+    var ac = new ApexCharts(document.querySelector(id), {
+        series: series,
+        chart: {
+            height: 350,
+            type: 'area',
+            toolbar: {
+                show: false
+            },
+        },
+        markers: {
+            size: 4
+        },
+        fill: {
+            type: "gradient",
+            gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0.3,
+                opacityTo: 0.4,
+                stops: [0, 90, 100]
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'smooth',
+            width: 2
+        },
+        xaxis: {
+            type: 'date',
+            categories: labels
+        },
+        tooltip: {
+            x: {
+                format: format
+            },
+        }
+    });
+    ac.render();
+    return ac;
+}
