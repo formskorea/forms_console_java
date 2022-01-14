@@ -64,4 +64,46 @@ class ClientController {
         return "client"
     }
 
+    @RequestMapping(value = ["/add"], method = [RequestMethod.GET, RequestMethod.POST])
+    @Throws(Exception::class)
+    fun add(model: Model, response: HttpServletResponse, request: HttpServletRequest): Any {
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
+        var isLogin = false
+
+        if (token != "") {
+            try {
+                var userinfo = Token.get(token, DefaultConfig.TOKEN_EXPDAY)
+
+                log.error(userinfo.toString())
+
+                if (userinfo != null) {
+                    val userinfo2 = applicationService.info(userinfo)
+                    log.error(userinfo.toString())
+                    if (userinfo2?.intStatus == DefaultConfig.MEMBER_OK || userinfo2?.intStatus == DefaultConfig.MEMBER_JOIN) {
+                        isLogin = true
+                        userinfo2.strMemberType = userinfo.strMemberType
+                        model.addAttribute("fmcuser", userinfo2)
+                    }
+                }
+            } catch (e: Exception) {
+                log.error(e.message)
+            }
+        }
+
+        if (!isLogin) {
+            return RedirectView("/login")
+        }
+
+        val scripts = ArrayList<String>()
+        scripts.add("//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js")
+        scripts.add("/js/clientadd.js")
+        model.addAttribute("scripts", scripts)
+
+        val styles = ArrayList<String>()
+        styles.add("/css/loading.css")
+        model.addAttribute("styles", styles)
+
+        return "clientadd"
+    }
+
 }

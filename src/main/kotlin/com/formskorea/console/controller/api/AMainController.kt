@@ -513,4 +513,34 @@ class AMainController {
         return rtnValue
     }
 
+
+    @RequestMapping(value = ["/emailcheck"], produces = ["application/json"], method = [RequestMethod.POST])
+    @ResponseBody
+    @Throws(Exception::class)
+    fun emailcheck(@RequestBody data: User, response: HttpServletResponse, request: HttpServletRequest): Any {
+        val rtnValue = ReturnValue()
+
+        log.debug(data.toString())
+
+
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS && data.strEmail.isNullOrEmpty()) {
+            rtnValue.error = DefaultConfig.ERROR_PARAM
+            rtnValue.status = DefaultConfig.SERVER_PARAMERROR
+            rtnValue.message = DefaultConfig.MESSAGE_EMPTY_EMAIL
+        }
+
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS) {
+            try {
+                data.isLogin = true
+                val result = applicationService.userinfo(data)
+                rtnValue.result = result == null
+            } catch (e: Exception) {
+                rtnValue.error = DefaultConfig.ERROR_DBERROR
+                rtnValue.status = DefaultConfig.SERVER_DBERROR
+                rtnValue.message = DefaultConfig.MESSAGE_DBERROR
+            }
+        }
+
+        return rtnValue
+    }
 }

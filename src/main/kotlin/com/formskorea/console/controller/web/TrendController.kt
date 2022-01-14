@@ -54,7 +54,7 @@ class TrendController {
         }
 
         val scripts = ArrayList<String>()
-        scripts.add("/js/client.js")
+        scripts.add("/js/trend.js")
         model.addAttribute("scripts", scripts)
 
         val styles = ArrayList<String>()

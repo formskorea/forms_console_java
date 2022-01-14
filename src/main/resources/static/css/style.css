@@ -924,7 +924,7 @@ h1, h2, h3, h4, h5, h6 {
   color: rgba(1, 41, 112, 0.6);
 }
 
-.work-add label:nth-child(1),
+.work-add label,
 .profile .profile-edit label {
   font-weight: 600;
   color: rgba(1, 41, 112, 0.6);

@@ -19,22 +19,24 @@ class ApplicationService {
     @Autowired
     lateinit var adminMapper: AdminMapper
 
-    fun info(data: User): User? {
-        val media = Media()
-        val info = when (data.strMemberType) {
+    fun userinfo(data: User): User? {
+        return when (data.strMemberType) {
             DefaultConfig.MEMBER_ADMIN -> {
-                media.intUserType = 9
                 applicationMapper.getAdminInfo(data)
             }
             DefaultConfig.MEMBER_CLIENT -> {
-                media.intUserType = 1
                 applicationMapper.getClientInfo(data)
             }
             else -> {
-                media.intUserType = 2
                 applicationMapper.getInfluncerInfo(data)
             }
         }
+    }
+
+
+    fun info(data: User): User? {
+        val media = Media()
+        val info = userinfo(data)
 
         if (info?.strNikname.isNullOrEmpty()) {
             info?.strNikname = info?.strName

@@ -201,6 +201,48 @@ function loadUserCount(start, end, htmltype) {
     });
 }
 
+function loadTrendCategory(itype) {
+
+}
+
+function loadTrend(itype, stype) {
+    $.ajax({
+        url: '/api/trend/data',
+        type: 'POST',
+        data: JSON.stringify({'itype': itype, 'stype': stype, 'sex': 9, 'limit': 10}),
+        headers: {'Content-Type': 'application/json'},
+    }).then((data, textStatus, jqXHR) => {
+        if (data.status == 200) {
+            for(var i = 0; i < data.result.length; i++) {
+                $("#admin_dh_ntrend_list li").eq(i).html(data.result[i].trend);
+            }
+        } else {
+            showModal(data.message);
+        }
+    }, (jqXHR, textStatus, errorThrown) => {
+        /*pass*/
+    });
+}
+
+function loadGTrend() {
+    $.ajax({
+        url: '/api/trend/data',
+        type: 'POST',
+        data: JSON.stringify({'itype': 3, 'limit': 10}),
+        headers: {'Content-Type': 'application/json'},
+    }).then((data, textStatus, jqXHR) => {
+        if (data.status == 200) {
+            for(var i = 0; i < data.result.length; i++) {
+                $("#admin_dh_gtrend_list li").eq(i).html(data.result[i].trend);
+            }
+        } else {
+            showModal(data.message);
+        }
+    }, (jqXHR, textStatus, errorThrown) => {
+        /*pass*/
+    });
+}
+
 
 $(document).ready(function () {
 
@@ -215,4 +257,6 @@ $(document).ready(function () {
     loadWorkCount(start2date, enddate, 2);
     loadUserCount(start2date, enddate, 2);
 
+    loadTrend(2, '25-29세');
+    loadGTrend();
 });

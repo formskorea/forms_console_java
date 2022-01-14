@@ -5,7 +5,7 @@
             <div class="col-xxl-3 col-md-3">
                 <div class="card info-card works-card">
                     <div class="filter">
-                        <a class="icon" href="#" aria-expanded="false"><i
+                        <a class="icon" href="/work/list" aria-expanded="false"><i
                                 class="bi bi-three-dots"></i></a>
                     </div>
                     <div class="card-body">
@@ -25,7 +25,7 @@
             <div class="col-xxl-3 col-md-3">
                 <div class="card info-card instagram-card">
                     <div class="filter">
-                        <a class="icon" href="#" aria-expanded="false"><i
+                        <a class="icon" href="/work/list" aria-expanded="false"><i
                                 class="bi bi-three-dots"></i></a>
                     </div>
                     <div class="card-body">
@@ -45,7 +45,7 @@
             <div class="col-xxl-3 col-md-3">
                 <div class="card info-card youtube-card">
                     <div class="filter">
-                        <a class="icon" href="#" aria-expanded="false"><i
+                        <a class="icon" href="/work/list" aria-expanded="false"><i
                                 class="bi bi-three-dots"></i></a>
                     </div>
                     <div class="card-body">
@@ -66,7 +66,7 @@
             <div class="col-xxl-3 col-md-3">
                 <div class="card info-card blog-card">
                     <div class="filter">
-                        <a class="icon" href="#" aria-expanded="false"><i
+                        <a class="icon" href="/work/list" aria-expanded="false"><i
                                 class="bi bi-three-dots"></i></a>
                     </div>
                     <div class="card-body">
@@ -92,17 +92,17 @@
                     <!-- Line Chart -->
                     <div id="reportsChart"></div>
                 </div>
-                <div class="filter">
-                    <a class="icon" href="#" aria-expanded="false"><i
-                            class="bi bi-three-dots"></i></a>
-                </div>
+<%--                <div class="filter">--%>
+<%--                    <a class="icon" href="/work/list" aria-expanded="false"><i--%>
+<%--                            class="bi bi-three-dots"></i></a>--%>
+<%--                </div>--%>
             </div>
         </div>
         <div class="row">
             <div class="col-xxl-6 col-md-6">
                 <div class="card info-card influencer-card">
                     <div class="filter">
-                        <a class="icon" href="#" aria-expanded="false"><i
+                        <a class="icon" href="/influencer/list" aria-expanded="false"><i
                                 class="bi bi-three-dots"></i></a>
                     </div>
                     <div class="card-body">
@@ -122,7 +122,7 @@
             <div class="col-xxl-6 col-md-6">
                 <div class="card info-card client-card">
                     <div class="filter">
-                        <a class="icon" href="#" aria-expanded="false"><i
+                        <a class="icon" href="/client/list" aria-expanded="false"><i
                                 class="bi bi-three-dots"></i></a>
                     </div>
                     <div class="card-body">
@@ -149,10 +149,10 @@
                     <div id="reportsChart2"></div>
                     <!-- End Line Chart -->
                 </div>
-                <div class="filter">
-                    <a class="icon" href="#" aria-expanded="false"><i
-                            class="bi bi-three-dots"></i></a>
-                </div>
+<%--                <div class="filter">--%>
+<%--                    <a class="icon" href="#" aria-expanded="false"><i--%>
+<%--                            class="bi bi-three-dots"></i></a>--%>
+<%--                </div>--%>
             </div>
         </div>
     </div>
@@ -213,22 +213,22 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="filter">
-                        <a class="icon" href="#"><i class="bi bi-three-dots"></i></a>
+                        <a class="icon" href="/trend"><i class="bi bi-three-dots"></i></a>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title"><strong>네이버 트랜드</strong> <span>| 어제</span></h5>
                         <div class="row">
-                            <ol class="list-group list-group-numbered">
-                                <li class="list-group-item">트랜드1</li>
-                                <li class="list-group-item">트랜드2</li>
-                                <li class="list-group-item">트랜드3</li>
-                                <li class="list-group-item">트랜드4</li>
-                                <li class="list-group-item">트랜드5</li>
-                                <li class="list-group-item">트랜드6</li>
-                                <li class="list-group-item">트랜드7</li>
-                                <li class="list-group-item">트랜드8</li>
-                                <li class="list-group-item">트랜드9</li>
-                                <li class="list-group-item">트랜드10</li>
+                            <ol class="list-group list-group-numbered" id="admin_dh_ntrend_list">
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
                             </ol>
                         </div>
                     </div>
@@ -237,22 +237,22 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="filter">
-                        <a class="icon" href="#"><i class="bi bi-three-dots"></i></a>
+                        <a class="icon" href="/trend"><i class="bi bi-three-dots"></i></a>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title"><strong>구글 트랜드</strong> <span>| 어제</span></h5>
                         <div class="row">
-                            <ol class="list-group list-group-numbered">
-                                <li class="list-group-item">트랜드1</li>
-                                <li class="list-group-item">트랜드2</li>
-                                <li class="list-group-item">트랜드3</li>
-                                <li class="list-group-item">트랜드4</li>
-                                <li class="list-group-item">트랜드5</li>
-                                <li class="list-group-item">트랜드6</li>
-                                <li class="list-group-item">트랜드7</li>
-                                <li class="list-group-item">트랜드8</li>
-                                <li class="list-group-item">트랜드9</li>
-                                <li class="list-group-item">트랜드10</li>
+                            <ol class="list-group list-group-numbered" id="admin_dh_gtrend_list">
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
+                                <li class="list-group-item text-0-8em"></li>
                             </ol>
                         </div>
                     </div>
@@ -262,7 +262,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="filter">
-                    <a class="icon" href="#"><i class="bi bi-three-dots"></i></a>
+                    <a class="icon" href="/trend"><i class="bi bi-three-dots"></i></a>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title"><strong>키워드 언급</strong> <span>| 당일</span></h5>
@@ -271,7 +271,7 @@
                         <script>
                             document.addEventListener("DOMContentLoaded", () => {
                                 new ApexCharts(document.querySelector("#polarAreaChart"), {
-                                    series: [30, 27, 21, 10, 8, 6, 3, 3, 2, 1],
+                                    series: [30, 27, 21, 10, 8, 6],
                                     chart: {
                                         type: 'polarArea',
                                         height: 400,
@@ -279,7 +279,7 @@
                                             show: false
                                         }
                                     },
-                                    labels: ['키워드1', '키워드2', '키워드3', '키워드4', '키워드5', '키워드6', '키워드7', '키워드8', '키워드9', '키워드10'],
+                                    labels: ['뷰티', '미용', '립', '통닭', '구도로', '양념통닭'],
                                     stroke: {
                                         colors: ['#fff']
                                     },

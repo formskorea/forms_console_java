@@ -14,4 +14,8 @@ data class Search(
     var seq: Int? = null,
     var date: String? = null,
     var mtype: Int? = null,
+    var itype: Int? = null,
+    var stype: String? = null,
+    var sex: Int? = null,
+    var age: String? = null
 )

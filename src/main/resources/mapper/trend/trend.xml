@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.formskorea.console.mapper.trend.TrendMapper">
+    <select id="getTrend" parameterType="Search" resultType="Trend">
+        SELECT
+        intSeq, dateDay, intType, strType, intSex, strAge, strTrendText, fltPercent, dateReg
+        FROM TB_TREND
+        WHERE
+            intSeq > 0
+        <if test="date != null and date != ''">
+            AND dateDay = #{date}
+        </if>
+        <if test="itype != null and itype != 0">
+            AND intType = #{itype}
+        </if>
+        <if test="stype != null and stype != ''">
+            AND strType = #{stype}
+        </if>
+        <if test="sex != null and sex != 0">
+            AND intSex = #{sex}
+        </if>
+        <if test="age != null and age != 0">
+            AND strAge = #{age}
+        </if>
+        ORDER BY dateDay DESC, intSeq ASC
+        <if test="limit != null and limit != 0">
+            limit 0, #{limit}
+        </if>;
+    </select>
+    <select id="getTrendCategory" parameterType="Search" resultType="Trend">
+        SELECT
+        strType
+        FROM TB_TREND
+        WHERE
+        dateDay = DATE(DATE_ADD(CURRENT_TIMESTAMP, INTERVAL -2 DAY))
+        <if test="itype != null and itype != 0">
+            AND intType = #{itype}
+        </if>
+        GROUP BY strType
+        ORDER BY strType ASC;
+    </select>
+</mapper>
