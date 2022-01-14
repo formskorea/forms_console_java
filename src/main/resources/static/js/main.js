@@ -221,7 +221,7 @@
 
 //model make
 function showModal(info, title = "") {
-    if(title == "") {
+    if (title == "") {
         $("#fmc-alert h5").html("알림");
     }
     $("#fmc-alert .modal-body").html(info);
@@ -233,7 +233,7 @@ function showModal(info, title = "") {
     $("#fmc-alert-ok").unbind("click");
     $("#fmc-alert-cancel").unbind("click");
 
-    $("#fmc-alert-cancel").click(function(e){
+    $("#fmc-alert-cancel").click(function (e) {
         $("#fmc-alert").modal("hide");
     });
     $("#fmc-alert").modal("show");
@@ -243,7 +243,7 @@ function showModal(info, title = "") {
 
 //confilm make
 function showConfilm(info, funok, funcancel, title = "", oktitle = "예", canceltitle = "아니오") {
-    if(title == "") {
+    if (title == "") {
         $("#fmc-alert h5").html("확인");
     }
     $("#fmc-alert .modal-body").html(info);
@@ -253,12 +253,12 @@ function showConfilm(info, funok, funcancel, title = "", oktitle = "예", cancel
     $("#fmc-alert-ok").unbind("click");
     $("#fmc-alert-cancel").unbind("click");
 
-    $("#fmc-alert-ok").click(function(e){
+    $("#fmc-alert-ok").click(function (e) {
         funok();
         $("#fmc-alert").modal("hide");
     });
 
-    $("#fmc-alert-cancel").click(function(e){
+    $("#fmc-alert-cancel").click(function (e) {
         funcancel();
         $("#fmc-alert").modal("hide");
     });
@@ -272,11 +272,34 @@ function showConfilm(info, funok, funcancel, title = "", oktitle = "예", cancel
 function setCookie(key, value, expiredays = 0) {
     var todayDate = new Date();
     todayDate.setDate(todayDate.getDate() + expiredays);
-    if(expiredays > 0) {
+    if (expiredays > 0) {
         document.cookie = key + "=" + escape(value) + "; path=/; expires=" + todayDate.toGMTString() + ";";
     } else {
         document.cookie = key + "=" + escape(value) + "; path=/; ";
     }
+}
+
+function checkPass(password) {
+    var rtnvalue = {};
+    rtnvalue.message = "";
+    rtnvalue.error = false;
+
+    var num = password.search(/[0-9]/g);
+    var eng = password.search(/[a-z]/ig);
+    var spe = password.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+
+    if (password.length < 10 || password.length > 20) {
+        rtnvalue.message = "10자리 ~ 20자리 이내로 입력해주세요.";
+        rtnvalue.error = true;
+    } else if (pw.search(/\s/) != -1) {
+        rtnvalue.message = "비밀번호는 공백 없이 입력해주세요.";
+        rtnvalue.error = true;
+    } else if (num < 0 || eng < 0 || spe < 0) {
+        rtnvalue.message = "영문,숫자, 특수문자 중 2가지 이상을 혼합하여 입력해주세요.";
+        rtnvalue.error = true;
+    }
+
+    return rtnvalue;
 }
 
 function checkEmail(value) {
@@ -304,7 +327,7 @@ function changeDateToString(dates = new Date()) {
     var month = ('0' + (date.getMonth() + 1)).slice(-2);
     var day = ('0' + date.getDate()).slice(-2);
 
-    return year + '-' + month  + '-' + day;
+    return year + '-' + month + '-' + day;
 }
 
 function changeStringToDate(string_date) {

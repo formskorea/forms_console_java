@@ -27,7 +27,7 @@
     </div><!-- End Page Title -->
 
     <section class="section">
-        <form id="form_editinfo" method="post" action="#">
+        <form id="form_influencer" method="post" action="#">
             <div class="row work-add">
                 <div class="card">
                     <h5 class="card-title"><strong>회원정보</strong></h5>
