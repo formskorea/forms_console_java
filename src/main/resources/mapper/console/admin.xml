@@ -256,7 +256,8 @@
     <select id="getMWork" parameterType="Search" resultType="Work">
         SELECT
         a.intSeq, a.strTitle, a.txtInfo, a.dateReadystart, a.dateReadyend, a.dateStart, a.dateEnd, a.intClientSeq,
-        a.intCompanySeq, a.intSelecttype, a.intTotalPrice, a.intStatus, a.dateReg, a.dateEdit, b.strName as strClientName, b.strEmail as strClientEmail, b.strMobile as strClientMobile, c.strCompanyname
+        a.intCompanySeq, a.intSelecttype, a.intTotalPrice, a.intStatus, a.dateReg, a.dateEdit, b.strName as
+        strClientName, b.strEmail as strClientEmail, b.strMobile as strClientMobile, c.strCompanyname
         FROM TB_WORK a, TB_CLIENT b, TB_COMPANY c
         WHERE
         a.intClientSeq = b.intSeq
@@ -269,7 +270,8 @@
         </if>
         <if test="keyword != null and keyword != ''">
             AND (a.strTitle LIKE CONCAT('%', #{keyword}, '%') OR a.txtInfo LIKE CONCAT('%', #{keyword}, '%')
-            OR a.intSeq = (SELECT aa.intWorkSeq FROM TB_TAG_LINK aa, TB_TAGS bb WHERE bb.intSeq = aa.intTagSeq AND aa.intUserType = 5 AND bb.strTag LIKE CONCAT('%', #{keyword}, '%'))
+            OR a.intSeq = (SELECT aa.intWorkSeq FROM TB_TAG_LINK aa, TB_TAGS bb WHERE bb.intSeq = aa.intTagSeq AND
+            aa.intUserType = 5 AND bb.strTag LIKE CONCAT('%', #{keyword}, '%'))
             OR b.strName LIKE CONCAT('%', #{keyword}, '%')
             OR c.strCompanyname LIKE CONCAT('%', #{keyword}, '%'))
         </if>
@@ -295,7 +297,8 @@
         </if>
         <if test="keyword != null and keyword != ''">
             AND (strTitle LIKE CONCAT('%', #{keyword}, '%') OR txtInfo LIKE CONCAT('%', #{keyword}, '%')
-            OR a.intSeq = (SELECT aa.intWorkSeq FROM TB_TAG_LINK aa, TB_TAGS bb WHERE bb.intSeq = aa.intTagSeq AND aa.intUserType = 5 AND bb.strTag LIKE CONCAT('%', #{keyword}, '%'))
+            OR a.intSeq = (SELECT aa.intWorkSeq FROM TB_TAG_LINK aa, TB_TAGS bb WHERE bb.intSeq = aa.intTagSeq AND
+            aa.intUserType = 5 AND bb.strTag LIKE CONCAT('%', #{keyword}, '%'))
             OR b.strName LIKE CONCAT('%', #{keyword}, '%')
             OR c.strCompanyname LIKE CONCAT('%', #{keyword}, '%'))
         </if>;
@@ -379,7 +382,7 @@
         intClientStatus, intPrice, dateReg, dateEdit, intStatus
         FROM TB_WORK_INFO
         WHERE
-            intSeq > 0
+        intSeq > 0
         <if test="intSeq != null and intSeq != 0">
             AND intSeq = #{intSeq}
         </if>
@@ -397,7 +400,7 @@
         COUNT(b.intSeq)
         FROM TB_WORK a, TB_WORK_INFO b
         WHERE
-            a.intSeq = b.intWorkSeq
+        a.intSeq = b.intWorkSeq
         <if test="status != null">
             AND a.intStatus = #{status}
         </if>
@@ -407,6 +410,48 @@
         </if>
         <if test="mtype != null">
             AND b.intMediaType = #{mtype}
+        </if>;
+    </select>
+
+    <select id="getMCompany" parameterType="Search" resultType="Company">
+        SELECT intSeq,
+        strCompanyname,
+        strHomepage,
+        intLevel,
+        strTelnum,
+        strZipcode,
+        strAddress,
+        strZone,
+        intStatus,
+        dateReg,
+        dateEdit,
+        strCompanynum
+        FROM TB_COMPANY
+        WHERE
+        intSeq > 0
+        <if test="status != null">
+            AND intStatus = #{status}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (strCompanyname LIKE CONCAT('%', #{keyword}, '%') OR strAddress LIKE CONCAT('%', #{keyword}, '%') OR
+            strCompanynum LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="length != null and limit != null and length != null and limit != null and length != 0 and limit != -1">
+            LIMIT #{limit}, #{length}
+        </if>;
+    </select>
+
+    <select id="getMCompanyCount" parameterType="Search" resultType="Int">
+        SELECT COUNT(intSeq)
+        FROM TB_COMPANY
+        WHERE
+        intSeq > 0
+        <if test="status != null">
+            AND intStatus = #{status}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (strCompanyname LIKE CONCAT('%', #{keyword}, '%') OR strAddress LIKE CONCAT('%', #{keyword}, '%') OR
+            strCompanynum LIKE CONCAT('%', #{keyword}, '%'))
         </if>;
     </select>
 </mapper>

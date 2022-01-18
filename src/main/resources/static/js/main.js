@@ -288,14 +288,14 @@ function checkPass(password) {
     var eng = password.search(/[a-z]/ig);
     var spe = password.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
 
-    if (password.length < 10 || password.length > 20) {
-        rtnvalue.message = "10자리 ~ 20자리 이내로 입력해주세요.";
+    if (password.length < 8 || password.length > 20) {
+        rtnvalue.message = "비밀번호를 8자리 ~ 20자리 이내로 입력해주세요.";
         rtnvalue.error = true;
-    } else if (pw.search(/\s/) != -1) {
+    } else if (password.search(/\s/) != -1) {
         rtnvalue.message = "비밀번호는 공백 없이 입력해주세요.";
         rtnvalue.error = true;
     } else if (num < 0 || eng < 0 || spe < 0) {
-        rtnvalue.message = "영문,숫자, 특수문자 중 2가지 이상을 혼합하여 입력해주세요.";
+        rtnvalue.message = "비밀번호는 영문,숫자, 특수문자 중 2가지 이상을 혼합하여 입력해주세요.";
         rtnvalue.error = true;
     }
 

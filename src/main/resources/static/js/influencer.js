@@ -17,9 +17,9 @@ function paging(maxsize) {
         endPage		= 1,
         html = "";
 
-    startPage = now_page - Math.floor(paging_size / 2);
+    startPage = maxsize > paging_size ? now_page - Math.floor(paging_size / 2) : 1;
     startPage = startPage <= 0 ? 1 : startPage;
-    endPage = startPage + paging_size >= maxsize ? maxsize : (startPage + paging_size - 1);
+    endPage = startPage + paging_size >= maxsize || maxsize <= paging_size ? maxsize : (startPage + paging_size - 1);
     startPage = maxsize == endPage && (maxsize - paging_size) > 1 ? maxsize - paging_size : startPage;
 
     for(var i = startPage; i <= endPage; i++) {
@@ -102,6 +102,7 @@ function loadData() {
                     list_box.find(".item_youtube_box").eq(i).addClass("d-none");
                     list_box.find(".item_blog_box").eq(i).addClass("d-none");
                     list_box.find(".item_shopping_box").eq(i).addClass("d-none");
+
                     for(var j = 0; j < field.media.length; j++) {
                         switch(field.media[j].type) {
                             case 1 :
@@ -134,6 +135,10 @@ function loadData() {
                                 break;
                         }
                     }
+                    list_box.find(".item_readgo").eq(i).attr("rdata", field.seq);
+                    list_box.find(".item_readgo").eq(i).click(function (e) {
+                        location.href = "/influencer/read/" + $(this).attr("rdata") + "?keyword=" + $("#search_text").val() + "&page=" + now_page + "&status=" + list_status;
+                    });
                 }
 
                 paging(data.result.max_page);
@@ -182,7 +187,13 @@ $(document).ready(function () {
     });
 
     $("#search_button").click(function (e) {
+        now_limit = 0;
+        now_page = 1;
         loadData();
+    });
+
+    $("#inf_addgo").click(function(event){
+        location.href = "/influencer/add";
     });
 
     loadData();

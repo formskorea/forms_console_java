@@ -2,6 +2,7 @@ package com.formskorea.console.controller.api
 
 import com.formskorea.console.config.DefaultConfig
 import com.formskorea.console.data.model.*
+import com.formskorea.console.service.AdminService
 import com.formskorea.console.service.ApplicationService
 import com.formskorea.console.service.MailService
 import com.formskorea.console.util.Etc
@@ -23,6 +24,9 @@ class AMainController {
 
     @Autowired
     lateinit var applicationService: ApplicationService
+
+    @Autowired
+    lateinit var adminService: AdminService
 
     @Autowired
     lateinit var mailService: MailService
@@ -106,7 +110,7 @@ class AMainController {
         return rtnValue
     }
 
-    @RequestMapping(value = ["/info"])
+    @RequestMapping(value = ["/info"], produces = ["application/json"], method = [RequestMethod.POST])
     @ResponseBody
     @Throws(Exception::class)
     fun info(response: HttpServletResponse, request: HttpServletRequest): Any {
@@ -163,9 +167,9 @@ class AMainController {
         return rtnValue
     }
 
-    @RequestMapping(value = ["/join"])
+    @RequestMapping(value = ["/join"], produces = ["application/json"], method = [RequestMethod.POST])
     @ResponseBody
-    @Transactional
+    @Transactional(value = "db1transactionManager")
     @Throws(Exception::class)
     fun join(@RequestBody data: User, response: HttpServletResponse, request: HttpServletRequest): Any {
         val rtnValue = ReturnValue()
@@ -220,10 +224,23 @@ class AMainController {
                     data.intStatus = 0
                 }
 
+                if(!data.strMobile.isNullOrEmpty()) {
+                    data.strMobile = Etc.setTelnum(data.strMobile!!)
+                }
+
                 if (data.company != null && !data.company?.strCompanyname.isNullOrEmpty()) {
                     data.company!!.strAddress += "|" + data.company!!.strAddress2
                     data.company!!.intStatus = 1
-                    cresult = applicationService.setCompany(data.company!!)
+
+                    if(!data.company?.strTelnum.isNullOrEmpty()) {
+                        data.company?.strTelnum = Etc.setTelnum(data.company?.strTelnum!!)
+                    }
+
+                    cresult = if (data.company?.intSeq != null && data.company?.intSeq!! > 0) {
+                        applicationService.editCompany(data.company!!)
+                    } else {
+                        applicationService.setCompany(data.company!!)
+                    }
                     if (cresult != null && cresult == true) {
                         data.intCompanySeq = data.company?.intSeq
                     }
@@ -271,9 +288,9 @@ class AMainController {
         return rtnValue
     }
 
-    @RequestMapping(value = ["/useredit"])
+    @RequestMapping(value = ["/useredit"], produces = ["application/json"], method = [RequestMethod.POST])
     @ResponseBody
-    @Transactional
+    @Transactional(value = "db1transactionManager")
     @Throws(Exception::class)
     fun useredit(@RequestBody data: User, response: HttpServletResponse, request: HttpServletRequest): Any {
         val rtnValue = ReturnValue()
@@ -335,6 +352,15 @@ class AMainController {
         log.error(data.toString())
 
         if (rtnValue.status == DefaultConfig.SERVER_SUCCESS) {
+
+            if(!data.strMobile.isNullOrEmpty()) {
+                data.strMobile = Etc.setTelnum(data.strMobile!!)
+            }
+
+            if(!data.company?.strTelnum.isNullOrEmpty()) {
+                data.company?.strTelnum = Etc.setTelnum(data.company?.strTelnum!!)
+            }
+
             try {
                 applicationService.editUser(data)
                 Etc.setCookie(
@@ -543,4 +569,35 @@ class AMainController {
 
         return rtnValue
     }
+
+    @RequestMapping(value = ["/company"], produces = ["application/json"], method = [RequestMethod.POST])
+    @ResponseBody
+    @Throws(Exception::class)
+    fun company(@RequestBody data: Search, response: HttpServletResponse, request: HttpServletRequest): Any {
+        val rtnValue = ReturnValue()
+
+        log.debug(data.toString())
+
+        data.status = 1
+
+        if (rtnValue.status == DefaultConfig.SERVER_SUCCESS) {
+            try {
+                val list = ListPage<Company>()
+                list.total = adminService.getMCompanyCount(data)
+                if (list.total != null && list.total!! > 0) {
+                    val page = list.total!!.toDouble() / data.length!!
+                    list.max_page = ceil(page).toInt()
+                    list.list = adminService.getMCompany(data)
+                }
+                rtnValue.result = list
+            } catch (e: Exception) {
+                rtnValue.error = DefaultConfig.ERROR_DBERROR
+                rtnValue.status = DefaultConfig.SERVER_DBERROR
+                rtnValue.message = DefaultConfig.MESSAGE_DBERROR
+            }
+        }
+
+        return rtnValue
+    }
+
 }

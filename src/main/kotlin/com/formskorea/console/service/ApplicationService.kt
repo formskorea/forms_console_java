@@ -177,6 +177,10 @@ class ApplicationService {
         return applicationMapper.setCompany(data)
     }
 
+    fun editCompany(data: Company): Boolean? {
+        return applicationMapper.editCompany(data)
+    }
+
     fun getCompany(data: Company): Company? {
         return applicationMapper.getCompany(data)
     }

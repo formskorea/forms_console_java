@@ -17,9 +17,9 @@ function paging(maxsize) {
         endPage		= 1,
         html = "";
 
-    startPage = now_page - Math.floor(paging_size / 2);
+    startPage = maxsize > paging_size ? now_page - Math.floor(paging_size / 2) : 1;
     startPage = startPage <= 0 ? 1 : startPage;
-    endPage = startPage + paging_size >= maxsize ? maxsize : (startPage + paging_size - 1);
+    endPage = startPage + paging_size >= maxsize || maxsize <= paging_size ? maxsize : (startPage + paging_size - 1);
     startPage = maxsize == endPage && (maxsize - paging_size) > 1 ? maxsize - paging_size : startPage;
 
     for(var i = startPage; i <= endPage; i++) {

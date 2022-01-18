@@ -1,9 +1,6 @@
 package com.formskorea.console.mapper.console
 
-import com.formskorea.console.data.model.Search
-import com.formskorea.console.data.model.User
-import com.formskorea.console.data.model.Work
-import com.formskorea.console.data.model.WorkInfo
+import com.formskorea.console.data.model.*
 
 interface AdminMapper {
     fun getMInfluncerInfo(data: Search): ArrayList<User>?
@@ -22,4 +19,6 @@ interface AdminMapper {
     fun editMWorkInfo(data: WorkInfo) : Boolean?
     fun delMWorkInfo(data: WorkInfo) : Boolean?
     fun getMWorkInfo(data: WorkInfo) : ArrayList<WorkInfo>?
+    fun getMCompany(data: Search) : ArrayList<Company>?
+    fun getMCompanyCount(data:Search) : Int?
 }

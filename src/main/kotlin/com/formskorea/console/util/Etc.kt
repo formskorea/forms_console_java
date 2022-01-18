@@ -14,17 +14,17 @@ import javax.servlet.http.HttpServletResponse
 object Etc {
     var log = LoggerFactory.getLogger(this::class.java) as Logger
 
-    fun setComma(value: Int) : String {
+    fun setComma(value: Int): String {
         val nf = NumberFormat.getInstance()
         return nf.format(value)
     }
 
-    fun setStringtoDate(value: String, ext : String = "yyyy-MM-dd HH:mm:ss") : Date {
+    fun setStringtoDate(value: String, ext: String = "yyyy-MM-dd HH:mm:ss"): Date {
         val sf = SimpleDateFormat(ext)
         return sf.parse(value)
     }
 
-    fun setDatetoString(value: Date, ext : String = "yyyy-MM-dd HH:mm:ss") : String {
+    fun setDatetoString(value: Date, ext: String = "yyyy-MM-dd HH:mm:ss"): String {
         val sf = SimpleDateFormat(ext)
         return sf.format(value)
     }
@@ -33,54 +33,54 @@ object Etc {
         return (Math.random() * (n2 - n1 + 1)).toInt() + n1
     }
 
-    fun setDateAdd(type: Int, add: Int, defdate: Date = Date()) : Date {
+    fun setDateAdd(type: Int, add: Int, defdate: Date = Date()): Date {
         val cal = Calendar.getInstance()
         cal.time = defdate
         cal.add(type, add)
         return Date(cal.timeInMillis)
     }
 
-    fun checkValid(data: String, regex: String) : Boolean {
+    fun checkValid(data: String, regex: String): Boolean {
         return Pattern.compile(regex).matcher(data).matches()
     }
 
-    fun checkEMail(data: String) : Boolean {
+    fun checkEMail(data: String): Boolean {
         val regex = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$"
         return checkValid(data, regex)
     }
 
-    fun checkMobile(data: String) : Boolean {
+    fun checkMobile(data: String): Boolean {
         val regex = "\\d{3}-\\d{3,4}-\\d{4}"
         return checkValid(data, regex)
     }
 
-    fun checkTelnum(data: String) : Boolean {
+    fun checkTelnum(data: String): Boolean {
         val regex = "\\d{2,3}-\\d{3,4}-\\d{4}"
         return checkValid(data, regex)
     }
 
-    fun checkPassword(data: String) : Boolean {
+    fun checkPassword(data: String): Boolean {
         val regex = "^.*(?=^.{8,30}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$"
         return checkValid(data, regex)
     }
 
-    fun checkHangle(data: String) : Boolean {
+    fun checkHangle(data: String): Boolean {
         val regex = "^[가-힣]*$"
         return checkValid(data, regex)
     }
 
-    fun checkEnglish(data: String) : Boolean {
+    fun checkEnglish(data: String): Boolean {
         val regex = "^[a-zA-Z]*$"
         return checkValid(data, regex)
     }
 
-    fun checkNumber(data: String) : Boolean {
+    fun checkNumber(data: String): Boolean {
         val regex = "^[0-9]*$"
         return checkValid(data, regex)
     }
 
-    fun getCookie(key: String, request: HttpServletRequest) : String {
-        if(request.cookies != null) {
+    fun getCookie(key: String, request: HttpServletRequest): String {
+        if (request.cookies != null) {
             for (field in request.cookies) {
                 if (field.name == key) {
                     return field.value
@@ -92,14 +92,33 @@ object Etc {
 
     fun setCookie(key: String, value: String?, response: HttpServletResponse, day: Int? = -1) {
         val cookie = Cookie(key, value)
-        if(day != null && day > 0) {
+        if (day != null && day > 0) {
             cookie.maxAge = day * 24 * 60 * 60
         }
         cookie.path = "/"
         response.addCookie(cookie)
     }
 
-    fun random(start:Int, end: Int) : Int {
+    fun random(start: Int, end: Int): Int {
         return (start until end).random()
+    }
+
+    fun setTelnum(value: String): String {
+        var rtnvalue = value.replace("-", "")
+
+        rtnvalue = when (rtnvalue.length) {
+            7 -> rtnvalue.substring(0, 2) + "-" + rtnvalue.substring(3, 6)
+            8 -> rtnvalue.substring(0, 3) + "-" + rtnvalue.substring(4, 7)
+            9 -> rtnvalue.substring(0, 1) + "-" + rtnvalue.substring(2, 4) + "-" + rtnvalue.substring(5, 8)
+            10 -> if (rtnvalue.take(2) == "02") {
+                rtnvalue.substring(0, 1) + "-" + rtnvalue.substring(2, 5) + "-" + rtnvalue.substring(6, 9)
+            } else {
+                rtnvalue.substring(0, 2) + "-" + rtnvalue.substring(3, 5) + "-" + rtnvalue.substring(6, 9)
+            }
+            11 -> rtnvalue.substring(0, 2) + "-" + rtnvalue.substring(3, 6) + "-" + rtnvalue.substring(7, 10)
+            else -> value
+        }
+
+        return rtnvalue
     }
 }

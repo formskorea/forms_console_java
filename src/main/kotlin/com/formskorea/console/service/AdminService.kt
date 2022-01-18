@@ -105,4 +105,12 @@ class AdminService {
     fun getMWorkInfo(data: WorkInfo): ArrayList<WorkInfo>? {
         return adminMapper.getMWorkInfo(data)
     }
+
+    fun getMCompanyCount(data: Search): Int? {
+        return adminMapper.getMCompanyCount(data)
+    }
+
+    fun getMCompany(data: Search): ArrayList<Company>? {
+        return adminMapper.getMCompany(data)
+    }
 }

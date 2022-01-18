@@ -76,6 +76,39 @@
                                        id="inf_pass2" placeholder="비밀번호를 다시 입력해주세요.">
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <label for="inf_status1" class="col-md-2 col-form-label">상태</label>
+                            <div class="col-md-10">
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inf_status"
+                                           id="inf_status1" value="0" checked>
+                                    <label class="form-check-label" for="inf_status1">
+                                        대기
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inf_status"
+                                           id="inf_status2" value="1">
+                                    <label class="form-check-label" for="inf_status2">
+                                        정상
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inf_status"
+                                           id="inf_status3" value="5">
+                                    <label class="form-check-label" for="inf_status3">
+                                        탈퇴
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inf_status"
+                                           id="inf_status4" value="9">
+                                    <label class="form-check-label" for="inf_status4">
+                                        차단
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card">
@@ -189,8 +222,7 @@
 </main>
 <!-- End #main -->
 <jsp:include page="inc_footer.jsp"/>
-<jsp:include page="inc_searchclient.jsp"/>
-<jsp:include page="inc_searchinf.jsp"/>
+<jsp:include page="inc_searchcompany.jsp"/>
 <jsp:include page="inc_bottom.jsp">
     <jsp:param name="scripts" value="${arrScript}"/>
 </jsp:include>
