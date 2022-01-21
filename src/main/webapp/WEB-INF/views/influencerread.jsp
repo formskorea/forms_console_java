@@ -9,6 +9,10 @@
     User userinfo = (User) request.getAttribute("fmcuser");
     User influencer = (User) request.getAttribute("influencer");
 
+    String keyword = (String) request.getAttribute("keyword");
+    String ppage = (String) request.getAttribute("page");
+    String status = (String) request.getAttribute("status");
+
     String infStatus = "대기";
     switch (influencer.getIntStatus()) {
         case DefaultConfig.MEMBER_OK:
@@ -27,14 +31,22 @@
     Urls[2] = "";
     Urls[3] = "";
     Urls[4] = "";
-    
-//
-//    for (int i = 0; i < influencer.getMedia().size(); i++) {
-//        Media field = influencer.getMedia().get(i);
-//        if (field.getStrURL() != null && !field.getStrURL().isBlank()) {
-//            Urls[field.getIntType()] = field.getStrURL();
-//        }
-//    }
+
+    if (influencer.getMedia() != null && influencer.getMedia().size() > 0) {
+        for (int i = 0; i < influencer.getMedia().size(); i++) {
+            Media field = influencer.getMedia().get(i);
+            if (field.getStrURL() != null && !field.getStrURL().isBlank()) {
+                Urls[field.getIntType()] = field.getStrURL();
+            }
+        }
+    }
+
+    String tagsv = "";
+    if(influencer.getTags() != null && influencer.getTags().size() > 0) {
+        for (int i = 0; i < influencer.getTags().size(); i++) {
+            tagsv += (i > 0 ? ", " : "") + "#" + influencer.getTags().get(i).getStrTag();
+        }
+    }
 
 %>
 <jsp:include page="inc_header.jsp">
@@ -83,6 +95,12 @@
                         </div>
                     </div>
                     <div class="row mb-3">
+                        <label class="col-md-2 col-form-label">관련 키워드</label>
+                        <div class="col-md-10">
+                            <%=tagsv%>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
                         <label class="col-md-2 col-form-label">상태</label>
                         <div class="col-md-10">
                             <%=infStatus%>
@@ -90,6 +108,7 @@
                     </div>
                 </div>
             </div>
+            <% if (!Urls[1].isBlank() || !Urls[2].isBlank() || !Urls[3].isBlank() || !Urls[4].isBlank()) { %>
             <div class="card">
                 <h5 class="card-title"><strong>매체정보</strong></h5>
                 <div class="card-body">
@@ -127,6 +146,7 @@
                     <% } %>
                 </div>
             </div>
+            <% } %>
             <% if (influencer.getCompany() != null) { %>
             <div class="card">
                 <h5 class="card-title"><strong>소속사 정보</strong></h5>
@@ -143,29 +163,33 @@
                     </div>
                     <div class="row mb-3 inf_comapy_checked">
                         <label class="col-md-2 col-form-label">주소</label>
-                        <div class="col-md-12">
-                            (<%=influencer.getCompany().getStrZipcode()%>) <%=influencer.getCompany().getStrAddress().replace("|", " ")%>
+                        <div class="col-md-10">
+                            (<%=influencer.getCompany().getStrZipcode()%>
+                            ) <%=influencer.getCompany().getStrAddress().replace("|", " ")%>
                         </div>
                     </div>
                     <div class="row mb-3 inf_comapy_checked">
                         <label class="col-md-2 col-form-label">사업자 등록번호</label>
                         <div class="col-md-4">
-                           <%=influencer.getCompany().getStrCompanynum()%>
+                            <%=(influencer.getCompany().getStrCompanynum() == null ? "없음" : influencer.getCompany().getStrCompanynum())%>
                         </div>
                     </div>
                 </div>
             </div>
             <% } %>
-            <div class="row mb-3 align-center">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                    <button class="btn-lg btn-primary w-100" type="button" id="inf_editgo"><i class="bx bx-user-plus"></i> 인플루언서 수정하기</button>
-                </div>
-                <div class="col-md-3"></div>
+            <div class="mb-3 align-center text-center">
+                <button class="btn-lg btn-primary" type="button" id="inf_editgo"><i class="bx bx-user-plus"></i> 인플루언서 수정하기</button>
+                <button class="btn-lg btn-outline-primary ms-3" type="button" id="inf_listgo">목록으로</button>
             </div>
         </div>
     </section>
 </main>
+<script>
+    var keyword = "<%=keyword%>";
+    var page = "<%=ppage%>";
+    var status = "<%=status%>";
+    var infno = "<%=influencer.getIntSeq()%>";
+</script>
 <!-- End #main -->
 <jsp:include page="inc_footer.jsp"/>
 <jsp:include page="inc_searchcompany.jsp"/>

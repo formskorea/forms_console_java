@@ -106,16 +106,18 @@ object Etc {
     fun setTelnum(value: String): String {
         var rtnvalue = value.replace("-", "")
 
+        log.error("rtnvalue : " + rtnvalue + " :: ${rtnvalue.length}")
+
         rtnvalue = when (rtnvalue.length) {
-            7 -> rtnvalue.substring(0, 2) + "-" + rtnvalue.substring(3, 6)
-            8 -> rtnvalue.substring(0, 3) + "-" + rtnvalue.substring(4, 7)
-            9 -> rtnvalue.substring(0, 1) + "-" + rtnvalue.substring(2, 4) + "-" + rtnvalue.substring(5, 8)
+            7 -> rtnvalue.substring(0, 3) + "-" + rtnvalue.substring(3, 7)
+            8 -> rtnvalue.substring(0, 4) + "-" + rtnvalue.substring(4, 8)
+            9 -> rtnvalue.substring(0, 2) + "-" + rtnvalue.substring(2, 5) + "-" + rtnvalue.substring(5, 9)
             10 -> if (rtnvalue.take(2) == "02") {
-                rtnvalue.substring(0, 1) + "-" + rtnvalue.substring(2, 5) + "-" + rtnvalue.substring(6, 9)
+                rtnvalue.substring(0, 2) + "-" + rtnvalue.substring(2, 6) + "-" + rtnvalue.substring(6, 10)
             } else {
-                rtnvalue.substring(0, 2) + "-" + rtnvalue.substring(3, 5) + "-" + rtnvalue.substring(6, 9)
+                rtnvalue.substring(0, 3) + "-" + rtnvalue.substring(3, 6) + "-" + rtnvalue.substring(6, 10)
             }
-            11 -> rtnvalue.substring(0, 2) + "-" + rtnvalue.substring(3, 6) + "-" + rtnvalue.substring(7, 10)
+            11 -> rtnvalue.substring(0, 3) + "-" + rtnvalue.substring(3, 7) + "-" + rtnvalue.substring(7, 11)
             else -> value
         }
 

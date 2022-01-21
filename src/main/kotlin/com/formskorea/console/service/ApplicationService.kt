@@ -38,6 +38,12 @@ class ApplicationService {
         val media = Media()
         val info = userinfo(data)
 
+        media.intUserType = when(data.strMemberType) {
+            DefaultConfig.MEMBER_CLIENT -> 1
+            DefaultConfig.MEMBER_INFLUENCER -> 2
+            else -> 9
+        }
+
         if (info?.strNikname.isNullOrEmpty()) {
             info?.strNikname = info?.strName
         }
@@ -95,9 +101,11 @@ class ApplicationService {
 
         if(!data.media.isNullOrEmpty()) {
             for (field in data.media!!) {
-                field.intUserSeq = data.intSeq
-                field.intUserType = defMedia.intUserType
-                applicationMapper.setMedia(field)
+                if(!field.strURL.isNullOrEmpty()) {
+                    field.intUserSeq = data.intSeq
+                    field.intUserType = defMedia.intUserType
+                    applicationMapper.setMedia(field)
+                }
             }
         }
 
@@ -112,6 +120,8 @@ class ApplicationService {
             for (field in data.tags!!) {
                 field.intUserSeq = data.intSeq
                 field.intUserType = defMedia.intUserType
+                field.intType = defTag.intType
+
                 val result = applicationMapper.getTag(field)
                 if(result.isNullOrEmpty()) { //tag reg
                     applicationMapper.setTag(field)

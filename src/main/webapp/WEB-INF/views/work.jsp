@@ -43,6 +43,9 @@
                         <button type="button" id="search_status4" class="status btn btn-outline-primary" ss-data="5">
                             대기
                         </button>
+                        <button type="button" id="search_status5" class="status btn btn-outline-primary" ss-data="7">
+                            완료
+                        </button>
                     </div>
                 </div>
                 <div class="row col-md-6 mb-3">

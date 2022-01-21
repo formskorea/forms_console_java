@@ -1,8 +1,3 @@
-var isEmailCheck = false;
-var saveEmail = "";
-var isCompany = true;
-var infStatus = 0;
-
 var c_list_box = $("#com_item_box");
 var c_list_item = c_list_box.html();
 var c_loading_box = $("#com_loading_box");
@@ -12,7 +7,7 @@ var c_now_limit = 0;
 var c_now_length = 10;
 var c_now_page = 1;
 var c_fulllist = new Array();
-var c_selectlist = {};
+var isProcessing = false;
 
 c_list_box.html("");
 
@@ -88,7 +83,7 @@ function c_select() {
         if (c_list_box.find(".com_item_status").eq(i).find("input").is(":checked")) {
             c_selectlist = c_fulllist[i];
             $("#inf_company_name").val(field.comname);
-            $("#inf_compnay_tel").val(field.tel);
+            $("#inf_company_tel").val(field.tel);
             $("#inf_company_zipcode").val(field.zip);
             var address = field.address.split("|");
             $("#inf_company_address1").val((address[0] == undefined || address[0] == "") ? "" : address[0]);
@@ -103,6 +98,8 @@ function c_select() {
 }
 
 $(document).ready(function () {
+    var tagify = $('[name=hashtag]').tagify();
+
     $("#inf_email_check").click(function () {
         var email = $("#inf_email").val();
 
@@ -201,6 +198,14 @@ $(document).ready(function () {
         c_loadData();
     });
 
+    $("#inf_readgo").click(function(event){
+        location.href  = "/influencer/read/" + infno + "?keyword=" + keyword + "&page=" + page + "&status=" + status;
+    });
+
+    $("#inf_listgo").click(function(event){
+        location.href = "/influencer/list?keyword=" + keyword + "&page=" + page + "&status=" + status;
+    });
+
     $("#form_influencer").submit(function(event){
         event.preventDefault();
 
@@ -217,12 +222,13 @@ $(document).ready(function () {
         var media4 = $("#inf_media4").val();
 
         var corpname = $("#inf_company_name").val();
-        var corptel = $("#inf_compnay_tel").val();
+        var corptel = $("#inf_company_tel").val();
         var corpzipcode = $("#inf_company_zipcode").val();
         var corpaddr1 = $("#inf_company_address1").val();
         var corpaddr2 = $("#inf_company_address2").val();
         var corpnum = $("#inf_company_number").val();
 
+        var nowtags = "";
         var company = {};
 
         if(name == "") {
@@ -237,7 +243,7 @@ $(document).ready(function () {
         } else if(!isEmailCheck) {
             showModal("이메일 중복을 확인해주세요.");
             isError = true;
-        } else if(password1 == "" || password2 == "") {
+        } else if((password1 == "" || password2 == "") && !isEdit) {
             showModal("비밀번호를 입력해주세요.");
             isError = true;
         } else if(password1 != password2) {
@@ -245,6 +251,12 @@ $(document).ready(function () {
             isError = true;
         } else {
             var pwcheck = checkPass(password1);
+
+            if(isEdit && password1 == "" && password2 == "") {
+                pwcheck.error = false;
+                pwcheck.message = "";
+            }
+
             if(pwcheck.error) {
                 showModal(pwcheck.message);
                 isError = true;
@@ -271,18 +283,43 @@ $(document).ready(function () {
 
         if(!isError) {
             var tojson = {'mtype': 'influencer', 'email': email, 'pass': password1, 'pass2': password2, 'name' : name, 'nik': nik, 'mobile' : mobile, 'status': infStatus };
+
             tojson.company = company;
             tojson.media = [{'type': 1, 'url': media1}, {'type': 2, 'url': media2}, {'type': 3, 'url': media3}, {'type': 4, 'url': media4}];
 
+            var url = '/api/influencer/add';
+
+            if(isEdit) {
+                url = '/api/influencer/edit';
+                tojson.seq = infno;
+                if(c_selectlist.seq != undefined && c_selectlist.seq != null) {
+                    tojson.comseq = c_selectlist.seq;
+                }
+            }
+
+            if (tagify.val()) {
+                var tdata = eval(tagify.val());
+                var tags = new Array();
+                for (key in tdata) {
+                    tags.push({'tag': tdata[key].value});
+                    nowtags += (nowtags != "" ? ", " : "") + "#" + tdata[key].value;
+                }
+                tojson.tags = tags;
+            }
+
             $.ajax({
-                url: '/api/join',
+                url: url,
                 type: 'POST',
                 data: JSON.stringify(tojson),
                 headers: {'Content-Type': 'application/json'},
             }).then((data, textStatus, jqXHR) => {
                 console.log(data);
                 if(data.status == 200) {
-                    location.href = "/influencer/list?status=" + infStatus;
+                    if(isEdit) {
+                        location.href = "/influencer/read/" + infno + "?status=" + infStatus + "&page=1&keyword=";
+                    } else {
+                        location.href = "/influencer/list?status=" + infStatus;
+                    }
                 } else {
                     showModal(data.message);
                 }

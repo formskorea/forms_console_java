@@ -103,6 +103,11 @@ function loadData() {
                     list_box.find(".item_companyname").eq(i).html(field.company.comname);
                     list_box.find(".item_companytel").eq(i).html(field.company.tel);
                     list_box.find(".item_companyaddr").eq(i).html("(" + field.company.zip + ") " + field.company.address.replace("|", " "));
+
+                    list_box.find(".item_readgo").eq(i).attr("rdata", field.seq);
+                    list_box.find(".item_readgo").eq(i).click(function (e) {
+                        location.href = "/client/read/" + $(this).attr("rdata") + "?keyword=" + $("#search_text").val() + "&page=" + now_page + "&status=" + list_status;
+                    });
                 }
 
                 paging(data.result.max_page);
@@ -153,6 +158,19 @@ $(document).ready(function () {
     $("#search_button").click(function (e) {
         loadData();
     });
+
+    $("#inf_addgo").click(function(event){
+        location.href = "/client/add";
+    });
+
+    if(keyword != "") {
+        $("#inf_search_text").val(keyword);
+    }
+
+    if(page > 1) {
+        now_page = page;
+        now_limit = (page - 1) * now_length;
+    }
 
     loadData();
 });

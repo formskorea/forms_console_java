@@ -5,6 +5,9 @@
     List<String> arrScript = (List<String>) request.getAttribute("scripts");
     List<String> arrCss = (List<String>) request.getAttribute("styles");
     User userinfo = (User) request.getAttribute("fmcuser");
+
+
+    Integer infStatus = 0;
 %>
 <jsp:include page="inc_header.jsp">
     <jsp:param name="styles" value="${arrCss}"/>
@@ -83,6 +86,46 @@
                         </div>
                         <div class="row mb-3">
                             <div class="quill-editor-full" style="min-height: 200px;">협업 내용을 입력해 주세요.</div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="work_status1" class="col-md-2 col-form-label">상태</label>
+                            <div class="col-md-10">
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="work_status"
+                                           id="work_status1" value="0" <%=(infStatus == 0 ? "checked" : "")%>>
+                                    <label class="form-check-label" for="work_status1">
+                                        모집
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="work_status"
+                                           id="work_status2" value="1" <%=(infStatus == 1 ? "checked" : "")%>>
+                                    <label class="form-check-label" for="work_status2">
+                                        진행
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="work_status"
+                                           id="work_status3" value="5" <%=(infStatus == 5 ? "checked" : "")%>>
+                                    <label class="form-check-label" for="work_status3">
+                                        대기
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="work_status"
+                                           id="work_status4" value="7" <%=(infStatus == 7 ? "checked" : "")%>>
+                                    <label class="form-check-label" for="work_status3">
+                                        완료
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="work_status"
+                                           id="work_status5" value="9" <%=(infStatus == 9 ? "checked" : "")%>>
+                                    <label class="form-check-label" for="work_status4">
+                                        취소
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -35,6 +35,10 @@ class InfluencerController {
         val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
         var isLogin = false
 
+        val keyword = request.getParameter("keyword")
+        val page = request.getParameter("page")
+        val status = request.getParameter("status")
+
         if (token != "") {
             try {
                 var userinfo = Token.get(token, DefaultConfig.TOKEN_EXPDAY)
@@ -48,6 +52,10 @@ class InfluencerController {
                         isLogin = true
                         userinfo2.strMemberType = userinfo.strMemberType
                         model.addAttribute("fmcuser", userinfo2)
+
+                        model.addAttribute("keyword", keyword)
+                        model.addAttribute("page", page)
+                        model.addAttribute("status", status)
                     }
                 }
             } catch (e: Exception) {
@@ -89,6 +97,7 @@ class InfluencerController {
                         isLogin = true
                         userinfo2.strMemberType = userinfo.strMemberType
                         model.addAttribute("fmcuser", userinfo2)
+                        model.addAttribute("influencer", User())
                     }
                 }
             } catch (e: Exception) {
@@ -102,11 +111,13 @@ class InfluencerController {
 
         val scripts = ArrayList<String>()
         scripts.add("//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js")
+        scripts.add("/js/tagify.min.js")
         scripts.add("/js/influenceradd.js")
         model.addAttribute("scripts", scripts)
 
         val styles = ArrayList<String>()
         styles.add("/css/loading.css")
+        styles.add("/css/tagify.css")
         model.addAttribute("styles", styles)
 
         return "influenceradd"
@@ -117,6 +128,10 @@ class InfluencerController {
     fun read(model: Model, @PathVariable infseq: Int, response: HttpServletResponse, request: HttpServletRequest): Any {
         val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
         var isLogin = false
+
+        val keyword = request.getParameter("keyword")
+        val page = request.getParameter("page")
+        val status = request.getParameter("status")
 
         if (token != "") {
             try {
@@ -136,9 +151,12 @@ class InfluencerController {
                         user.intSeq = infseq
                         user.strMemberType = DefaultConfig.MEMBER_INFLUENCER
 
-                        val result = applicationService.userinfo(user)
+                        val result = applicationService.info(user)
 
                         model.addAttribute("influencer", result)
+                        model.addAttribute("keyword", keyword)
+                        model.addAttribute("page", page)
+                        model.addAttribute("status", status)
                     }
                 }
             } catch (e: Exception) {
@@ -159,6 +177,65 @@ class InfluencerController {
         model.addAttribute("styles", styles)
 
         return "influencerread"
+    }
+
+    @RequestMapping(value = ["/edit/{infseq}"], method = [RequestMethod.GET, RequestMethod.POST])
+    @Throws(Exception::class)
+    fun edit(model: Model, @PathVariable infseq: Int, response: HttpServletResponse, request: HttpServletRequest): Any {
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
+        var isLogin = false
+
+        val keyword = request.getParameter("keyword")
+        val page = request.getParameter("page")
+        val status = request.getParameter("status")
+
+        if (token != "") {
+            try {
+                var userinfo = Token.get(token, DefaultConfig.TOKEN_EXPDAY)
+
+                log.error(userinfo.toString())
+
+                if (userinfo != null) {
+                    val userinfo2 = applicationService.info(userinfo)
+                    log.error(userinfo.toString())
+                    if (userinfo2?.intStatus == DefaultConfig.MEMBER_OK || userinfo2?.intStatus == DefaultConfig.MEMBER_JOIN) {
+                        isLogin = true
+                        userinfo2.strMemberType = userinfo.strMemberType
+                        model.addAttribute("fmcuser", userinfo2)
+
+                        val user = User()
+                        user.intSeq = infseq
+                        user.strMemberType = DefaultConfig.MEMBER_INFLUENCER
+
+                        val result = applicationService.info(user)
+
+                        model.addAttribute("influencer", result)
+                        model.addAttribute("keyword", keyword)
+                        model.addAttribute("page", page)
+                        model.addAttribute("status", status)
+                    }
+                }
+            } catch (e: Exception) {
+                log.error(e.message)
+            }
+        }
+
+        if (!isLogin) {
+            return RedirectView("/login")
+        }
+
+        val scripts = ArrayList<String>()
+        scripts.add("//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js")
+        scripts.add("/js/tagify.min.js")
+        scripts.add("/js/influenceradd.js")
+        model.addAttribute("scripts", scripts)
+
+        val styles = ArrayList<String>()
+        styles.add("/css/tagify.css")
+        styles.add("/css/loading.css")
+        model.addAttribute("styles", styles)
+
+        return "influenceradd"
     }
 
 }

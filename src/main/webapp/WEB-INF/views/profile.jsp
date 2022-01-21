@@ -195,7 +195,7 @@
                                 } %>
                                 <% if (!userinfo.getStrMemberType().equals(DefaultConfig.MEMBER_ADMIN)) { %>
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">해시태그</div>
+                                    <div class="col-lg-3 col-md-4 label ">관련 키워드</div>
                                     <div class="col-lg-9 col-md-8" id="view_tags"><%=(!userinfo.getStrMemberType().equals(DefaultConfig.MEMBER_ADMIN) && !tags.equals("") ? tags : "없음")%>
                                     </div>
                                 </div>

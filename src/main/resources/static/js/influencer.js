@@ -196,5 +196,14 @@ $(document).ready(function () {
         location.href = "/influencer/add";
     });
 
+    if(keyword != "") {
+        $("#inf_search_text").val(keyword);
+    }
+
+    if(page > 1) {
+        now_page = page;
+        now_limit = (page - 1) * now_length;
+    }
+
     loadData();
 });

@@ -5,6 +5,10 @@
     List<String> arrScript = (List<String>) request.getAttribute("scripts");
     List<String> arrCss = (List<String>) request.getAttribute("styles");
     User userinfo = (User) request.getAttribute("fmcuser");
+
+    String keyword = (String) request.getAttribute("keyword");
+    String ppage = (String) request.getAttribute("page");
+    String status = (String) request.getAttribute("status");
 %>
 <jsp:include page="inc_header.jsp">
     <jsp:param name="styles" value="${arrCss}"/>
@@ -26,7 +30,10 @@
     </div><!-- End Page Title -->
 
     <section class="section">
-        <div class="card mt-5 mb-3" id="search_box">
+        <div class="text-end mt-3 mb-3">
+            <button class="btn btn-primary" id="inf_addgo"><i class="bx bx-add-to-queue"></i> 새로등록</button>
+        </div>
+        <div class="card mb-3" id="search_box">
             <div class="card-body mt-3 row pt-3">
                 <div class="row col-md-4 mb-3">
                     <div class="btn-group" role="group" aria-label="상태">
@@ -69,6 +76,13 @@
                                 <span class="item_companytel col-md-3 card-title text-secondary pt-md-0 text-center text-1em">010-0000-0000</span>
                                 <span class="item_companyaddr col-md-6 card-title text-secondary pt-md-0 text-center text-1em">주소주소</span>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12 text-end">
+                                    <button class="btn btn-outline-primary item_readgo align-center"><i
+                                            class="ri-information-line"></i> 상세보기
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -87,8 +101,12 @@
 
         </nav>
     </section>
-
 </main>
+<script>
+    var keyword = "<%=keyword%>";
+    var page = "<%=ppage%>";
+    var status = "<%=status%>";
+</script>
 <!-- End #main -->
 <jsp:include page="inc_footer.jsp"/>
 <jsp:include page="inc_bottom.jsp">
