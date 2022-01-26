@@ -392,6 +392,12 @@
         <if test="intClientSeq != null and intClientSeq != 0">
             AND intClientSeq = #{intClientSeq}
         </if>
+        <if test="intMediaType != null and intMediaType != 0">
+            AND intMediaType = #{intMediaType}
+        </if>
+        <if test="intStatus != null and intStatus != 0">
+            AND intStatus = #{intStatus}
+        </if>
         ORDER BY intSeq ASC;
     </select>
 

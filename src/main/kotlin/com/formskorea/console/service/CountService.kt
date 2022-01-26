@@ -1,8 +1,6 @@
 package com.formskorea.console.service
 
-import com.formskorea.console.data.model.CountUsers
-import com.formskorea.console.data.model.CountWork
-import com.formskorea.console.data.model.Search
+import com.formskorea.console.data.model.*
 import com.formskorea.console.mapper.console.AdminMapper
 import com.formskorea.console.mapper.log.WorkCountMapper
 import com.formskorea.console.util.Etc
@@ -75,6 +73,10 @@ class CountService {
         return nowcount
     }
 
+    fun setCountWork(data: CountWork) : Boolean {
+        return workCountMapper.setWorkCount(data)
+    }
+
     fun getCountUsers(search: Search): ArrayList<CountUsers> {
         var rtnValue = ArrayList<CountUsers>()
 
@@ -122,6 +124,25 @@ class CountService {
         nowcount.intClient = adminMapper.getMClientCount(nowsearch)
 
         return nowcount
+    }
+
+    fun setUserWork(data: CountUsers) : Boolean {
+        return workCountMapper.setUserCount(data)
+    }
+
+    fun setHistory(data: History) : Boolean {
+        return workCountMapper.setHistory(data)
+    }
+
+    fun getHistory(data: History) : ArrayList<History> {
+        return workCountMapper.getHistory(data)
+    }
+
+    fun createWorkLog(data: Work) : Boolean {
+        val result1 = workCountMapper.createWorkLog(data)
+        val result2 = workCountMapper.createWorkIdx(data)
+        val result3 = workCountMapper.createWorkIdx2(data)
+        return result1 && result2 && result3
     }
 
 }

@@ -18,7 +18,6 @@ var i_now_limit = 0;
 var i_now_length = 10;
 var i_now_page = 1;
 var i_fulllist = new Array();
-var i_selectlist = new Array();
 var work_influencer_list = $("#work_influencer_list");
 var work_influencer_item = work_influencer_list.html();
 var i_work_totalprice = 0;
@@ -225,87 +224,83 @@ function i_selectlistmake() {
                 if (!fiedlsub.checked) {
                     fiedlsub.checked = false;
                 }
+                if (!fiedlsub.iurl) {
+                    fiedlsub.iurl = "";
+                }
+                if (!fiedlsub.cstatus) {
+                    fiedlsub.cstatus = 0;
+                }
+                if (!fiedlsub.istatus) {
+                    fiedlsub.istatus = 0;
+                }
+
+                var infbox = null;
 
                 switch (fiedlsub.type) {
                     case 1 :
-                        work_influencer_list.find(".inf_item_instagram_box").eq(i).find("a.inf_item_media_link").attr("src", fiedlsub.url);
-                        work_influencer_list.find(".inf_item_instagram_box").eq(i).find("span.inf_item_media_link").html(fiedlsub.url);
-                        work_influencer_list.find(".inf_item_instagram_box").eq(i).removeClass("d-none");
-                        work_influencer_list.find(".inf_item_instagram_box").eq(i).find(".work_item_select input").attr("id", "inf_item_select1_" + field.seq);
-                        work_influencer_list.find(".inf_item_instagram_box").eq(i).find(".work_item_select label").attr("for", "inf_item_select1_" + field.seq);
-                        work_influencer_list.find(".inf_item_instagram_box").eq(i).find(".work_item_price").attr("wdata", String(i) + "_" + String(j));
-                        work_influencer_list.find(".inf_item_instagram_box").eq(i).find(".work_item_price").bind('keyup keydown', function (e) {
-                            $(this).val(comma($(this).val()));
-                            var location = $(this).attr("wdata").split("_");
-                            i_selectlist[location[0] *= 1].media[location[1] *= 1].price = uncomma($(this).val());
-                            i_totalprice();
-                        });
-                        if (fiedlsub.price) {
-                            work_influencer_list.find(".inf_item_instagram_box").eq(i).find(".work_item_price").val(comma(fiedlsub.price));
-                        }
-                        work_influencer_list.find(".inf_item_instagram_box").eq(i).find(".work_item_select input").attr("wdata", String(i) + "_" + String(j));
-                        work_influencer_list.find(".inf_item_instagram_box").eq(i).find(".work_item_select input").click(function (e) {
-                            var location = $(this).attr("wdata").split("_");
-                            i_selectlist[location[0] *= 1].media[location[1] *= 1].checked = $(this).is(":checked");
-                            i_totalprice();
-                        });
-                        if (fiedlsub.checked) {
-                            work_influencer_list.find(".inf_item_instagram_box").eq(i).find(".work_item_select input").attr("checked", true);
-                        }
-
+                        infbox = work_influencer_list.find(".inf_item_instagram_box");
                         break;
                     case 2 :
-                        work_influencer_list.find(".inf_item_youtube_box").eq(i).find("a.inf_item_media_link").attr("src", fiedlsub.url);
-                        work_influencer_list.find(".inf_item_youtube_box").eq(i).find("span.inf_item_media_link").html(fiedlsub.url);
-                        work_influencer_list.find(".inf_item_youtube_box").eq(i).removeClass("d-none");
-                        work_influencer_list.find(".inf_item_youtube_box").eq(i).find(".work_item_select input").attr("id", "inf_item_select_2_" + field.seq);
-                        work_influencer_list.find(".inf_item_youtube_box").eq(i).find(".work_item_select label").attr("for", "inf_item_select_2_" + field.seq);
-                        work_influencer_list.find(".inf_item_youtube_box").eq(i).find(".work_item_price").attr("wdata", String(i) + "_" + String(j));
-                        work_influencer_list.find(".inf_item_youtube_box").eq(i).find(".work_item_price").bind('keyup keydown', function (e) {
-                            $(this).val(comma($(this).val()));
-                            var location = $(this).attr("wdata").split("_");
-                            i_selectlist[location[0] *= 1].media[location[1] *= 1].price = uncomma($(this).val());
-                            i_totalprice();
-                        });
-                        if (fiedlsub.price) {
-                            work_influencer_list.find(".inf_item_youtube_box").eq(i).find(".work_item_price").val(comma(fiedlsub.price));
-                        }
-                        work_influencer_list.find(".inf_item_youtube_box").eq(i).find(".work_item_select input").attr("wdata", String(i) + "_" + String(j));
-                        work_influencer_list.find(".inf_item_youtube_box").eq(i).find(".work_item_select input").click(function (e) {
-                            var location = $(this).attr("wdata").split("_");
-                            i_selectlist[location[0] *= 1].media[location[1] *= 1].checked = $(this).is(":checked");
-                            i_totalprice();
-                        });
-                        if (fiedlsub.checked) {
-                            work_influencer_list.find(".inf_item_youtube_box").eq(i).find(".work_item_select input").attr("checked", true);
-                        }
+                        infbox = work_influencer_list.find(".inf_item_youtube_box");
                         break;
                     case 3 :
-                        work_influencer_list.find(".inf_item_blog_box").eq(i).find("a.inf_item_media_link").attr("src", fiedlsub.url);
-                        work_influencer_list.find(".inf_item_blog_box").eq(i).find("span.inf_item_media_link").html(fiedlsub.url);
-                        work_influencer_list.find(".inf_item_blog_box").eq(i).removeClass("d-none");
-                        work_influencer_list.find(".inf_item_blog_box").eq(i).find(".work_item_select input").attr("id", "inf_item_select_3_" + field.seq);
-                        work_influencer_list.find(".inf_item_blog_box").eq(i).find(".work_item_select label").attr("for", "inf_item_select_3_" + field.seq);
-                        work_influencer_list.find(".inf_item_blog_box").eq(i).find(".work_item_price").attr("wdata", String(i) + "_" + String(j));
-                        work_influencer_list.find(".inf_item_blog_box").eq(i).find(".work_item_price").bind('keyup keydown', function (e) {
-                            $(this).val(comma($(this).val()));
-                            var location = $(this).attr("wdata").split("_");
-                            i_selectlist[location[0] *= 1].media[location[1] *= 1].price = uncomma($(this).val());
-                            i_totalprice();
-                        });
-                        if (fiedlsub.price) {
-                            work_influencer_list.find(".inf_item_blog_box").eq(i).find(".work_item_price").val(comma(fiedlsub.price));
-                        }
-                        work_influencer_list.find(".inf_item_blog_box").eq(i).find(".work_item_select input").attr("wdata", String(i) + "_" + String(j));
-                        work_influencer_list.find(".inf_item_blog_box").eq(i).find(".work_item_select input").click(function (e) {
-                            var location = $(this).attr("wdata").split("_");
-                            i_selectlist[location[0] *= 1].media[location[1] *= 1].checked = $(this).is(":checked");
-                            i_totalprice();
-                        });
-                        if (fiedlsub.checked) {
-                            work_influencer_list.find(".inf_item_blog_box").eq(i).find(".work_item_select input").attr("checked", true);
-                        }
+                        infbox = work_influencer_list.find(".inf_item_blog_box");
                         break;
+                }
+                if (infbox != null) {
+                    infbox.eq(i).find("a.inf_item_media_link").attr("src", fiedlsub.url);
+                    infbox.eq(i).find("span.inf_item_media_link").html(fiedlsub.url);
+                    infbox.eq(i).removeClass("d-none");
+                    infbox.eq(i).find(".work_item_select input").attr("id", "inf_item_select_" + field.seq + "_" + fiedlsub.type);
+                    infbox.eq(i).find(".work_item_select label").attr("for", "inf_item_select_" + field.seq + "_" + fiedlsub.type);
+                    infbox.eq(i).find(".work_item_price").attr("wdata", String(i) + "_" + String(j));
+                    infbox.eq(i).find(".work_item_price").bind('keyup keydown', function (e) {
+                        $(this).val(comma($(this).val()));
+                        var location = $(this).attr("wdata").split("_");
+                        i_selectlist[location[0] *= 1].media[location[1] *= 1].price = uncomma($(this).val());
+                        i_totalprice();
+                    });
+                    if (fiedlsub.price) {
+                        infbox.eq(i).find(".work_item_price").val(comma(fiedlsub.price));
+                    }
+                    infbox.eq(i).find(".work_item_select input").attr("wdata", String(i) + "_" + String(j));
+                    infbox.eq(i).find(".work_item_select input").click(function (e) {
+                        var location = $(this).attr("wdata").split("_");
+                        i_selectlist[location[0] *= 1].media[location[1] *= 1].checked = $(this).is(":checked");
+                        i_totalprice();
+                    });
+                    if (fiedlsub.checked) {
+                        infbox.eq(i).find(".work_item_select input").attr("checked", true);
+                    }
+
+                    infbox.eq(i).find(".work_item_url").attr("wdata", String(i) + "_" + String(j));
+                    infbox.eq(i).find(".work_item_url").bind('keyup keydown', function (e) {
+                        var location = $(this).attr("wdata").split("_");
+                        i_selectlist[location[0] *= 1].media[location[1] *= 1].iurl = $(this).val();
+                    });
+                    if (fiedlsub.iurl) {
+                        infbox.eq(i).find(".work_item_url").val(fiedlsub.iurl);
+                    }
+
+                    infbox.eq(i).find(".work_item_cstatus").attr("wdata", String(i) + "_" + String(j));
+                    infbox.eq(i).find(".work_item_cstatus").change(function () {
+                        var location = $(this).attr("wdata").split("_");
+                        i_selectlist[location[0] *= 1].media[location[1] *= 1].cstatus = $(this).children("option:selected").val();
+                    });
+
+                    if (fiedlsub.cstatus) {
+                        infbox.eq(i).find(".work_item_cstatus").val(fiedlsub.cstatus.toString()).attr("selected", true);
+                    }
+
+                    infbox.eq(i).find(".work_item_istatus").attr("wdata", String(i) + "_" + String(j));
+                    infbox.eq(i).find(".work_item_istatus").change(function () {
+                        var location = $(this).attr("wdata").split("_");
+                        i_selectlist[location[0] *= 1].media[location[1] *= 1].istatus = $(this).children("option:selected").val();
+                    });
+
+                    if (fiedlsub.istatus) {
+                        infbox.eq(i).find(".work_item_istatus").val(fiedlsub.istatus.toString()).attr("selected", true);
+                    }
                 }
             }
         }
@@ -327,7 +322,6 @@ var c_now_limit = 0;
 var c_now_length = 10;
 var c_now_page = 1;
 var c_fulllist = new Array();
-var c_selectlist = {};
 
 c_list_box.html("");
 
@@ -449,7 +443,7 @@ $(document).ready(function ($) {
         i_loadData();
     });
 
-    $("#inf_item_selectgo").click(function () {
+    $("#inf_item_selectgo").click(function (e) {
         i_select();
     });
 
@@ -466,12 +460,25 @@ $(document).ready(function ($) {
         c_loadData();
     });
 
-    $("#cl_item_selectgo").click(function () {
+    $("#cl_item_selectgo").click(function (e) {
         c_select();
     });
 
-    $("#form_editinfo").submit(function (event) {
-        event.preventDefault();
+    $("input[name='work_status']").click(function(e) {
+        console.log("click :: " + $(this).val());
+        wostatus = $(this).val();
+    });
+
+    $("#work_listgo").click(function(e){
+        location.href = "/work/list?keyword=" + keyword + "&status=" + status + "&page=" + page;
+    });
+
+    $("#work_readgo").click(function(e){
+        location.href = "/work/read/" + workno + "?keyword=" + keyword + "&status=" + status + "&page=" + page;
+    });
+
+    $("#form_editinfo").submit(function (e) {
+        e.preventDefault();
 
         if (isProcessing) {
             showModal("처리중입니다.");
@@ -501,7 +508,8 @@ $(document).ready(function ($) {
                 "end": end,
                 "info": info,
                 "stype": stype,
-                "totalprice": i_work_totalprice
+                "totalprice": i_work_totalprice,
+                "status" : wostatus
             };
 
             if (tagify.val()) {
@@ -514,18 +522,28 @@ $(document).ready(function ($) {
                 tojson.tags = tags;
             }
 
-            if(c_selectlist.seq !== undefined) {
+            if (c_selectlist.seq !== undefined) {
                 tojson.cseq = c_selectlist.seq;
                 tojson.comseq = c_selectlist.comseq;
             }
 
             var infos = new Array();
 
-            if(i_selectlist.length > 0) {
-                for(var i = 0; i < i_selectlist.length; i++) {
-                    for(var j = 0; j < i_selectlist[i].media.length; j++) {
-                        if(i_selectlist[i].media[j].checked) {
-                            infos.push({"cseq" : tojson.cseq, "iseq": i_selectlist[i].seq, "mtype": i_selectlist[i].media[j].type, "mseq": i_selectlist[i].media[j].seq, "ustatus": 1, "cstatus": 5, "price": i_selectlist[i].media[j].price, "status": 1});
+            if (i_selectlist.length > 0) {
+                for (var i = 0; i < i_selectlist.length; i++) {
+                    for (var j = 0; j < i_selectlist[i].media.length; j++) {
+                        if (i_selectlist[i].media[j].checked) {
+                            infos.push({
+                                "cseq": tojson.cseq,
+                                "iseq": i_selectlist[i].seq,
+                                "mtype": i_selectlist[i].media[j].type,
+                                "mseq": i_selectlist[i].media[j].seq,
+                                "ustatus": i_selectlist[i].media[j].istatus,
+                                "cstatus": i_selectlist[i].media[j].cstatus,
+                                "price": i_selectlist[i].media[j].price,
+                                "iurl": i_selectlist[i].media[j].iurl,
+                                "status": 1
+                            });
                         }
                     }
                 }
@@ -535,41 +553,51 @@ $(document).ready(function ($) {
 
             var errstring = "";
 
-            if(title == "") {
+            if (title == "") {
                 errstring = "협업명을 입력해주세요.";
-            } else if(rstart == "" || rend == "") {
+            } else if (rstart == "" || rend == "") {
                 errstring = "모집기간을 입력해주세요.";
-            } else if(rstart > rend) {
+            } else if (rstart > rend) {
                 errstring = "모집기간 종료일이 시작일보다 적습니다.";
-            } else if(start == "" || end == "") {
+            } else if (start == "" || end == "") {
                 errstring = "진행기간을 입력해주세요.";
-            } else if(start > end) {
+            } else if (start > end) {
                 errstring = "진행기간 종료일이 시작일보다 적습니다.";
-            } else if(rend > start) {
+            } else if (rend > start) {
                 errstring = "진행기간이 모집기간보다 앞에 있습니다.";
-            } else if(tojson.tags === undefined || tojson.tags.length <= 0) {
+            } else if (tojson.tags === undefined || tojson.tags.length <= 0) {
                 errstring = "관련 키워드를 설정해 주세요.";
-            } else if(c_selectlist.seq === undefined) {
+            } else if (c_selectlist.seq === undefined) {
                 errstring = "담당자를 선택해 주세요.";
-            } else if(tojson.infos === undefined || tojson.infos.length <= 0 || i_work_totalprice == 0) {
+            } else if (tojson.infos === undefined || tojson.infos.length <= 0 || i_work_totalprice == 0) {
                 errstring = "인플루언서를 선택해주세요.";
             }
 
+            var wurl = "/api/work/add";
 
-            if(errstring != "") {
+            if(isEdit) {
+                wurl = "/api/work/edit";
+                tojson.seq = workno;
+            }
+
+            if (errstring != "") {
                 showModal(errstring);
             } else {
                 $.ajax({
-                    url: '/api/work/add',
+                    url: wurl,
                     type: 'POST',
                     data: JSON.stringify(tojson),
                     headers: {'Content-Type': 'application/json'},
                 }).then((data, textStatus, jqXHR) => {
-                    if(data.status == 200) {
-                        showConfilm("협업이 저장되었습니다.<br />협업내용을 확인하시겠습니까?", function() {
-                            location.href = "/work/info/" + data.result;
+                    if (data.status == 200) {
+                        showConfilm("협업이 " + (isEdit ? "수정" : "저장") + " 되었습니다.<br />협업내용을 확인하시겠습니까?", function () {
+                            if(isEdit) {
+                                location.href = "/work/read/" + workno + "?keyword=" + keyword + "&status=" + status + "&page=" + page;
+                            } else {
+                                location.href = "/work/read/" + data.result + "?keyword=" + keyword + "&status=" + status + "&page=" + page;
+                            }
                         }, function () {
-                            location.href = "/work/list";
+                            location.href = "/work/list?keyword=" + keyword + "&status=" + status + "&page=" + page;
                         })
                     } else {
                         showModal(data.message);
@@ -584,4 +612,8 @@ $(document).ready(function ($) {
         }
     });
 
+    if(isEdit) {
+        i_selectlistmake();
+        i_totalprice();
+    }
 });

@@ -145,6 +145,10 @@ class WorkController {
         var isLogin = false
         var isUse = false
 
+        val keyword = request.getParameter("keyword")
+        val page = request.getParameter("page")
+        val status = request.getParameter("status")
+
         if (token != "") {
             try {
                 var userinfo = Token.get(token, DefaultConfig.TOKEN_EXPDAY)
@@ -185,6 +189,7 @@ class WorkController {
             work = result[0]
             val workInfo = WorkInfo()
             workInfo.intWorkSeq = work.intSeq
+            workInfo.intStatus = 1
             work.infos = adminService.getMWorkInfo(workInfo)
             if(!work.infos.isNullOrEmpty()) {
                 for (field in work.infos!!) {
@@ -208,6 +213,10 @@ class WorkController {
             val company = Company()
             company.intSeq = work.intCompanySeq
             work.company = applicationService.getCompany(company)
+
+            model.addAttribute("keyword", keyword)
+            model.addAttribute("page", page)
+            model.addAttribute("status", status)
         }
 
         if (!isLogin) {
@@ -226,6 +235,124 @@ class WorkController {
         model.addAttribute("work", work)
 
         return "workread"
+    }
+
+    @RequestMapping(value = ["/edit/{workseq}"], method = [RequestMethod.GET, RequestMethod.POST])
+    @Throws(Exception::class)
+    fun edit(model: Model, @PathVariable workseq: Int, response: HttpServletResponse, request: HttpServletRequest): Any {
+        val token = Etc.getCookie(DefaultConfig.TOKEN_ISSUER, request)
+        var isLogin = false
+        var isUse = false
+
+        val keyword = request.getParameter("keyword")
+        val page = request.getParameter("page")
+        val status = request.getParameter("status")
+
+        if (token != "") {
+            try {
+                var userinfo = Token.get(token, DefaultConfig.TOKEN_EXPDAY)
+
+                log.error(userinfo.toString())
+
+                if (userinfo != null) {
+                    val userinfo2 = applicationService.info(userinfo)
+                    log.error(userinfo.toString())
+                    if (userinfo2?.intStatus == DefaultConfig.MEMBER_OK || userinfo2?.intStatus == DefaultConfig.MEMBER_JOIN) {
+                        isLogin = true
+                        userinfo2.strMemberType = userinfo.strMemberType
+                        model.addAttribute("fmcuser", userinfo2)
+
+                        if (!userinfo2.txtPermission.isNullOrEmpty()) {
+                            val permJson = JSONObject(userinfo2.txtPermission)
+                            if(!permJson.isNull(DefaultConfig.PERM_WORK_READ) && permJson.getBoolean(DefaultConfig.PERM_WORK_READ)) {
+                                isUse = true
+                            }
+                        }
+                        if((userinfo.strMemberType == DefaultConfig.MEMBER_CLIENT || userinfo.strMemberType == DefaultConfig.MEMBER_ADMIN) && userinfo2.intSuper == 1) {
+                            isUse = true
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                log.error(e.message)
+            }
+        }
+
+        val search = Search()
+        search.seq = workseq
+        search.limit = 0
+        search.length = 1
+        val result = adminService.getMWork(search)
+        var work = Work()
+        if(!result.isNullOrEmpty()) {
+            work = result[0]
+            val workInfo = WorkInfo()
+            workInfo.intWorkSeq = work.intSeq
+            workInfo.intStatus = 1
+            work.infos = adminService.getMWorkInfo(workInfo)
+            if(!work.infos.isNullOrEmpty()) {
+                val arraySeq = ArrayList<Int>()
+                for (field in work.infos!!) {
+                    var isAddCheck = false
+                    for(field2 in arraySeq) {
+                        if(field2 == field.intInfSeq) {
+                            isAddCheck = true
+                            break
+                        }
+                    }
+                    if(!isAddCheck && field.intInfSeq != null) {
+                        arraySeq.add(field.intInfSeq!!)
+                    }
+                }
+
+                work.inflist = ArrayList()
+                for(field in arraySeq) {
+                    val user = User()
+                    user.intSeq = field
+                    user.strMemberType = DefaultConfig.MEMBER_INFLUENCER
+                    val userinfo = applicationService.info(user)
+                    if(userinfo != null) {
+                        work.inflist?.add(userinfo)
+                    }
+                }
+            }
+
+            val tag = Tag()
+            tag.intWorkSeq = workseq
+            work.tags = applicationService.getTags(tag)
+
+            search.seq = work.intClientSeq
+            val result2 = adminService.getMClientInfo(search)
+            if(!result2.isNullOrEmpty()) {
+                work.client = result2[0]
+            }
+            val company = Company()
+            company.intSeq = work.intCompanySeq
+            work.company = applicationService.getCompany(company)
+
+            model.addAttribute("keyword", keyword)
+            model.addAttribute("page", page)
+            model.addAttribute("status", status)
+        }
+
+        if (!isLogin) {
+            return RedirectView("/login")
+        }
+
+        val scripts = ArrayList<String>()
+        scripts.add("/js/tagify.min.js")
+        scripts.add("/js/workadd.js")
+        model.addAttribute("scripts", scripts)
+
+        val styles = ArrayList<String>()
+        styles.add("/css/loading.css")
+        styles.add("/css/tagify.css")
+        model.addAttribute("styles", styles)
+
+        model.addAttribute("workseq", workseq)
+        model.addAttribute("work", work)
+
+        return "workadd"
     }
 
 }

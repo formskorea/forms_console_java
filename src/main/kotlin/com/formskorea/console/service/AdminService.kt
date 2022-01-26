@@ -94,6 +94,66 @@ class AdminService {
         }
     }
 
+    fun editMWork(data: Work): Boolean? {
+        try {
+            adminMapper.editMWork(data)
+
+            //work info
+            val workInfo = WorkInfo()
+            workInfo.intWorkSeq = data.intSeq
+            workInfo.intStatus = 9
+
+            adminMapper.editMWorkInfo(workInfo)
+
+            if (!data.infos.isNullOrEmpty()) {
+                for(field in data.infos!!) {
+                    field.intWorkSeq = data.intSeq
+                    field.intClientSeq = data.intClientSeq
+
+                    val field2 = field
+                    field2.intStatus = null
+                    val result = getMWorkInfo(field2)
+
+                    if(!result.isNullOrEmpty()) {
+                        field.intSeq = result[0].intSeq
+                        field.intStatus = 1
+                        adminMapper.editMWorkInfo(field)
+                    } else {
+                        adminMapper.setMWorkInfo(field)
+                    }
+                }
+            }
+
+            //tag
+            val defTag = Tag()
+            defTag.intWorkSeq = data.intSeq
+            applicationMapper.delTagLink(defTag)
+
+            if (!data.tags.isNullOrEmpty()) {
+                for (field in data.tags!!) {
+                    field.intUserSeq = data.intClientSeq
+                    field.intUserType = 1
+                    defTag.intType = 5
+                    field.intWorkSeq = data.intSeq
+
+                    val result = applicationMapper.getTag(field)
+                    if (result.isNullOrEmpty()) { //tag reg
+                        applicationMapper.setTag(field)
+                        field.intTagSeq = field.intSeq
+                    } else {
+                        field.intTagSeq = result[0].intSeq
+                    }
+                    applicationMapper.setTagLink(field)
+                }
+            }
+
+            return true
+        } catch (e: Exception) {
+            log.error(e.message)
+            return false
+        }
+    }
+
     fun getMWork(data: Search): ArrayList<Work>? {
         return adminMapper.getMWork(data)
     }

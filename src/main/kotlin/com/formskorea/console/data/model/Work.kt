@@ -24,5 +24,6 @@ data class Work(
     var client: User? = null,
     var company: Company? = null,
     var tags: ArrayList<Tag>? = null,
-    var infos: ArrayList<WorkInfo>? = null
+    var infos: ArrayList<WorkInfo>? = null,
+    var inflist: ArrayList<User>? = null
 )

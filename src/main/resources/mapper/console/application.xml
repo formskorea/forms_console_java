@@ -472,6 +472,9 @@
         <if test="intTagSeq != null and intTagSeq != 0">
             AND intTagSeq = #{intTagSeq}
         </if>
+        <if test="intWorkSeq != null and intWorkSeq != 0">
+            AND intWorkSeq = #{intWorkSeq}
+        </if>
         <if test="intType != null and intType != 0">
             AND intType = #{intType}
         </if>;

@@ -84,4 +84,6 @@ object DefaultConfig {
     const val PERM_WORK_EDIT = "wedit"
     const val PERM_WORK_DEL = "wdel"
 
+
+    const val HISTORY_CODE_SYSTEM = 800
 }

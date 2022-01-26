@@ -9,7 +9,7 @@ data class WorkInfo(
     @SerializedName("iseq") var intInfSeq: Int? = null,
     @SerializedName("mtype") var intMediaType: Int? = null,
     @SerializedName("mseq") var intMediaSeq: Int? = null,
-    @SerializedName("url") var strURL: String? = null,
+    @SerializedName("iurl") var strURL: String? = null,
     @SerializedName("ustatus") var intUserStatus: Int? = null,
     @SerializedName("cstatus") var intClientStatus: Int? = null,
     @SerializedName("price") var intPrice: Int? = null,

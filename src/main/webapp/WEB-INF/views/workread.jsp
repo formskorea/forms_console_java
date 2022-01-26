@@ -12,6 +12,10 @@
     Integer workseq = (Integer) request.getAttribute("workseq");
     Work work = (Work) request.getAttribute("work");
 
+    String keyword = (String) request.getAttribute("keyword");
+    String ppage = (String) request.getAttribute("page");
+    String status = (String) request.getAttribute("status");
+
     Integer[] mediacount = new Integer[4];
     mediacount[0] = 0;
     mediacount[1] = 0;
@@ -29,7 +33,6 @@
     String day_span = "";
     String day_span1 = work.getDateReadystart() + " ~ " + work.getDateReadyend();
     String day_span2 = work.getDateStart() + " ~ " + work.getDateEnd();
-    String button_bottom = "<button class=\"btn btn-primary\" id=\"work_edit\"><i class=\"bi bi-file-earmark-code\"></i> 수정하기</button>";
 
     switch (work.getIntStatus()) {
         case 0:
@@ -38,6 +41,10 @@
             break;
         case 1:
             status_span = "<span class=\"badge bg-success text-light\">진행</span>";
+            day_span = day_span2;
+            break;
+        case 7:
+            status_span = "<span class=\"badge bg-warning text-light\">완료</span>";
             day_span = day_span2;
             break;
         case 5:
@@ -56,6 +63,11 @@
             Tag field = work.getTags().get(i);
             tags += (i != 0 ? ", " : "") + "#" + field.getStrTag();
         }
+    }
+
+    String comAddress = "";
+    if(work.getCompany().getStrAddress() != null && !work.getCompany().getStrAddress().isBlank()) {
+        comAddress = "(" + work.getCompany().getStrZipcode() + ") " + work.getCompany().getStrAddress().replace("|", " ");
     }
 
 %>
@@ -125,7 +137,7 @@
                 </ul>
                 <div class="tab-content pt-2" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <h5 class="card-title"><i class="bi bi-record-circle"></i> <strong>기본정보</strong></h5>
+                        <h5 class="card-title"><strong>기본정보</strong></h5>
                         <div class="row mb-lg-3">
                             <span class="col-md-2"><strong>모집기간</strong></span>
                             <span class="col-md-4 text-secondary"><%=day_span1%></span>
@@ -145,7 +157,7 @@
                             </div>
                         </div>
                         <hr/>
-                        <h5 class="card-title"><i class="bi bi-record-circle"></i> <strong>담당자 정보</strong></h5>
+                        <h5 class="card-title"><strong>담당자 정보</strong></h5>
                         <div class="row mb-lg-3">
                             <span class="col-md-2"><strong>회사명</strong></span>
                             <span class="col-md-4 text-secondary"><%=work.getCompany().getStrCompanyname()%></span>
@@ -154,7 +166,7 @@
                         </div>
                         <div class="row mb-lg-3">
                             <span class="col-md-2"><strong>주소</strong></span>
-                            <span class="col-md-10 text-secondary">(<%=work.getCompany().getStrZipcode()%>) <%=work.getCompany().getStrAddress().replace("|", " ")%></span>
+                            <span class="col-md-10 text-secondary"><%=comAddress%></span>
                         </div>
                         <div class="row mb-lg-3">
                             <span class="col-md-2"><strong>담당자명</strong></span>
@@ -169,7 +181,7 @@
                             <span class="col-md-4 text-secondary"><%=work.getClient().getStrEmail()%></span>
                         </div>
                         <hr/>
-                        <h5 class="card-title"><i class="bi bi-record-circle"></i> <strong>인플루언서 정보</strong></h5>
+                        <h5 class="card-title"><strong>인플루언서 정보</strong></h5>
                         <ul class="list-group mb-md-5">
                             <li class="list-group-item list-group-item-primary">
                                 <div class="row">
@@ -207,6 +219,9 @@
                                     case 5:
                                         istatus = "보류";
                                         break;
+                                    case 9:
+                                        istatus = "취소";
+                                        break;
                                     default:
                                         istatus = "요청";
                                         break;
@@ -230,8 +245,7 @@
                                     <span class="col-md-2 text-center text-0-9em"><%=field.getInfluencer().getStrMobile()%></span>
                                     <span class="col-md-2 text-center text-0-9em"><%=field.getInfluencer().getStrEmail()%></span>
                                     <span class="col-md-1 text-center text-0-9em"><%=mediatype%></span>
-                                    <span class="col-md-2 text-center text-0-9em"><a href="<%=field.getStrURL()%>"
-                                                                                     target="_blank"><%=field.getStrURL()%></a> </span>
+                                    <span class="col-md-2 text-center text-0-9em"><a href="<%=field.getStrURL()%>" target="_blank"><%=(field.getStrURL() != null ? field.getStrURL() : "")%></a> </span>
                                     <span class="col-md-1 text-center text-0-9em"><%=Etc.INSTANCE.setComma(field.getIntPrice())%>원</span>
                                     <span class="col-md-1 text-center text-0-9em"><%=cstatus%></span>
                                     <span class="col-md-1 text-center text-0-9em"><%=istatus%></span>
@@ -240,7 +254,8 @@
                             <% } %>
                         </ul>
                         <div class="text-center mb-md-5">
-                            <%=button_bottom%>
+                            <button class="btn-lg btn-primary" type="button" id="work_editgo"><i class="bi bi-file-earmark-code"></i> 수정하기</button>
+                            <button class="btn-lg btn-outline-primary ms-3" type="button" id="work_listgo">목록으로</button>
                         </div>
                     </div>
                     <% if (mediacount[1] > 0) { %>
@@ -268,8 +283,8 @@
                                 </button>
                             </div>
                         </div>
-                        <canvas id="instagram_chart" class="mb-md-3"
-                                style="width: 100%; min-height: 100px; max-height: 400px;"></canvas>
+                        <div id="instagram_chart" class="mb-md-3"
+                                style="width: 100%; min-height: 100px; max-height: 400px;"></div>
                         <div class="row pb-0">
                             <table class="table work-table" id="work_i_list">
                                 <thead>
@@ -336,8 +351,7 @@
                                 </button>
                             </div>
                         </div>
-                        <canvas id="youtube_chart" class="mb-md-3"
-                                style="width: 100%; min-height: 100px; max-height: 400px;"></canvas>
+                        <div id="youtube_chart" class="mb-md-3" style="width: 100%; min-height: 100px; max-height: 400px;"></div>
                         <div class="row pb-0">
                             <table class="table work-table" id="work_y_list">
                                 <thead>
@@ -404,8 +418,8 @@
                                 </button>
                             </div>
                         </div>
-                        <canvas id="blog_chart" class="mb-md-3"
-                                style="width: 100%; min-height: 100px; max-height: 400px;"></canvas>
+                        <div id="blog_chart" class="mb-md-3"
+                                style="width: 100%; min-height: 100px; max-height: 400px;"></div>
                         <div class="row pb-0">
                             <table class="table work-table" id="work_b_list">
                                 <thead>
@@ -450,10 +464,14 @@
                 </div><!-- End Default Tabs -->
             </div>
         </div>
-
     </section>
-
 </main>
+<script>
+    var workno = <%=workseq%>;
+    var keyword = "<%=keyword%>";
+    var page = "<%=ppage%>";
+    var status = "<%=status%>";
+</script>
 <!-- End #main -->
 <jsp:include page="inc_footer.jsp"/>
 <jsp:include page="inc_bottom.jsp">

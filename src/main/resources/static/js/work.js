@@ -98,6 +98,10 @@ function loadData() {
                             status_span = "<span class=\"badge bg-dark text-light\">대기</span>";
                             day_span = field.start + " ~ " + field.end;
                             break;
+                        case 7 :
+                            status_span = "<span class=\"badge bg-warning text-light\">완료</span>";
+                            day_span = field.start + " ~ " + field.end;
+                            break;
                         default :
                             status_span = "<span class=\"badge bg-danger text-light\">취소</span>";
                             day_span = field.start + " ~ " + field.end;

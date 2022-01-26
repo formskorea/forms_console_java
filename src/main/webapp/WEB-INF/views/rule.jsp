@@ -28,8 +28,10 @@
                             <div class="card-body">
 
                                 <div class="pt-4 pb-2">
-                                    <h5 class="card-title text-center pb-0 fs-4"><strong>회원가입완료</strong></h5>
-                                    <p class="text-center small">Meta Console 회원가입을 완료하였습니다.</p>
+                                    <h5 class="card-title text-center pb-0 fs-4"><strong>이용약관</strong></h5>
+                                    <p class="text-center small">
+                                        
+                                    </p>
                                 </div>
 
                             </div>
