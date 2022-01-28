@@ -21,4 +21,5 @@ interface AdminMapper {
     fun getMWorkInfo(data: WorkInfo) : ArrayList<WorkInfo>?
     fun getMCompany(data: Search) : ArrayList<Company>?
     fun getMCompanyCount(data:Search) : Int?
+    fun cutWork() : Int?
 }

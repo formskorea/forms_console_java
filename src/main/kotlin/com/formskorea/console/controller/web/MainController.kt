@@ -234,7 +234,13 @@ class MainController {
     @RequestMapping(value = ["/rule"], method = [RequestMethod.GET, RequestMethod.POST])
     @Throws(Exception::class)
     fun rule(model: Model, response: HttpServletResponse, request: HttpServletRequest): Any {
-        return "rule"
+
+        var rtnPage = when(request.getParameter("type")) {
+            "2" -> "rule_type2"
+            else -> "rule_type1"
+        }
+
+        return rtnPage
     }
 
     @RequestMapping(value = ["/find"], method = [RequestMethod.GET, RequestMethod.POST])

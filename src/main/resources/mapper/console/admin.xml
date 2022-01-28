@@ -460,4 +460,12 @@
             strCompanynum LIKE CONCAT('%', #{keyword}, '%'))
         </if>;
     </select>
+
+
+    <update id="cutWork">
+        UPDATE TB_WORK SET
+            intStatus = 7
+        WHERE
+            intStatus = 1 AND CURRENT_DATE > dateEnd
+    </update>
 </mapper>

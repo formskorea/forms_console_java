@@ -156,7 +156,7 @@
                                         <button class="btn btn-primary w-100" type="submit">회원가입</button>
                                     </div>
                                     <div class="col-12 mb-0">
-                                        <p class="small mb-2">회원가입 버튼을 클릭하면 Meta Console의 <a href="/rule?type=1" target="_blank"><strong>약관</strong></a>, <a href="/rule?type=2" target="_blank"><strong>데이터 정책</strong></a> 및 <a href="/rule?type=2" target="_blank"><strong>쿠키 정책</strong></a>에 동의하게 됩니다.</p>
+                                        <p class="small mb-2">회원가입 버튼을 클릭하면 Meta Console의 <a href="/rule?type=1" target="_blank"><strong>약관</strong></a>및 <a href="/rule?type=2" target="_blank"><strong>개인정보 보호정책</strong></a>에 동의하게 됩니다.</p>
                                         <p class="small mb-0">로그인을 원하시면 <a href="/login"><strong>이곳</strong></a>을
                                             클릭해주세요.</p>
                                         <p class="small">회원정보를 찾으시려면 <a href="/find"><strong>이곳</strong></a>을

@@ -173,4 +173,8 @@ class AdminService {
     fun getMCompany(data: Search): ArrayList<Company>? {
         return adminMapper.getMCompany(data)
     }
+
+    fun cutWork() : Int? {
+        return adminMapper.cutWork()
+    }
 }
