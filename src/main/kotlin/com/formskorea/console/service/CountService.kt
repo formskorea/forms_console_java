@@ -142,7 +142,12 @@ class CountService {
         val result1 = workCountMapper.createWorkLog(data)
         val result2 = workCountMapper.createWorkIdx(data)
         val result3 = workCountMapper.createWorkIdx2(data)
-        return result1 && result2 && result3
+        val result4 = workCountMapper.createWorkIdx3(data)
+        return result1 && result2 && result3 && result4
+    }
+
+    fun getWorkLog(data: Search) : ArrayList<WorkLog> {
+        return workCountMapper.getWorkLog(data)
     }
 
 }

@@ -106,7 +106,7 @@ function loadData() {
                     for(var j = 0; j < field.media.length; j++) {
                         switch(field.media[j].type) {
                             case 1 :
-                                list_box.find(".item_instagram_box").eq(i).find("a.item_media_link").attr("src", field.media[j].url);
+                                list_box.find(".item_instagram_box").eq(i).find("a.item_media_link").attr("href", field.media[j].url);
                                 list_box.find(".item_instagram_box").eq(i).find("span.item_media_link").html(field.media[j].url);
                                 list_box.find(".item_instagram_box").eq(i).find("span.item_follower").html(priceToString(field.media[j].count1));
                                 list_box.find(".item_instagram_box").eq(i).find("span.item_follow").html(priceToString(field.media[j].count2));
@@ -114,7 +114,7 @@ function loadData() {
                                 list_box.find(".item_instagram_box").eq(i).removeClass("d-none");
                                 break;
                             case 2 :
-                                list_box.find(".item_youtube_box").eq(i).find("a.item_media_link").attr("src", field.media[j].url);
+                                list_box.find(".item_youtube_box").eq(i).find("a.item_media_link").attr("href", field.media[j].url);
                                 list_box.find(".item_youtube_box").eq(i).find("span.item_media_link").html(field.media[j].url);
                                 list_box.find(".item_youtube_box").eq(i).find("span.item_follower").html(priceToString(field.media[j].count1));
                                 list_box.find(".item_youtube_box").eq(i).find("span.item_follow").html(priceToString(field.media[j].count2));
@@ -122,14 +122,14 @@ function loadData() {
                                 list_box.find(".item_youtube_box").eq(i).removeClass("d-none");
                                 break;
                             case 3 :
-                                list_box.find(".item_blog_box").eq(i).find("a.item_media_link").attr("src", field.media[j].url);
+                                list_box.find(".item_blog_box").eq(i).find("a.item_media_link").attr("href", field.media[j].url);
                                 list_box.find(".item_blog_box").eq(i).find("span.item_media_link").html(field.media[j].url);
                                 list_box.find(".item_blog_box").eq(i).find("span.item_follower").html(priceToString(field.media[j].count1));
                                 list_box.find(".item_blog_box").eq(i).find("span.item_follow").html(priceToString(field.media[j].count2));
                                 list_box.find(".item_blog_box").eq(i).removeClass("d-none");
                                 break;
                             case 4 :
-                                list_box.find(".item_shopping_box").eq(i).find("a.item_media_link").attr("src", field.media[j].url);
+                                list_box.find(".item_shopping_box").eq(i).find("a.item_media_link").attr("href", field.media[j].url);
                                 list_box.find(".item_shopping_box").eq(i).find("span.item_media_link").html(field.media[j].url);
                                 list_box.find(".item_shopping_box").eq(i).removeClass("d-none");
                                 break;

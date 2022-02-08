@@ -60,6 +60,7 @@
         (
             intSeq int auto_increment,
             dateDay date null,
+            intWorkInfoSeq int null,
             intMediaSeq int null,
             intMediaType tinyint null,
             intClientSeq int null,
@@ -89,48 +90,97 @@
             on TB_WORK_${intSeq}_LOG (dateDay, intMediaType, intMediaSeq);
     </update>
 
+    <update id="createWorkIdx3" parameterType="Work">
+        create index IDX_WL_${intSeq}_INFO
+            on TB_WORK_${intSeq}_LOG (dateDay, intWorkInfoSeq, intMediaType, intClientSeq, intWorkInfoSeq);
+    </update>
+
+    <select id="getWorkLog" parameterType="Search" resultType="WorkLog">
+        SELECT
+            dateDay, intWorkInfoSeq, intMediaSeq, intMediaType, intClientSeq,
+            intInfluencerSeq, intCount1, intCount2, intCount3, intCount4, intCount5,
+            intCount6, intCount7, intCount8, intCount9, intCount10
+        FROM
+            TB_WORK_${intWorkSeq}_LOG
+        WHERE
+            intSeq > 0
+        <if test="date != null and date != ''">
+            AND dateDay = #{date}
+        </if>
+        <if test="mtype != null and mtype > 0">
+            intMediaType = #{mtype}
+        </if>
+        <if test="cseq != null and cseq > 0">
+            intClientSeq = #{cseq}
+        </if>
+        <if test="iseq != null and iseq > 0">
+            intInfluencerSeq = #{iseq}
+        </if>
+        ORDER BY
+            dateDay ASC, intWorkInfoSeq ASC, intMediaType ASC, intClientSeq ASC, intInfluencerSeq ASC
+    </select>
+
     <insert id="setWorkLog" parameterType="WorkLog" useGeneratedKeys="true" keyProperty="intSeq">
-        INSERT INTO TB_WORK_${intSeq}_LOG (
-            dateDay, intMediaSeq, intMediaType, intClientSeq, intInfluencerSeq, intCount1, intCount2, intCount3, intCount4, intCount5, intCount6, intCount7, intCount8, intCount9, intCount10
-        ) VALUES (
-            #{dateDay}, #{intMediaSeq}, #{intMediaType}, #{intClientSeq}, #{intInfluencerSeq}, #{intCount1}, #{intCount2}, #{intCount3}, #{intCount4}, #{intCount5}, #{intCount6}, #{intCount7}, #{intCount8}, #{intCount9}, #{intCount10}
-        };
+        INSERT INTO TB_WORK_${intWorkSeq}_LOG (dateDay, intWorkInfoSeq, intMediaSeq, intMediaType, intClientSeq,
+                                           intInfluencerSeq, intCount1, intCount2, intCount3, intCount4, intCount5,
+                                           intCount6, intCount7, intCount8, intCount9, intCount10)
+        VALUES (
+            #{dateDay}, #{intWorkInfoSeq}, #{intMediaSeq}, #{intMediaType}, #{intClientSeq}, #{intInfluencerSeq}, #{intCount1}, #{intCount2}, #{intCount3}, #{intCount4}, #{intCount5}, #{intCount6}, #{intCount7}, #{intCount8}, #{intCount9}, #{intCount10}
+            );
     </insert>
 
     <update id="editWorkLog" parameterType="WorkLog">
-        UPDATE TB_WORK_${intSeq}_LOG SET
-            dateDay = #{},
-            intMediaSeq,
-            intMediaType,
-            intClientSeq,
-            intInfluencerSeq,
-            intCount1,
-            intCount2,
-            intCount3,
-            intCount4,
-            intCount5,
-            intCount6,
-            intCount7,
-            intCount8,
-            intCount9,
-            intCount10
-        WHERE
-            intSeq > 0
-        <if test="intSeq != null and intSeq > 0">
-            AND intSeq = #{intSeq}
+        UPDATE TB_WORK_${intWorkSeq}_LOG SET
+        <if test="dateDay != null and dateDay != ''">
+        dateDay = #{dateDay},
+        </if>
+        <if test="intWorkInfoSeq != null and intWorkInfoSeq > 0">
+        intWorkInfoSeq = #{intWorkInfoSeq},
         </if>
         <if test="intMediaSeq != null and intMediaSeq > 0">
-            AND intMediaSeq = #{intMediaSeq}
+        intMediaSeq = #{intMediaSeq},
         </if>
         <if test="intMediaType != null and intMediaType > 0">
-            AND intMediaType = #{intMediaType}
+        intMediaType = #{intMediaType},
         </if>
         <if test="intClientSeq != null and intClientSeq > 0">
-            AND intClientSeq = #{intClientSeq}
+        intClientSeq = #{intClientSeq},
         </if>
         <if test="intInfluencerSeq != null and intInfluencerSeq > 0">
-            AND intInfluencerSeq = #{intInfluencerSeq}
-        </if>;
+        intInfluencerSeq = #{intInfluencerSeq},
+        </if>
+        <if test="intCount1 != null and intCount1 > 0">
+        intCount1 = #{intCount1},
+        </if>
+        <if test="intCount2 != null and intCount2 > 0">
+        intCount2 = #{intCount2},
+        </if>
+        <if test="intCount3 != null and intCount3 > 0">
+        intCount3 = #{intCount3},
+        </if>
+        <if test="intCount4 != null and intCount4 > 0">
+        intCount4 = #{intCount4},
+        </if>
+        <if test="intCount5 != null and intCount5 > 0">
+        intCount5 = #{intCount5},
+        </if>
+        <if test="intCount6 != null and intCount6 > 0">
+        intCount6 = #{intCount6},
+        </if>
+        <if test="intCount7 != null and intCount7 > 0">
+        intCount7 = #{intCount7},
+        </if>
+        <if test="intCount8 != null and intCount8 > 0">
+        intCount8 = #{intCount8},
+        </if>
+        <if test="intCount9 != null and intCount9 > 0">
+        intCount9 = #{intCount9},
+        </if>
+        <if test="intCount10 != null and intCount10 > 0">
+        intCount10 = #{intCount10}
+        </if>
+        WHERE
+            intSeq = #{intSeq};
     </update>
 
 </mapper>

@@ -12,6 +12,8 @@ interface WorkCountMapper {
     fun createWorkLog(data: Work) : Boolean
     fun createWorkIdx(data: Work) : Boolean
     fun createWorkIdx2(data: Work) : Boolean
+    fun createWorkIdx3(data: Work) : Boolean
+    fun getWorkLog(data: Search) : ArrayList<WorkLog>
     fun setWorkLog(data: WorkLog) : Boolean
     fun editWorkLog(data: WorkLog) : Boolean
 }
