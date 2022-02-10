@@ -4,6 +4,9 @@
 <%@ page import="com.formskorea.console.data.model.WorkInfo" %>
 <%@ page import="com.formskorea.console.data.model.Tag" %>
 <%@ page import="com.formskorea.console.util.Etc" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.util.Calendar" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     List<String> arrScript = (List<String>) request.getAttribute("scripts");
@@ -22,10 +25,26 @@
     mediacount[2] = 0;
     mediacount[3] = 0;
 
+    ArrayList<WorkInfo> mediauser1 = new ArrayList<>();
+    ArrayList<WorkInfo> mediauser2 = new ArrayList<>();
+    ArrayList<WorkInfo> mediauser3 = new ArrayList<>();
+
     for (Integer i = 0; i < work.getInfos().size(); i++) {
         WorkInfo winfo = work.getInfos().get(i);
         if (winfo.getIntMediaType() > 0) {
             mediacount[winfo.getIntMediaType()]++;
+
+            switch (winfo.getIntMediaType()) {
+                case 1:
+                    mediauser1.add(winfo);
+                    break;
+                case 2:
+                    mediauser2.add(winfo);
+                    break;
+                case 3:
+                    mediauser3.add(winfo);
+                    break;
+            }
         }
     }
 
@@ -66,8 +85,22 @@
     }
 
     String comAddress = "";
-    if(work.getCompany().getStrAddress() != null && !work.getCompany().getStrAddress().isBlank()) {
+    if (work.getCompany().getStrAddress() != null && !work.getCompany().getStrAddress().isBlank()) {
         comAddress = "(" + work.getCompany().getStrZipcode() + ") " + work.getCompany().getStrAddress().replace("|", " ");
+    }
+
+    Date defDEnd = new Date();
+    Date defCutEnd = Etc.INSTANCE.setStringtoDate(work.getDateEnd(), "yyyy-MM-dd");
+    Date defCutStart = Etc.INSTANCE.setStringtoDate(work.getDateStart(), "yyyy-mm-dd");
+
+    if(defDEnd.getTime() > defCutEnd.getTime()) {
+        defDEnd = defCutEnd;
+    }
+
+    Date defDStart = Etc.INSTANCE.setDateAdd(Calendar.DAY_OF_MONTH, -6, defDEnd);
+
+    if(defDStart.getTime() < defCutStart.getTime()) {
+        defDStart = defCutStart;
     }
 
 %>
@@ -245,7 +278,8 @@
                                     <span class="col-md-2 text-center text-0-9em"><%=field.getInfluencer().getStrMobile()%></span>
                                     <span class="col-md-2 text-center text-0-9em"><%=field.getInfluencer().getStrEmail()%></span>
                                     <span class="col-md-1 text-center text-0-9em"><%=mediatype%></span>
-                                    <span class="col-md-2 text-center text-0-9em"><a href="<%=field.getStrURL()%>" target="_blank"><%=(field.getStrURL() != null ? field.getStrURL() : "")%></a> </span>
+                                    <span class="col-md-2 text-center text-0-9em"><a href="<%=field.getStrURL()%>"
+                                                                                     target="_blank"><%=(field.getStrURL() != null ? field.getStrURL() : "")%></a> </span>
                                     <span class="col-md-1 text-center text-0-9em"><%=Etc.INSTANCE.setComma(field.getIntPrice())%>원</span>
                                     <span class="col-md-1 text-center text-0-9em"><%=cstatus%></span>
                                     <span class="col-md-1 text-center text-0-9em"><%=istatus%></span>
@@ -254,28 +288,43 @@
                             <% } %>
                         </ul>
                         <div class="text-center mb-md-5">
-                            <button class="btn-lg btn-primary" type="button" id="work_editgo"><i class="bi bi-file-earmark-code"></i> 수정하기</button>
+                            <button class="btn-lg btn-primary" type="button" id="work_editgo"><i
+                                    class="bi bi-file-earmark-code"></i> 수정하기
+                            </button>
                             <button class="btn-lg btn-outline-primary ms-3" type="button" id="work_listgo">목록으로</button>
                         </div>
                     </div>
                     <% if (mediacount[1] > 0) { %>
                     <div class="tab-pane fade" id="instagram" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="row mb-md-3">
-                            <div class="col-md-3">
+                            <div class="col-md-1">
                                 <select class="form-select" id="work_i_select">
                                     <option value="1" selected="selected">일별</option>
                                     <option value="2">월별</option>
                                     <option value="3">년별</option>
                                 </select>
                             </div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="work_i_userselect">
+                                    <option value="" selected="selected">전체</option>
+                                    <%
+                                        if (mediauser1.size() > 0) {
+                                            for (int i = 0; i < mediauser1.size(); i++) {
+                                                WorkInfo workInfo = (WorkInfo) mediauser1.get(i);
+                                    %>
+                                    <option value="<%=workInfo.getInfluencer().getIntSeq()%>"><%=workInfo.getInfluencer().getStrName()%></option>
+                                    <% }
+                                    } %>
+                                </select>
+                            </div>
                             <div class="col-md-3">
-                                <input type="date" class="form-control" id="work_i_start" name="work_i_start">
+                                <input type="date" class="form-control" id="work_i_start" name="work_i_start" value="<%=Etc.INSTANCE.setDatetoString(defDStart, "yyyy-MM-dd")%>">
                             </div>
                             <div class="col-md-1 text-center align-middle">
                                 ~
                             </div>
                             <div class="col-md-3">
-                                <input type="date" class="form-control" id="work_i_end" name="work_i_end">
+                                <input type="date" class="form-control" id="work_i_end" name="work_i_end" value="<%=Etc.INSTANCE.setDatetoString(defDEnd, "yyyy-MM-dd")%>">
                             </div>
                             <div class="col-md-2 text-center">
                                 <button type="button" class="btn btn-primary" id="work_i_search"><i
@@ -284,7 +333,7 @@
                             </div>
                         </div>
                         <div id="instagram_chart" class="mb-md-3"
-                                style="width: 100%; min-height: 100px; max-height: 400px;"></div>
+                             style="width: 100%; min-height: 100px; max-height: 400px;"></div>
                         <div class="row pb-0">
                             <table class="table work-table" id="work_i_list">
                                 <thead>
@@ -306,18 +355,18 @@
                                     <td class="work_i_count4 text-end">0</td>
                                     <td class="work_i_count5 text-end">0</td>
                                 </tr>
-                                <tr class="work_i_loading d-none">
+                                <tr class="work_i_loading">
                                     <td colspan="6">
                                         <div class="row g-0 mb-3">
                                             <div class="loader col-md-12 text-center">Loading...</div>
                                         </div>
                                     </td>
                                 </tr>
-                                <tr class="work_i_list_empty d-none">
+                                <tr class="work_i_list_empty">
                                     <td colspan="6">
                                         <div class="text-center">
                                             <i class="bi bi-trash2" style="font-size: 6em;"></i><br/>
-                                            <span>인스타그램 정보가 없습니다.</span>
+                                            <span>인스타그램 누적 Log가 없습니다.</span>
                                         </div>
                                     </td>
                                 </tr>
@@ -329,21 +378,34 @@
                     <% if (mediacount[2] > 0) { %>
                     <div class="tab-pane fade" id="youtube" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="row mb-md-3">
-                            <div class="col-md-3">
+                            <div class="col-md-1">
                                 <select class="form-select" id="work_y_select">
                                     <option value="1" selected="selected">일별</option>
                                     <option value="2">월별</option>
                                     <option value="3">년별</option>
                                 </select>
                             </div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="work_y_userselect">
+                                    <option value="" selected="selected">전체</option>
+                                    <%
+                                        if (mediauser2.size() > 0) {
+                                            for (int i = 0; i < mediauser2.size(); i++) {
+                                                WorkInfo workInfo = (WorkInfo) mediauser2.get(i);
+                                    %>
+                                    <option value="<%=workInfo.getInfluencer().getIntSeq()%>"><%=workInfo.getInfluencer().getStrName()%></option>
+                                    <% }
+                                    } %>
+                                </select>
+                            </div>
                             <div class="col-md-3">
-                                <input type="date" class="form-control" id="work_y_start" name="work_y_start">
+                                <input type="date" class="form-control" id="work_y_start" name="work_y_start" value="<%=Etc.INSTANCE.setDatetoString(defDStart, "yyyy-MM-dd")%>">
                             </div>
                             <div class="col-md-1 text-center align-middle">
                                 ~
                             </div>
                             <div class="col-md-3">
-                                <input type="date" class="form-control" id="work_y_end" name="work_y_end">
+                                <input type="date" class="form-control" id="work_y_end" name="work_y_end" value="<%=Etc.INSTANCE.setDatetoString(defDEnd, "yyyy-MM-dd")%>">
                             </div>
                             <div class="col-md-2 text-center">
                                 <button type="button" class="btn btn-primary" id="work_y_search"><i
@@ -351,7 +413,8 @@
                                 </button>
                             </div>
                         </div>
-                        <div id="youtube_chart" class="mb-md-3" style="width: 100%; min-height: 100px; max-height: 400px;"></div>
+                        <div id="youtube_chart" class="mb-md-3"
+                             style="width: 100%; min-height: 100px; max-height: 400px;"></div>
                         <div class="row pb-0">
                             <table class="table work-table" id="work_y_list">
                                 <thead>
@@ -373,18 +436,18 @@
                                     <td class="work_y_count4 text-end">0</td>
                                     <td class="work_y_count5 text-end">0</td>
                                 </tr>
-                                <tr class="work_y_loading d-none">
+                                <tr class="work_y_loading">
                                     <td colspan="6">
                                         <div class="row g-0 mb-3">
                                             <div class="loader col-md-12 text-center">Loading...</div>
                                         </div>
                                     </td>
                                 </tr>
-                                <tr class="work_y_list_empty d-none">
+                                <tr class="work_y_list_empty">
                                     <td colspan="6">
                                         <div class="text-center">
                                             <i class="bi bi-trash2" style="font-size: 6em;"></i><br/>
-                                            <span>유튜브 정보가 없습니다.</span>
+                                            <span>유튜브 누적 Log가 없습니다.</span>
                                         </div>
                                     </td>
                                 </tr>
@@ -396,21 +459,34 @@
                     <% if (mediacount[3] > 0) { %>
                     <div class="tab-pane fade" id="blog" role="tabpanel" aria-labelledby="contact-tab">
                         <div class="row mb-md-3">
-                            <div class="col-md-3">
+                            <div class="col-md-1">
                                 <select class="form-select" id="work_b_select">
                                     <option value="1" selected="selected">일별</option>
                                     <option value="2">월별</option>
                                     <option value="3">년별</option>
                                 </select>
                             </div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="work_b_userselect">
+                                    <option value="" selected="selected">전체</option>
+                                    <%
+                                        if (mediauser3.size() > 0) {
+                                            for (int i = 0; i < mediauser3.size(); i++) {
+                                                WorkInfo workInfo = (WorkInfo) mediauser3.get(i);
+                                    %>
+                                    <option value="<%=workInfo.getInfluencer().getIntSeq()%>"><%=workInfo.getInfluencer().getStrName()%></option>
+                                    <% }
+                                    } %>
+                                </select>
+                            </div>
                             <div class="col-md-3">
-                                <input type="date" class="form-control" id="work_b_start" name="work_b_start">
+                                <input type="date" class="form-control" id="work_b_start" name="work_b_start" value="<%=Etc.INSTANCE.setDatetoString(defDStart, "yyyy-MM-dd")%>">
                             </div>
                             <div class="col-md-1 text-center align-middle">
                                 ~
                             </div>
                             <div class="col-md-3">
-                                <input type="date" class="form-control" id="work_b_end" name="work_b_end">
+                                <input type="date" class="form-control" id="work_b_end" name="work_b_end" value="<%=Etc.INSTANCE.setDatetoString(defDEnd, "yyyy-MM-dd")%>">
                             </div>
                             <div class="col-md-2 text-center">
                                 <button type="button" class="btn btn-primary" id="work_b_search"><i
@@ -419,13 +495,13 @@
                             </div>
                         </div>
                         <div id="blog_chart" class="mb-md-3"
-                                style="width: 100%; min-height: 100px; max-height: 400px;"></div>
+                             style="width: 100%; min-height: 100px; max-height: 400px;"></div>
                         <div class="row pb-0">
                             <table class="table work-table" id="work_b_list">
                                 <thead>
                                 <tr>
                                     <th scope="col" width="25%" class="text-center table-primary">날짜</th>
-                                    <th scope="col" width="15%" class="text-center table-primary">좋아요</th>
+                                    <th scope="col" width="15%" class="text-center table-primary">공감</th>
                                     <th scope="col" width="15%" class="text-center table-primary">댓글</th>
                                     <th scope="col" width="15%" class="text-center table-primary">게시물</th>
                                     <th scope="col" width="15%" class="text-center table-primary">오늘방문수</th>
@@ -441,18 +517,18 @@
                                     <td class="work_b_count4 text-end">0</td>
                                     <td class="work_b_count5 text-end">0</td>
                                 </tr>
-                                <tr class="work_b_loading d-none">
+                                <tr class="work_b_loading">
                                     <td colspan="6">
                                         <div class="row g-0 mb-3">
                                             <div class="loader col-md-12 text-center">Loading...</div>
                                         </div>
                                     </td>
                                 </tr>
-                                <tr class="work_b_list_empty d-none">
+                                <tr class="work_b_list_empty">
                                     <td colspan="6">
                                         <div class="text-center">
                                             <i class="bi bi-trash2" style="font-size: 6em;"></i><br/>
-                                            <span>블로그 정보가 없습니다.</span>
+                                            <span>블로그 누적 Log가 없습니다.</span>
                                         </div>
                                     </td>
                                 </tr>

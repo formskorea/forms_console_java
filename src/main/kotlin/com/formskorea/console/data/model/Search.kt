@@ -20,5 +20,6 @@ data class Search(
     var cseq: Int? = null,
     var sex: Int? = null,
     var age: String? = null,
-    var odby: Int? = null
+    var odby: Int? = null,
+    var wseq: Int? = null
 )
