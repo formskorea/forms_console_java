@@ -6,6 +6,8 @@ function showSearchInf() {
     $("#fmc_searchinf").modal("show");
 }
 
+var isProcessing = false;
+
 //#######################################
 //          influencer
 //#######################################
@@ -414,7 +416,6 @@ function c_select() {
 
 $(document).ready(function ($) {
     var tagify = $('[name=hashtag]').tagify();
-    var isProcessing = false;
 
     $("#work_clientsearch").click(function (e) {
         c_now_page = 1;
@@ -480,9 +481,15 @@ $(document).ready(function ($) {
     $("#form_editinfo").submit(function (e) {
         e.preventDefault();
 
-        if (isProcessing) {
-            showModal("처리중입니다.");
-        } else {
+        if (!isProcessing) {
+            isProcessing = true;
+            var submitButton = $(this).find("button[type=submit]");
+
+            $("#inf_btn_process").removeClass("d-none");
+            $("#inf_btn_icon").addClass("d-none");
+            submitButton.removeClass("btn-primary");
+            submitButton.addClass("btn-secondary");
+
             var title = $("#work_title").val();
             var rstart = $("#work_wstart").val();
             var rend = $("#work_wend").val();
@@ -590,6 +597,12 @@ $(document).ready(function ($) {
                     headers: {'Content-Type': 'application/json'},
                 }).then((data, textStatus, jqXHR) => {
                     if (data.status == 200) {
+                        isProcessing = false;
+                        $("#inf_btn_process").addClass("d-none");
+                        $("#inf_btn_icon").removeClass("d-none");
+                        submitButton.removeClass("btn-secondary");
+                        submitButton.addClass("btn-primary");
+
                         showConfilm("협업이 " + (isEdit ? "수정" : "저장") + " 되었습니다.<br />협업내용을 확인하시겠습니까?", function () {
                             if(isEdit) {
                                 location.href = "/work/read/" + workno + "?keyword=" + keyword + "&status=" + status + "&page=" + page;
@@ -600,15 +613,29 @@ $(document).ready(function ($) {
                             location.href = "/work/list?keyword=" + keyword + "&status=" + status + "&page=" + page;
                         })
                     } else {
+                        isProcessing = false;
+                        $("#inf_btn_process").addClass("d-none");
+                        $("#inf_btn_icon").removeClass("d-none");
+                        submitButton.removeClass("btn-secondary");
+                        submitButton.addClass("btn-primary");
+
                         showModal(data.message);
                     }
                 }, (jqXHR, textStatus, errorThrown) => {
+                    isProcessing = false;
+                    $("#inf_btn_process").addClass("d-none");
+                    $("#inf_btn_icon").removeClass("d-none");
+                    submitButton.removeClass("btn-secondary");
+                    submitButton.addClass("btn-primary");
+
                     showModal("DB 처리중 오류가 발생되었습니다.");
                 });
             }
 
             console.log(tojson);
 
+        } else {
+            showModal("처리중입니다.");
         }
     });
 

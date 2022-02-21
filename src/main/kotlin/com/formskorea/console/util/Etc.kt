@@ -45,7 +45,7 @@ object Etc {
     }
 
     fun checkEMail(data: String): Boolean {
-        val regex = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$"
+        val regex = "^([0-9a-zA-Z_.-]+)@([0-9a-zA-Z_-]+)(.[0-9a-zA-Z_-]+){1,2}$"
         return checkValid(data, regex)
     }
 

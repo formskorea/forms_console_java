@@ -47,6 +47,8 @@ $(document).ready(function ($) {
                     submitButton.removeClass("btn-secondary");
                 });
             }
+        } else {
+            showModal("처리중입니다.");
         }
 
     });

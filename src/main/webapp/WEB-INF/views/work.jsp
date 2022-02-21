@@ -110,7 +110,7 @@
         <div class="row g-0 mb-3 d-none" id="empty_box">
             <div class="text-center">
                 <i class="bi bi-trash2" style="font-size: 6em;"></i><br/>
-                <span>협력사 정보가 없습니다.</span>
+                <span>협업 정보가 없습니다.</span>
             </div>
         </div>
         <nav aria-label="Page navigation" id="page_box">

@@ -388,7 +388,7 @@
                     </div>
                 </div>
                 <div class="mb-3 text-center">
-                    <button class="btn-lg btn-primary" type="submit"><i class="bi bi-clipboard-plus"></i>
+                    <button class="btn-lg btn-primary" type="submit"><i class="bi bi-clipboard-plus" id="inf_btn_icon"></i><span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="inf_btn_process"></span>
                         협업 <%=(isEdit ? "수정" : "등록")%>
                     </button>
                     <button class="btn-lg btn-outline-primary ms-3" type="button" id="work_listgo">목록으로</button>

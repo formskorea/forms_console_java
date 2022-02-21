@@ -218,7 +218,7 @@
                     </div>
                 </div>
                 <div class="mb-3 align-center text-center">
-                    <button class="btn-lg btn-primary" type="submit"><i class="bx bx-user-plus"></i> 협력사 <%=(isEdit ? "수정" : "등록")%></button>
+                    <button class="btn-lg btn-primary" type="submit"><i class="bx bx-user-plus" id="inf_btn_icon"></i><span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="inf_btn_process"></span> 협력사 <%=(isEdit ? "수정" : "등록")%></button>
                     <button class="btn-lg btn-outline-primary ms-3" type="button" id="cl_listgo">목록으로</button>
                     <% if(isEdit) { %>
                     <button class="btn-lg btn-outline-primary ms-3" type="button" id="cl_readgo">상세내용</button>

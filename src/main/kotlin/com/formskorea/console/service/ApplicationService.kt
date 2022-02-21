@@ -75,7 +75,13 @@ class ApplicationService {
     }
 
     fun setUser(data: User): Boolean? {
-        return when (data.strMemberType) {
+        val usertype = when(data.strMemberType) {
+            DefaultConfig.MEMBER_CLIENT -> 1
+            DefaultConfig.MEMBER_INFLUENCER -> 2
+            else -> 9
+        }
+
+        val rtnval = when (data.strMemberType) {
             DefaultConfig.MEMBER_ADMIN -> {
                 applicationMapper.setAdmin(data)
             }
@@ -86,6 +92,32 @@ class ApplicationService {
                 applicationMapper.setInfluncer(data)
             }
         }
+
+        //tag
+        val defTag = Tag()
+        defTag.intUserSeq = data.intSeq
+        defTag.intUserType = usertype
+        defTag.intType = 1
+        applicationMapper.delTagLink(defTag)
+
+        if(!data.tags.isNullOrEmpty()) {
+            for (field in data.tags!!) {
+                field.intUserSeq = data.intSeq
+                field.intUserType = usertype
+                field.intType = defTag.intType
+
+                val result = applicationMapper.getTag(field)
+                if(result.isNullOrEmpty()) { //tag reg
+                    applicationMapper.setTag(field)
+                    field.intTagSeq = field.intSeq
+                } else {
+                    field.intTagSeq = result[0].intSeq
+                }
+                applicationMapper.setTagLink(field)
+            }
+        }
+
+        return rtnval
     }
 
     fun editUser(data: User): Boolean? {

@@ -209,131 +209,160 @@ $(document).ready(function () {
     $("#form_editinfo").submit(function (event) {
         event.preventDefault();
 
-        var isError = false;
-        var name = $("#cl_name").val();
-        var nik = $("#cl_nik").val();
-        var email = $("#cl_email").val();
-        var mobile = $("#cl_mobile").val();
-        var password1 = $("#cl_pass").val();
-        var password2 = $("#cl_pass2").val();
+        if(!isProcessing) {
+            isProcessing = true;
+            var submitButton = $(this).find("button[type=submit]");
 
-        var corpname = $("#cl_company_name").val();
-        var corptel = $("#cl_company_tel").val();
-        var corpzipcode = $("#cl_company_zipcode").val();
-        var corpaddr1 = $("#cl_company_address1").val();
-        var corpaddr2 = $("#cl_company_address2").val();
-        var corpnum = $("#cl_company_number").val();
+            $("#inf_btn_process").removeClass("d-none");
+            $("#inf_btn_icon").addClass("d-none");
+            submitButton.removeClass("btn-primary");
+            submitButton.addClass("btn-secondary");
 
-        var nowtags = "";
-        var company = {};
+            var isError = false;
+            var name = $("#cl_name").val();
+            var nik = $("#cl_nik").val();
+            var email = $("#cl_email").val();
+            var mobile = $("#cl_mobile").val();
+            var password1 = $("#cl_pass").val();
+            var password2 = $("#cl_pass2").val();
 
-        if (name == "") {
-            showModal("성명을 입력해주세요.");
-            isError = true;
-        } else if (nik == "") {
-            showModal("활동명을 입력해주세요.");
-            isError = true;
-        } else if (email == "") {
-            showModal("이메일을 입력해주세요.");
-            isError = true;
-        } else if (!isEmailCheck) {
-            showModal("이메일 중복을 확인해주세요.");
-            isError = true;
-        } else if ((password1 == "" || password2 == "") && !isEdit) {
-            showModal("비밀번호를 입력해주세요.");
-            isError = true;
-        } else if (password1 != password2) {
-            showModal("비밀번호가 일치하지 않습니다.");
-            isError = true;
-        } else {
-            var pwcheck = checkPass(password1);
+            var corpname = $("#cl_company_name").val();
+            var corptel = $("#cl_company_tel").val();
+            var corpzipcode = $("#cl_company_zipcode").val();
+            var corpaddr1 = $("#cl_company_address1").val();
+            var corpaddr2 = $("#cl_company_address2").val();
+            var corpnum = $("#cl_company_number").val();
 
-            if (isEdit && password1 == "" && password2 == "") {
-                pwcheck.error = false;
-                pwcheck.message = "";
-            }
+            var nowtags = "";
+            var company = {};
 
-            if (pwcheck.error) {
-                showModal(pwcheck.message);
+            if (name == "") {
+                showModal("성명을 입력해주세요.");
+                isError = true;
+            } else if (nik == "") {
+                showModal("활동명을 입력해주세요.");
+                isError = true;
+            } else if (email == "") {
+                showModal("이메일을 입력해주세요.");
+                isError = true;
+            } else if (!isEmailCheck) {
+                showModal("이메일 중복을 확인해주세요.");
+                isError = true;
+            } else if ((password1 == "" || password2 == "") && !isEdit) {
+                showModal("비밀번호를 입력해주세요.");
+                isError = true;
+            } else if (password1 != password2) {
+                showModal("비밀번호가 일치하지 않습니다.");
                 isError = true;
             } else {
+                var pwcheck = checkPass(password1);
 
-                if (corpname == "") {
-                    showModal("소속사명을 입력해주세요.");
-                    isError = true;
-                } else if (corptel == "") {
-                    showModal("소속사 연락처를 입력해주세요.");
+                if (isEdit && password1 == "" && password2 == "") {
+                    pwcheck.error = false;
+                    pwcheck.message = "";
+                }
+
+                if (pwcheck.error) {
+                    showModal(pwcheck.message);
                     isError = true;
                 } else {
-                    company = {
-                        'comname': corpname,
-                        'tel': corptel,
-                        'zip': corpzipcode,
-                        'address': corpaddr1,
-                        'address2': corpaddr2,
-                        'corpnum': corpnum
-                    };
-                    if (c_selectlist.seq != undefined && c_selectlist.seq != null) {
-                        company.seq = c_selectlist.seq;
-                    }
-                }
 
-            }
-        }
-
-        if (!isError) {
-            var tojson = {
-                'mtype': 'influencer',
-                'email': email,
-                'pass': password1,
-                'pass2': password2,
-                'name': name,
-                'nik': nik,
-                'mobile': mobile,
-                'status': infStatus
-            };
-
-            tojson.company = company;
-
-            var url = '/api/client/add';
-
-            if (isEdit) {
-                url = '/api/client/edit';
-                tojson.seq = infno;
-                if (c_selectlist.seq != undefined && c_selectlist.seq != null) {
-                    tojson.comseq = c_selectlist.seq;
-                }
-            }
-
-            if (tagify.val()) {
-                var tdata = eval(tagify.val());
-                var tags = new Array();
-                for (key in tdata) {
-                    tags.push({'tag': tdata[key].value});
-                    nowtags += (nowtags != "" ? ", " : "") + "#" + tdata[key].value;
-                }
-                tojson.tags = tags;
-            }
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: JSON.stringify(tojson),
-                headers: {'Content-Type': 'application/json'},
-            }).then((data, textStatus, jqXHR) => {
-                console.log(data);
-                if (data.status == 200) {
-                    if (isEdit) {
-                        location.href = "/client/read/" + infno + "?status=" + infStatus + "&page=1&keyword=";
+                    if (corpname == "") {
+                        showModal("소속사명을 입력해주세요.");
+                        isError = true;
+                    } else if (corptel == "") {
+                        showModal("소속사 연락처를 입력해주세요.");
+                        isError = true;
                     } else {
-                        location.href = "/client/list?status=" + infStatus;
+                        company = {
+                            'comname': corpname,
+                            'tel': corptel,
+                            'zip': corpzipcode,
+                            'address': corpaddr1,
+                            'address2': corpaddr2,
+                            'corpnum': corpnum
+                        };
+                        if (c_selectlist.seq != undefined && c_selectlist.seq != null) {
+                            company.seq = c_selectlist.seq;
+                        }
                     }
-                } else {
-                    showModal(data.message);
+
                 }
-            }, (jqXHR, textStatus, errorThrown) => {
-                /*pass*/
-            });
+            }
+
+            if (!isError) {
+                var tojson = {
+                    'mtype': 'influencer',
+                    'email': email,
+                    'pass': password1,
+                    'pass2': password2,
+                    'name': name,
+                    'nik': nik,
+                    'mobile': mobile,
+                    'status': infStatus
+                };
+
+                tojson.company = company;
+
+                var url = '/api/client/add';
+
+                if (isEdit) {
+                    url = '/api/client/edit';
+                    tojson.seq = infno;
+                    if (c_selectlist.seq != undefined && c_selectlist.seq != null) {
+                        tojson.comseq = c_selectlist.seq;
+                    }
+                }
+
+                if (tagify.val()) {
+                    var tdata = eval(tagify.val());
+                    var tags = new Array();
+                    for (key in tdata) {
+                        tags.push({'tag': tdata[key].value});
+                        nowtags += (nowtags != "" ? ", " : "") + "#" + tdata[key].value;
+                    }
+                    tojson.tags = tags;
+                }
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: JSON.stringify(tojson),
+                    headers: {'Content-Type': 'application/json'},
+                }).then((data, textStatus, jqXHR) => {
+                    console.log(data);
+                    if (data.status == 200) {
+                        isProcessing = false;
+                        $("#inf_btn_process").addClass("d-none");
+                        $("#inf_btn_icon").removeClass("d-none");
+                        submitButton.removeClass("btn-secondary");
+                        submitButton.addClass("btn-primary");
+
+                        if (isEdit) {
+                            location.href = "/client/read/" + infno + "?status=" + infStatus + "&page=1&keyword=";
+                        } else {
+                            location.href = "/client/list?status=" + infStatus;
+                        }
+                    } else {
+                        showModal(data.message);
+                        isProcessing = false;
+                        $("#inf_btn_process").addClass("d-none");
+                        $("#inf_btn_icon").removeClass("d-none");
+                        submitButton.removeClass("btn-secondary");
+                        submitButton.addClass("btn-primary");
+                    }
+                }, (jqXHR, textStatus, errorThrown) => {
+                    /*pass*/
+                    showModal("DB 처리중 오류가 발생되었습니다.");
+                    isProcessing = false;
+                    $("#inf_btn_process").addClass("d-none");
+                    $("#inf_btn_icon").removeClass("d-none");
+                    submitButton.removeClass("btn-secondary");
+                    submitButton.addClass("btn-primary");
+                });
+            }
+        } else {
+            showModal("처리중입니다.");
         }
 
     });
