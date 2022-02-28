@@ -97,14 +97,14 @@ function loadData(mtype) {
 
                     switch (mtype) {
                         case 2 :
-                            body.find("tr").eq(i).find("td").eq(0).html(comma(field.count1));
-                            body.find("tr").eq(i).find("td").eq(1).html(comma(field.count2));
-                            body.find("tr").eq(i).find("td").eq(2).html(comma(field.count3));
-                            body.find("tr").eq(i).find("td").eq(3).html(comma(field.count4));
-                            body.find("tr").eq(i).find("td").eq(4).html(comma(field.count5));
+                            body.find("tr").eq(i).find("td").eq(0).html(comma(field.count5));
+                            body.find("tr").eq(i).find("td").eq(1).html(comma(field.count8));
+                            body.find("tr").eq(i).find("td").eq(2).html(comma(field.count6));
+                            body.find("tr").eq(i).find("td").eq(3).html(comma(field.count2));
+                            body.find("tr").eq(i).find("td").eq(4).html(comma(field.count3));
 
-                            series[0].data.push(field.count4);
-                            series[1].data.push(field.count5);
+                            series[0].data.push(field.count5);
+                            series[1].data.push(field.count8);
                             break;
                         case 3 :
                             body.find("tr").eq(i).find("td").eq(0).html(comma(field.count4));

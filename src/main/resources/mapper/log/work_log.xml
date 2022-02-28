@@ -58,88 +58,25 @@
     <update id="createWorkLog" parameterType="Work">
         create table TB_WORK_${intSeq}_LOG
         (
-            intSeq
-            int
-            auto_increment,
-            dateDay
-            date
-            null,
-            intWorkInfoSeq
-            int
-            null,
-            intMediaSeq
-            int
-            null,
-            intMediaType
-            tinyint
-            null,
-            intClientSeq
-            int
-            null,
-            intInfluencerSeq
-            int
-            null,
-            intCount1
-            int
-            default
-            0
-            null,
-            intCount2
-            int
-            default
-            0
-            null,
-            intCount3
-            int
-            default
-            0
-            null,
-            intCount4
-            int
-            default
-            0
-            null,
-            intCount5
-            int
-            default
-            0
-            null,
-            intCount6
-            int
-            default
-            0
-            null,
-            intCount7
-            int
-            default
-            0
-            null,
-            intCount8
-            int
-            default
-            0
-            null,
-            intCount9
-            int
-            default
-            0
-            null,
-            intCount10
-            int
-            default
-            0
-            null,
-            constraint
-            TB_WORK_
-            ${intSeq}
-            _
-            LOG_pk
-            primary
-            key
-        (
-            intSeq
-        )
-            );
+            intSeq           int auto_increment,
+            dateDay          date          null,
+            intWorkInfoSeq   int           null,
+            intMediaSeq      int           null,
+            intMediaType     tinyint       null,
+            intClientSeq     int           null,
+            intInfluencerSeq int           null,
+            intCount1        bigint default 0 null,
+            intCount2        bigint default 0 null,
+            intCount3        bigint default 0 null,
+            intCount4        bigint default 0 null,
+            intCount5        bigint default 0 null,
+            intCount6        bigint default 0 null,
+            intCount7        bigint default 0 null,
+            intCount8        bigint default 0 null,
+            intCount9        bigint default 0 null,
+            intCount10       bigint default 0 null,
+            constraint TB_WORK_${intSeq}_LOG_pk primary key(intSeq)
+        );
     </update>
 
     <update id="createWorkIdx" parameterType="Work">
@@ -154,7 +91,7 @@
 
     <update id="createWorkIdx3" parameterType="Work">
         create index IDX_WL_${intSeq}_INFO
-            on TB_WORK_${intSeq}_LOG (dateDay, intWorkInfoSeq, intMediaType, intClientSeq, intWorkInfoSeq);
+            on TB_WORK_${intSeq}_LOG (dateDay, intWorkInfoSeq, intMediaType, intClientSeq);
     </update>
 
     <select id="getWorkLog" parameterType="Search" resultType="WorkLog">

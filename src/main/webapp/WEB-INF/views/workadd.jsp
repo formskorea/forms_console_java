@@ -438,7 +438,7 @@
             'zip': "<%=field.getCompany().getStrZipcode()%>"
         },
         <% } %>
-        'comseq': <%=field.getIntCompanySeq().toString()%>,
+        'comseq': <%=(field.getIntCompanySeq() != null ? field.getIntCompanySeq().toString() : "-1")%>,
         'email': "<%=field.getStrEmail()%>",
         'level': <%=field.getIntLevel()%>,
         'mobile': "<%=field.getStrMobile()%>",
