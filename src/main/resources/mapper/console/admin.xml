@@ -27,7 +27,7 @@
         <if test="keyword != null and keyword != ''">
             AND (aa.strEmail LIKE CONCAT('%', #{keyword}, '%') OR aa.strMobile LIKE CONCAT('%', #{keyword}, '%')
             OR aa.strName LIKE CONCAT('%', #{keyword}, '%') OR aa.strNikname LIKE CONCAT('%', #{keyword}, '%')
-            OR aa.intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
+            OR aa.intSeq = any(SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
             a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
             OR aa.intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword},
             '%')))
@@ -76,7 +76,7 @@
         <if test="keyword != null and keyword != ''">
             AND (aa.strEmail LIKE CONCAT('%', #{keyword}, '%') OR aa.strMobile LIKE CONCAT('%', #{keyword}, '%')
             OR aa.strName LIKE CONCAT('%', #{keyword}, '%') OR aa.strNikname LIKE CONCAT('%', #{keyword}, '%')
-            OR aa.intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
+            OR aa.intSeq = any(SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
             a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
             OR aa.intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword},
             '%')))
@@ -138,7 +138,7 @@
         <if test="keyword != null and keyword != ''">
             AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strMobile LIKE CONCAT('%', #{keyword}, '%') OR strName
             LIKE CONCAT('%', #{keyword}, '%')
-            OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
+            OR intSeq = any(SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
             a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
             OR intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword}, '%')))
         </if>
@@ -159,7 +159,7 @@
         <if test="keyword != null and keyword != ''">
             AND (strEmail LIKE CONCAT('%', #{keyword}, '%') OR strMobile LIKE CONCAT('%', #{keyword}, '%') OR strName
             LIKE CONCAT('%', #{keyword}, '%')
-            OR intSeq = (SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
+            OR intSeq = any(SELECT a.intUserSeq FROM TB_TAG_LINK a, TB_TAGS b WHERE b.intSeq = a.intTagSeq AND
             a.intUserType = 2 AND b.strTag LIKE CONCAT('%', #{keyword}, '%'))
             OR intCompanySeq = (SELECT intSeq FROM TB_COMPANY WHERE strCompanyname LIKE CONCAT('%', #{keyword}, '%')))
         </if>;
@@ -270,7 +270,7 @@
         </if>
         <if test="keyword != null and keyword != ''">
             AND (a.strTitle LIKE CONCAT('%', #{keyword}, '%') OR a.txtInfo LIKE CONCAT('%', #{keyword}, '%')
-            OR a.intSeq = (SELECT aa.intWorkSeq FROM TB_TAG_LINK aa, TB_TAGS bb WHERE bb.intSeq = aa.intTagSeq AND
+            OR a.intSeq = any(SELECT aa.intWorkSeq FROM TB_TAG_LINK aa, TB_TAGS bb WHERE bb.intSeq = aa.intTagSeq AND
             aa.intUserType = 5 AND bb.strTag LIKE CONCAT('%', #{keyword}, '%'))
             OR b.strName LIKE CONCAT('%', #{keyword}, '%')
             OR c.strCompanyname LIKE CONCAT('%', #{keyword}, '%'))
@@ -297,7 +297,7 @@
         </if>
         <if test="keyword != null and keyword != ''">
             AND (strTitle LIKE CONCAT('%', #{keyword}, '%') OR txtInfo LIKE CONCAT('%', #{keyword}, '%')
-            OR a.intSeq = (SELECT aa.intWorkSeq FROM TB_TAG_LINK aa, TB_TAGS bb WHERE bb.intSeq = aa.intTagSeq AND
+            OR a.intSeq = any(SELECT aa.intWorkSeq FROM TB_TAG_LINK aa, TB_TAGS bb WHERE bb.intSeq = aa.intTagSeq AND
             aa.intUserType = 5 AND bb.strTag LIKE CONCAT('%', #{keyword}, '%'))
             OR b.strName LIKE CONCAT('%', #{keyword}, '%')
             OR c.strCompanyname LIKE CONCAT('%', #{keyword}, '%'))

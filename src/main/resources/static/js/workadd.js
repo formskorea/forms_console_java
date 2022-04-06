@@ -570,8 +570,6 @@ $(document).ready(function ($) {
                 errstring = "진행기간을 입력해주세요.";
             } else if (start > end) {
                 errstring = "진행기간 종료일이 시작일보다 적습니다.";
-            } else if (rend > start) {
-                errstring = "진행기간이 모집기간보다 앞에 있습니다.";
             } else if (tojson.tags === undefined || tojson.tags.length <= 0) {
                 errstring = "관련 키워드를 설정해 주세요.";
             } else if (c_selectlist.seq === undefined) {
@@ -589,6 +587,11 @@ $(document).ready(function ($) {
 
             if (errstring != "") {
                 showModal(errstring);
+                isProcessing = false;
+                $("#inf_btn_process").addClass("d-none");
+                $("#inf_btn_icon").removeClass("d-none");
+                submitButton.removeClass("btn-secondary");
+                submitButton.addClass("btn-primary");
             } else {
                 $.ajax({
                     url: wurl,

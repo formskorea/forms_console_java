@@ -360,6 +360,12 @@ $(document).ready(function () {
                     submitButton.removeClass("btn-secondary");
                     submitButton.addClass("btn-primary");
                 });
+            } else {
+                isProcessing = false;
+                $("#inf_btn_process").addClass("d-none");
+                $("#inf_btn_icon").removeClass("d-none");
+                submitButton.removeClass("btn-secondary");
+                submitButton.addClass("btn-primary");
             }
         } else {
             showModal("처리중입니다.");
